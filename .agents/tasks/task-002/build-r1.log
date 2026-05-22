@@ -1,0 +1,23 @@
+## Build Log — task-002 dark mode (round 1)
+
+Date: 2026-04-21
+Branch: agent/task-002-darkmode-remaining-pages
+Next.js: 16.2.3 (Turbopack)
+
+### Result: ✅ PASS
+
+Compiled successfully in 4.5s
+TypeScript: no errors (3.4s)
+Static pages generated: 20/20
+
+### Pages modified
+- community/page.tsx  — dark: classes added
+- prompts/page.tsx    — dark: classes added
+- store/page.tsx    — dark: classes added
+- products/page.tsx      — dark: classes added
+- profile/page.tsx    — dark: classes added; bg-gradient-to-br → bg-linear-to-br fixed
+- ranking/page.tsx    — dark: classes added; flex-shrink-0 → shrink-0 fixed
+
+### Warnings (non-blocking)
+- middleware file convention deprecation (pre-existing, unrelated)
+- edge runtime disables static generation for /api/chat (pre-existing)

@@ -1,0 +1,30 @@
+[project]
+name = "harness"
+description = "AI 개발자 커뮤니티 플랫폼"
+lang = "ko"
+
+[ci]
+command = "cd client_front && npm install && npm run build"
+architecture_check = "cd back && npx tsc --noEmit"
+frontend_dir = "client_front"
+
+[models]
+default = "claude-sonnet-4-6"
+
+[workflow]
+max_iterations = 3
+pass_threshold = 7.0
+auto_merge = true
+branch_prefix = "agent"
+trunk_branch = "main"
+
+[native]
+adversarial_model = "gpt-4.1"
+adversarial_mechanism = "auto"
+review_gate = "eng"
+gate_full_review_min = 5
+gate_summary_confirm_min = 3
+
+[integrations.memverse]
+enabled = false
+domain_prefix = ""

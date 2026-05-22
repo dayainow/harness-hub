@@ -1,0 +1,151 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id          String       @id @default(uuid())
+  email       String       @unique
+  username    String       @unique
+  name        String?
+  avatarUrl   String?
+  role        UserRole     @default(USER)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  reviews     Review[]
+  collections Collection[]
+  bookmarks   HarnessBookmark[]
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  CURATOR
+}
+
+model Harness {
+  id             String        @id @default(uuid())
+  slug           String        @unique  // e.g. "princeton-nlp/SWE-agent"
+  name           String
+  orgName        String
+  repoUrl        String        @unique
+  description    String
+  readmeExcerpt  String?       @db.Text
+  stars          Int           @default(0)
+  forks          Int           @default(0)
+  issuesOpen     Int           @default(0)
+  latestVersion  String?
+  lastUpdated    DateTime?
+  license        String?       // SPDX ID e.g. "MIT"
+  licenseTier    LicenseTier   @default(GREEN)
+  languages      String[]
+  category       HarnessCategory @default(OTHER)
+  modelCompat    String[]      // e.g. ["claude-sonnet-4-6", "gpt-4o"]
+  tags           String[]
+  verified       Boolean       @default(false)
+  featured       Boolean       @default(false)
+  status         HarnessStatus @default(ACTIVE)
+  installCmd     String?
+  downloadsCount Int           @default(0)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  benchmarks     Benchmark[]
+  reviews        Review[]
+  bookmarks      HarnessBookmark[]
+  collectionItems CollectionItem[]
+}
+
+enum LicenseTier {
+  GREEN
+  YELLOW
+  RED
+}
+
+enum HarnessStatus {
+  PENDING
+  ACTIVE
+  REJECTED
+}
+
+enum HarnessCategory {
+  CODING_AGENT
+  EVAL_HARNESS
+  RAG_FRAMEWORK
+  RESEARCH_AGENT
+  TOOL_USE
+  MULTI_AGENT
+  BROWSER_AGENT
+  DATA_PIPELINE
+  OTHER
+}
+
+model Benchmark {
+  id        String   @id @default(uuid())
+  harnessId String
+  name      String   // "SWE-bench Verified", "SWE-bench Lite", "MLE-bench"
+  score     Float
+  model     String   // e.g. "claude-sonnet-4-6"
+  date      DateTime
+  createdAt DateTime @default(now())
+
+  harness Harness @relation(fields: [harnessId], references: [id], onDelete: Cascade)
+}
+
+model Review {
+  id           String   @id @default(uuid())
+  harnessId    String
+  userId       String
+  rating       Int      // 1-5
+  body         String
+  usageContext String?  // e.g. "Used for automated PR review"
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  harness Harness @relation(fields: [harnessId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([harnessId, userId])
+}
+
+model Collection {
+  id          String   @id @default(uuid())
+  slug        String   @unique
+  title       String
+  description String
+  curatorId   String
+  isPublic    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  curator User            @relation(fields: [curatorId], references: [id], onDelete: Cascade)
+  items   CollectionItem[]
+}
+
+model CollectionItem {
+  id           String   @id @default(uuid())
+  collectionId String
+  harnessId    String
+  addedAt      DateTime @default(now())
+
+  collection Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  harness    Harness    @relation(fields: [harnessId], references: [id], onDelete: Cascade)
+
+  @@unique([collectionId, harnessId])
+}
+
+model HarnessBookmark {
+  id        String   @id @default(uuid())
+  userId    String
+  harnessId String
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  harness Harness @relation(fields: [harnessId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, harnessId])
+}

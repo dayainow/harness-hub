@@ -1,0 +1,44 @@
+{
+  "Nav": {
+    "products": "Explore Products",
+    "market": "AI Market",
+    "categories": "Categories",
+    "ranking": "Top Ranking",
+    "prompts": "Prompts",
+    "community": "Community",
+    "submit": "+ Submit Product",
+    "search": "Search...",
+    "login": "Login with Google",
+    "logout": "Logout"
+  },
+  "Home": {
+    "heroTag": "An AI Community to Make Life More Creative",
+    "heroTitle1": "Learn together,",
+    "heroTitle2": "Build directly,",
+    "heroTitle3": "Enrich life with AI",
+    "heroDesc": "Experiment with AI products ranging from writing and images to video, music, and automation.",
+    "searchPlaceholder": "What AI do you want to explore today?",
+    "searchBtn": "Search",
+    "suggest": "Trending:",
+    "weeklyTools": "Spotlight of the Week",
+    "weeklyDesc": "Check out the hottest AI products getting the most traction right now.",
+    "allTools": "View All Products",
+    "recentPosts": "Community News",
+    "allPosts": "Go to Community",
+    "categoryTitle": "Browse by Category"
+  },
+  "Common": {
+    "footerDesc": "Ola is a community for AI enthusiasts. A 1-pyeong AI lab for all of us.",
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "quickLinks": "Links"
+  },
+  "Footer": {
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "contact": "Contact",
+    "careers": "Careers",
+    "press": "Press",
+    "support": "Support"
+  }
+}

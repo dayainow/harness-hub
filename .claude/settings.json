@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs kill *)",
+      "Bash(git -C /Users/dobedub/Documents/source/harness/harness-client log --oneline -5)",
+      "Bash(python3 -c \"import sys,json; data=json.load\\(sys.stdin\\); [print\\(t.get\\('name'\\), '|', t.get\\('iconUrl','\\(none\\)'\\)\\) for t in data[:5]]\")",
+      "Bash(rsync -a --delete --exclude=.git --exclude=node_modules --exclude=.next '--exclude=.env*' /Users/dobedub/Documents/source/harness/client_front/ /tmp/harness-client/)",
+      "Bash(git -C /tmp/harness-client add -A)",
+      "Bash(git -C /tmp/harness-client status --short)",
+      "Bash(git -C /tmp/harness-client -c user.email=devops@dobedub.com -c user.name=HongDaeEui commit -m 'fix: TopNavBar 검색 드롭다운 Image → img 태그로 교체, 로고 이미지 수정')",
+      "Bash(git -C /tmp/harness-client push origin main)",
+      "Bash(git -C /tmp/harness-client log --oneline -5)",
+      "Bash(python3 -c ' *)",
+      "Bash(identify /tmp/test_logo.jpg)",
+      "Read(//private/tmp/harness-client/src/components/**)",
+      "Read(//private/tmp/harness-client/**)",
+      "Bash(git -C /tmp/harness-client show 4f4af80:src/components/HomeClient.tsx)",
+      "Bash(git -C /tmp/harness-client show --stat 4f4af80)",
+      "Bash(git -C /tmp/harness-client show b83a4e4:src/components/HomeClient.tsx)",
+      "Bash(git -C /tmp/harness-client log --oneline --all)",
+      "Bash(git -C /tmp/harness-client show f086433:src/components/HomeClient.tsx)",
+      "Bash(git -C /tmp/harness-client show f13bf60~1:src/components/HomeClient.tsx)",
+      "Bash(awk -F: '{print $1}')",
+      "Bash(xargs '-I{}' sh -c 'COUNT=$\\(grep -c \"use client\" \"{}\" 2>/dev/null\\); if [ \"$COUNT\" -gt 1 ]; then echo \"TRIPLE: {} \\($COUNT times\\)\"; fi')",
+      "Bash(sed -i '' '1{/^\"use client\";$/N;s/^\"use client\";\\\\n\"use client\";\\\\n\"use client\";$/\"use client\";/}' '/Users/dobedub/Documents/source/harness/client_front/src/app/[locale]/store/new/MeetupCreateForm.tsx' '/Users/dobedub/Documents/source/harness/client_front/src/app/[locale]/resources/ResourceCard.tsx' '/Users/dobedub/Documents/source/harness/client_front/src/app/[locale]/community/error.tsx')",
+      "Bash(sed -i '' '1{/^\"use client\";$/N;s/^\"use client\";\\\\n\"use client\";$/\"use client\";/}' /Users/dobedub/Documents/source/harness/client_front/src/components/ImageUpload.tsx)"
+    ]
+  }
+}

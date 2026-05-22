@@ -1,0 +1,41 @@
+name: 🤖 AI News Bot
+
+on:
+  schedule:
+    - cron: '0 0 * * *'   # 매일 오전 9시 KST (UTC 00:00)
+  workflow_dispatch:        # 수동 실행 버튼
+
+jobs:
+  post-ai-news:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write       # posted_ids.json 커밋용
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🐍 Python 설치
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 📂 posted_ids.json 없으면 생성
+        run: |
+          if [ ! -f scripts/posted_ids.json ]; then
+            echo "[]" > scripts/posted_ids.json
+          fi
+
+      - name: 🤖 AI News Bot 실행
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OLA_API_URL: ${{ secrets.OLA_API_URL }}
+        run: python scripts/ai_news_bot.py
+
+      - name: 💾 posted_ids.json 커밋 (중복 방지 저장)
+        run: |
+          git config user.name  "Ola AI Bot"
+          git config user.email "ai-news-bot@olalab.kr"
+          git add scripts/posted_ids.json
+          git diff --staged --quiet || git commit -m "chore: AI 뉴스봇 실행 기록 업데이트 [$(date +'%Y-%m-%d')]"
+          git push

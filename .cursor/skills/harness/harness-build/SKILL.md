@@ -1,0 +1,171 @@
+---
+name: harness-build
+description: >-
+  Implement code according to a harness plan/contract. Reads the plan, implements
+  all deliverables, runs CI, triages failures, and writes a structured build log.
+  Fully autonomous — no confirmations needed. Use when saying "build this",
+  "implement the plan", or "harness build". (harness)
+---
+
+# Harness Build
+
+You are running the `/harness-build` workflow. This is a **non-interactive, fully automated**
+build pipeline. Do NOT ask for confirmation at any step. The user said `/harness-build`
+which means DO IT. Implement everything and output the build result.
+
+**Only stop for:**
+- In-branch test failures that cannot be auto-fixed after triage
+- Contract deliverable that is genuinely impossible (missing dependency, infeasible requirement)
+
+**Never stop for:**
+- Implementation approach confirmation
+- "Should I proceed?" questions
+- Pre-existing test failures
+- Minor implementation decisions (make them, note in build log)
+
+---
+
+## Core Principles
+
+1. **Deliver exactly per contract** — implement only what the contract lists
+2. **Small commits** — one commit per logical unit; message format `<type>(scope): description`
+3. **Follow project conventions** — check existing patterns before writing new code
+4. **Test coverage** — new behavior needs tests; changes must keep existing tests passing
+5. **No architecture calls** — Planner owns architecture; you implement
+
+---
+
+## Step 1: Read the Contract
+
+1. Find the current task: most recent `task-NNN` directory under `.agents/tasks/`
+2. Read `.agents/tasks/task-NNN/plan.md`
+3. Extract the deliverables checklist from the Contract section
+4. If this is a subsequent round (feedback exists from evaluation), also read
+   `.agents/tasks/task-NNN/evaluation-rN.md` for the fix suggestions
+
+---
+
+## Step 2: Search Before Building
+
+Before writing any code:
+
+1. Scan the project for existing patterns, utilities, and conventions
+2. Check if any deliverable can be solved by reusing existing code
+3. Note the project's testing patterns (framework, directory structure, naming)
+
+This prevents reinventing what already exists and ensures consistency.
+
+---
+
+## Step 3: Implement
+
+For each deliverable in the contract:
+
+1. Implement the code changes
+2. Write tests for new behavior (match the project's existing test patterns)
+3. Ensure type hints / type safety where the project uses them
+4. Handle error paths — do not leave bare exceptions or missing error handling
+
+**Constraints:**
+- Only modify files directly required by the contract deliverables
+- Never delete existing tests — add new tests, do not remove old ones
+- Never modify files not listed in or implied by the deliverables
+- If you discover related issues outside contract scope, note them in the build log
+  but do NOT fix them
+
+
+
+---
+
+## Step 4: Run CI
+
+Run the full test suite:
+
+```bash
+cd client_front && npm install && npm run build
+```
+
+### Test Failure Triage
+
+If tests fail, determine ownership:
+
+**Pre-existing failures** (test fails on `main` too):
+- Note in build log: "Pre-existing failure: test_name — not introduced by this change"
+- Continue — not your problem
+
+**In-branch failures** (test passes on base, fails on HEAD):
+- This IS your problem
+- Read the failure output carefully
+- Fix the issue in your implementation
+- Re-run `cd client_front && npm install && npm run build`
+- Maximum 3 fix attempts per failing test
+
+**After triage:** If in-branch failures remain after 3 attempts, note them as blockers
+in the build log and stop.
+
+## Error Recovery Matrix
+
+Note: test failure triage (pre-existing vs in-branch) is handled in Step 4 above.
+This matrix covers non-test errors.
+
+| Error Type | Signal | Recovery Action |
+|-----------|--------|----------------|
+| CI failure (lint) | linter errors in output | Auto-fix if linter supports it, commit, re-run |
+| CI failure (type) | type checker errors | Fix type annotations, re-run |
+| Git conflict | merge conflict markers | Report to user, do not attempt resolution |
+| Scope creep | diff touches files outside contract | Revert uncommitted changes, re-read contract |
+| Import error | ModuleNotFoundError or similar | Check if dependency is missing, add to requirements |
+| Permission error | PermissionError or EACCES | Report to user, do not retry |
+| Agent timeout | no output for extended period | Cancel and retry with simpler prompt |
+
+If the same error type persists after 2 retries of the same fix strategy,
+write the finding to `.agents/tasks/<task-id>/build-notes.md` and proceed to the next deliverable.
+
+
+---
+
+## Step 5: Write Build Log
+
+Write a structured build log to `.agents/tasks/task-NNN/build-rN.log`:
+
+```markdown
+# Build Log — Round N
+
+## Deliverables
+- [x] Deliverable 1: what was done, files changed
+- [x] Deliverable 2: what was done, files changed
+- [ ] Deliverable 3: NOT DONE — reason
+
+## Files Changed
+- `path/to/file1.py` — description of change
+- `path/to/file2.py` — description of change
+
+## CI Result
+- Command: `cd client_front && npm install && npm run build`
+- Result: PASS / FAIL
+- Tests: N passed, M failed
+- Pre-existing failures: K (not introduced by this change)
+
+## Decisions Made
+- (implementation decisions you made without asking — explain rationale)
+
+## Out-of-Scope Issues Found
+- (issues discovered but not fixed — outside contract scope)
+```
+
+
+
+## Step 6: Commit
+
+Stage and commit the implementation:
+
+```bash
+git add <specific-files-changed>
+git commit -m "<type>(scope): implement task-NNN deliverables
+
+Deliverables: (list what was implemented)
+CI: all tests pass"
+```
+
+Use specific file paths — never `git add -A` or `git add .` to avoid including
+unrelated changes.

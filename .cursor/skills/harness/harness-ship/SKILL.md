@@ -1,0 +1,624 @@
+---
+name: harness-ship
+description: >-
+  Minimal-interaction shipping pipeline: merge base, test, 5-role code review,
+  fix loop, bisectable commits, push, PR. One command — next thing you see is the
+  PR URL. Use when saying "ship this", "harness ship", "push", or "create a PR".
+  Proactively invoke when user says code is ready or asks to deploy. (harness)
+---
+
+# Harness Ship — Automated Pipeline
+
+You are running the `/harness-ship` workflow. This is a **minimal-interaction** pipeline.
+Run straight through and output the PR URL at the end.
+
+**Only stop for:**
+- On the trunk branch (abort)
+- Merge conflicts that cannot be auto-resolved (stop, show conflicts)
+- In-branch test failures that survive triage (pre-existing are triaged, not blocking)
+- ASK-classified review findings that need user judgment
+- Evaluation score stays below 7.0 after 3 iterations
+
+**Never stop for:**
+- Uncommitted changes (always include them)
+- Commit message approval (auto-commit)
+- PR content (auto-generate)
+- AUTO-FIX review findings (fix and continue)
+
+---
+
+
+
+
+## Workspace Pre-flight
+
+
+Before shipping, ensure the base branch is up to date.
+
+### 0. Fetch Trunk
+
+```bash
+git fetch origin main
+```
+
+This ensures rebase (Step 2) operates against the latest remote state.
+If fetch fails (network error): warn but continue — rebase will use the last-fetched state.
+
+
+
+
+
+## Step 1: Pre-flight
+
+1. Check the current branch. If on `main`, **abort**: "You're on the trunk branch. Ship from a feature branch."
+
+2. Run `git status`. Uncommitted changes are always included — no need to ask.
+
+3. Run `git diff main...HEAD --stat` and `git log main..HEAD --oneline` to understand what's being shipped.
+
+4. Check `.agents/config.toml` exists.
+
+5. **Detect or create the task directory** (deterministic algorithm):
+   1. Scan `.agents/tasks/` for all `task-NNN` directories
+   2. Let `L` = directory with the largest NNN (by numeric sort)
+   3. If `L` exists and `L/plan.md` exists → reuse `L` as `TASK_DIR`
+   4. Otherwise → create `task-{max(NNN)+1}` (or `task-001` if none exist) as `TASK_DIR`
+   5. All eval artifacts, ship-metrics, and build logs go into `TASK_DIR`
+
+   ```bash
+   mkdir -p .agents/tasks/task-NNN
+   ```
+
+   If a plan exists at `TASK_DIR/plan.md`, read it for context.
+
+6. **Prior Learnings**: If Memverse MCP is available, search for learnings relevant to the
+   changed files/modules. Display any prior pitfalls or patterns that apply to this diff.
+
+7. **Eval Readiness Reminder**: This workflow WILL run a mandatory eval at Step 3.8.
+   After tests pass, the NEXT step is eval — NOT commit, NOT release.
+   Create a TODO list now with EVAL explicitly marked:
+
+   ```
+   - [ ] Pre-flight (Step 1)
+   - [ ] Rebase (Step 2)
+   - [ ] Tests (Step 3)
+   - [ ] Coverage Audit (Step 3.4)
+   - [ ] Plan Completion Audit (Step 3.5)
+   - [ ] **EVAL — MANDATORY** (Step 3.8)
+   - [ ] Scope Drift Detection (Step 4)
+   - [ ] Fix Loop if ITERATE (Step 5)
+   - [ ] Eval Artifact Gate (Step 5.9)
+   - [ ] Commit (Step 6)
+   - [ ] Verification Gate (Step 7)
+   - [ ] Push + PR (Step 8)
+   ```
+
+---
+
+## Step 2: Rebase onto the base branch (BEFORE tests)
+
+Fetch and rebase onto the base branch so tests run against the latest state:
+
+```bash
+git fetch origin main && git rebase origin/main
+```
+
+**If rebase conflicts:** Try to auto-resolve simple conflicts (e.g. CHANGELOG ordering).
+If conflicts are complex or ambiguous, run `git rebase --abort`, **STOP** and show the conflicts.
+
+**If already up to date:** Continue silently.
+
+---
+
+## Step 3: Run Tests (on merged code)
+
+Run the full test suite:
+
+```bash
+cd client_front && npm install && npm run build
+```
+
+**If any test fails:** Do NOT immediately stop. Apply the Test Failure Ownership Triage:
+
+### Test Failure Triage
+
+For each failing test, determine ownership:
+
+1. Run the same test on the base branch:
+   ```bash
+   git stash && git checkout main && cd client_front && npm install && npm run build 2>&1; git checkout - && git stash pop
+   ```
+   (Or use `git diff` to check if the failing test file was modified on this branch)
+
+2. **Pre-existing failure** (fails on base branch too): Note it, continue. Not your problem.
+3. **In-branch failure** (passes on base, fails on HEAD): This IS your problem. Must fix.
+
+**After triage:** If in-branch failures remain, enter the fix loop (Step 5).
+If all failures were pre-existing, continue to Step 3.5.
+
+**If all pass:** Continue silently — note the counts briefly.
+
+---
+
+## Step 3.4: Test Coverage Audit
+
+Analyze the diff to ensure changed code paths have adequate test coverage.
+
+### 1. Detect Test Framework
+Scan for: `pytest.ini`, `pyproject.toml [product.pytest]`, `jest.config.*`, `vitest.config.*`,
+`Makefile` test targets, `tox.ini`, `setup.cfg [product:pytest]`. Note the framework for later use.
+
+### 2. Trace Code Paths
+For each file in `git diff main..HEAD`:
+1. Read the changed file and identify all modified/added functions and methods
+2. For each function, trace:
+   - Happy path (normal execution)
+   - Each conditional branch (if/else, match/case)
+   - Each error path (try/except, error returns)
+   - Each loop boundary (empty collection, single item, many items)
+3. Draw an ASCII coverage diagram:
+
+```
+COVERAGE: src/harness/workflow.py
+├─ single_task_pass()
+│  ├─ [TESTED ★★★] happy path — tested in test_single_task_pass
+│  ├─ [TESTED ★★]  max iterations — tested in test_blocked_after_max
+│  ├─ [GAP]        empty spec input — no test
+│  └─ [TESTED ★]   dual eval failure — tested but shallow
+├─ split_spec_contract()
+│  ├─ [TESTED ★★★] with marker
+│  ├─ [TESTED ★★★] without marker
+│  └─ [TESTED ★★★] case insensitive
+```
+
+Legend: ★★★ = thorough (multiple assertions), ★★ = basic (single assertion), ★ = exists but shallow, GAP = no test
+
+### 3. User Flow Coverage
+Check that these scenarios are covered for changed code:
+- Concurrent/parallel execution (if applicable)
+- Empty/null state
+- Boundary values (0, max, negative)
+- Error recovery paths
+
+### 4. E2E Decision Matrix
+For changed code paths, recommend test type:
+- Pure function with no I/O → **unit test**
+- Single component with mocked deps → **unit test**
+- 2 components interacting → **integration test**
+- 3+ components or full user flow → **E2E test**
+- LLM/AI behavior validation → **eval test**
+
+### 5. Regression Rule (Iron Law)
+If the diff modifies existing behavior (changes to existing functions, not just new code):
+- There MUST be a regression test that verifies the old behavior still works
+- This is non-negotiable — generate the test if missing, do NOT ask
+
+### 6. Coverage Gate
+Calculate estimated coverage from the diagram:
+- Count total code paths and tested paths
+- **>= 80%**: PASS — continue
+- **>= 60%**: WARNING — output: "Coverage at ~X%. Consider adding tests for: [list GAP paths]"
+- **< 60%**: GATE — auto-generate tests for GAP paths (max 20 tests), run them, then re-assess
+
+### 7. Auto-Generate Missing Tests (when coverage < 60%)
+For each GAP path:
+1. Generate a test following the project's existing test patterns
+2. Run the test to verify it passes
+3. Cap at 20 generated tests per audit
+4. Commit generated tests: `git add tests/ && git commit -m "test: auto-generate coverage for gaps"`
+
+---
+
+## Step 3.5: Plan Completion Audit
+
+If a plan file exists at `.agents/tasks/task-NNN/plan.md`:
+
+1. Extract every actionable item (checkboxes, numbered steps, imperative statements)
+2. Cross-reference against `git diff main...HEAD`
+3. Classify each: **DONE** / **PARTIAL** / **NOT DONE** / **CHANGED**
+4. Output:
+
+```
+PLAN COMPLETION AUDIT
+═══════════════════════════════════
+  [DONE]      Deliverable 1 — file(s) changed
+  [DONE]      Deliverable 2 — file(s) changed
+  [NOT DONE]  Deliverable 3 — no evidence in diff
+═══════════════════════════════════
+COMPLETION: X/Y DONE, M PARTIAL, K NOT DONE
+```
+
+If any NOT DONE items: note them in the PR body. Continue — this is informational, not blocking.
+
+---
+
+## Step 3.8: Pre-Landing Review — 5-Role Code Evaluation (always-on)
+
+Run code evaluation inline. Dispatch all 5 role reviewers in parallel using
+Task product — the main agent orchestrates but does NOT perform reviews itself.
+
+## Code Review — 5-Role Parallel Dispatch
+
+### Dispatch
+
+Launch **all 5 reviewers in parallel** via the Task product, each with `mode: code-eval`.
+Send a SINGLE message containing all 5 Task product calls:
+
+| # | Subagent | Prompt extras |
+|---|----------|---------------|
+| 1 | `harness-architect` | `mode: code-eval`, diff range, architecture docs paths |
+| 2 | `harness-product-owner` | `mode: code-eval`, diff range, `.agents/vision.md` path, plan path |
+| 3 | `harness-engineer` | `mode: code-eval`, diff range, source directory listing |
+| 4 | `harness-qa` | `mode: code-eval`, diff range, `ci_command: cd client_front && npm install && npm run build`, test directory listing |
+| 5 | `harness-project-manager` | `mode: code-eval`, diff range, plan path, deliverable checklist |
+
+Each prompt must include:
+- `diff_range: main..HEAD`
+- `plan_path: .agents/tasks/task-NNN/plan.md` (if available)
+- `memverse_domain: harness`
+- Role-specific context listed above
+
+**CI Ownership:** Only `harness-qa` runs `cd client_front && npm install && npm run build`. Other roles
+perform read-only analysis on the diff.
+
+**Degradation ladder** (if Task product calls fail):
+- **5/5 respond:** Full synthesis as described below
+- **3-4/5 respond:** Proceed with available reviews, note missing perspectives
+- **1-2/5 respond:** Log warning, fall through to single-agent review
+- **0/5 respond:** Fall back to single generalPurpose subagent review
+
+### Synthesis
+
+After all responses arrive:
+
+1. **Merge findings** from all 5 reviewers into a unified list
+2. **Filter out-of-scope findings** using the role→responsibility map:
+   | Role | Owns | Must NOT report |
+   |------|------|----------------|
+   | Architect | Design, modules, deps, security design | Code quality, tests, delivery, user value |
+   | Product Owner | User value, requirements, AC, UX edge cases | Code quality, architecture, tests, delivery |
+   | Engineer | Code quality, DRY, patterns, performance, errors | Architecture decisions, user value, delivery, test strategy |
+   | QA | Tests, coverage, CI, regression, boundaries | Code quality, architecture, user value, delivery |
+   | Project Manager | Scope, delivery, decomposition, commit structure | Code quality, architecture, tests, user value |
+
+   For each finding, check if the reporting role owns that category:
+   - **In-scope**: keep as-is
+   - **Out-of-scope + CRITICAL**: re-tag as `[CROSS-ROLE]` and keep
+   - **Out-of-scope + WARN/INFO**: mark `[OUT-OF-SCOPE]` and exclude from scoring
+3. **Cross-validate:** If 2+ roles flag the same issue → mark `[HIGH CONFIDENCE]`
+4. **Compute dimension scores** (map role to evaluation dimension):
+   ```
+   Design:        [architect score]/10
+   Completeness:  [product-owner score]/10
+   Quality:       [engineer score]/10
+   Regression:    [qa score]/10
+   Scope:         [project-manager score]/10
+   ─────────────────────────────────
+   Weighted avg:  [avg]/10
+   ```
+5. **Determine verdict:**
+   - All PASS and avg ≥ 7.0 → `PASS`
+   - Any CRITICAL finding → `ITERATE`
+   - avg < 7.0 → `ITERATE`
+
+### Fix-First Triage
+
+Apply the Fix-First heuristic from `.cursor/rules/harness-fix-first.mdc`:
+
+- **AUTO-FIX:** High certainty + small blast radius + reversible → fix immediately
+- **ASK:** Security, behavior change, architecture change, data model change,
+  or low confidence → batch and present to user
+
+After auto-fixes, re-run `cd client_front && npm install && npm run build` to verify no regressions.
+Log: `[AUTO-FIXED] file:line — Problem → What you did`
+
+### Final Verdict
+
+Write the evaluation summary to `.agents/tasks/task-NNN/evaluation-rN.md`:
+
+```markdown
+# Code Evaluation — Round N
+
+## Dimension Scores
+| Dimension | Role | Score |
+|-----------|------|-------|
+| Design | architect | N/10 |
+| Completeness | product-owner | N/10 |
+| Quality | engineer | N/10 |
+| Regression | qa | N/10 |
+| Scope | project-manager | N/10 |
+| **Weighted Average** | | **N/10** |
+
+## Findings
+[merged findings list]
+
+## Auto-Fixed
+[list of auto-fixed items]
+
+## ASK Items
+[items requiring user decision]
+
+## Verdict: PASS | ITERATE
+```
+
+
+
+
+**Review Gate (eng):** Evaluation is a hard gate — ITERATE verdict blocks shipping.
+All CRITICAL findings must be resolved before proceeding.
+
+
+---
+
+## Step 4: Scope Drift Detection
+
+Check: did the diff deliver what was planned — nothing more, nothing less?
+
+1. Read plan (if exists), commit messages, and TODOS.md for stated intent
+2. Run `git diff main...HEAD --stat` and compare against intent
+3. Output:
+
+```
+Scope Check: [CLEAN / DRIFT DETECTED / REQUIREMENTS MISSING]
+Intent: <1-line summary>
+Delivered: <1-line summary>
+[If drift: list each out-of-scope change]
+[If missing: list each unaddressed requirement]
+```
+
+This is **INFORMATIONAL** — does not block shipping.
+
+---
+
+## Step 5: Fix Loop (if ITERATE)
+
+If evaluation verdict is ITERATE:
+
+1. Read the evaluation feedback (specific fix suggestions)
+2. Apply fixes to the code
+3. Run `cd client_front && npm install && npm run build` to verify
+4. Re-run evaluation (Step 3.8) with incremented round number
+5. Maximum 3 total iterations
+
+If still ITERATE after 3 rounds: **STOP**. Report the scores and
+unresolved findings.
+
+---
+
+## Step 5.5: TODOS.md Management
+
+If a `TODOS.md` file exists in the project root:
+
+1. Read `TODOS.md` and parse all TODO items
+2. Cross-reference against `git diff main...HEAD` to detect completed items:
+   - If a TODO references a file/function that was modified/added in the diff, check if the work is done
+   - If a TODO describes functionality that is now implemented, mark as completed
+3. Move completed items to a `## Completed` section at the bottom
+4. Output summary: "TODOS: N items marked complete, M remaining"
+5. If any items were updated, commit: `git add TODOS.md && git commit -m "chore: update TODOS.md"`
+
+If no `TODOS.md` exists: skip silently.
+
+---
+
+## Step 5.9: Eval Artifact Gate (MANDATORY — cannot be skipped)
+
+```
+╔══════════════════════════════════════════════════════════════╗
+║  EVAL GATE: Before committing, verify eval actually ran.    ║
+║  This catches the #1 workflow skip — jumping from           ║
+║  "tests pass" straight to "commit".                         ║
+╚══════════════════════════════════════════════════════════════╝
+```
+
+Check for evaluation artifacts using the `TASK_DIR` established in Step 1:
+
+```bash
+ls TASK_DIR/evaluation-r*.md 2>/dev/null
+```
+
+**Verification checklist:**
+1. **Exists**: The file must exist. If not → you skipped Step 3.8. Go back.
+2. **Non-empty**: The file must contain a verdict (`PASS` or `ITERATE`). An empty or stub file is not valid.
+3. **Fresh**: The evaluation must be for the CURRENT diff. If code changed after the eval
+   (e.g., fix loop commits), the latest evaluation round must post-date those changes.
+4. **Correct task**: The `TASK_DIR` must match the directory established in Step 1 pre-flight.
+
+**If ANY check fails:** You have not completed eval. **Go back to Step 3.8.**
+Do NOT rationalize ("it's just templates", "tests pass so it's fine").
+The eval is what catches issues tests cannot: security holes, design flaws, scope drift.
+
+**If evaluation file exists:** Read the verdict. Proceed only if:
+
+- Verdict is **PASS** (average >= 7.0)
+- Or all CRITICAL findings have been resolved in the fix loop
+
+
+---
+
+## Step 6: Commit (bisectable chunks)
+
+
+Once evaluation PASSES:
+
+
+1. **Bisectable commits**: Analyze the diff and group into logical commits:
+   - Infrastructure/config changes first
+   - Core logic + tests together
+   - Each commit must be independently valid
+
+2. **Commit format**: `<type>(scope): description`
+   Types: feat, fix, refactor, test, docs, chore
+
+3. Stage and commit by file groups (not `git add -A`):
+   ```bash
+   git add <specific-files> && git commit -m "<type>(scope): description"
+   ```
+
+---
+
+## Safety Rules
+
+### Bypass-Immune (NEVER skip, even with --force)
+- Never commit `.env`, credentials, or API keys
+- Never `git push --force` to `main`
+- Never drop/truncate production database tables
+- Never delete `.agents/` task artifacts
+
+### Bypassable (user can override)
+- Lint warnings in non-critical files
+- Missing type annotations
+- Test coverage below threshold
+
+
+---
+
+## Step 7: Verification Gate — IRON LAW
+
+```
+IRON LAW: NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE.
+
+Rationalization prevention:
+- "Should work now" → RUN IT.
+- "I'm confident" → Confidence is not evidence.
+- "I already tested earlier" → Code changed since then. Test again.
+- "It's a trivial change" → Trivial changes break production.
+- "Only docs changed" → Docs can have broken links, bad paths.
+
+Claiming work is complete without verification is dishonesty, not efficiency.
+```
+
+**Before pushing, verify:**
+
+1. If ANY code changed after Step 3's test run (review fixes don't count),
+   re-run `cd client_front && npm install && npm run build`. Paste fresh output — not a summary, the actual output.
+2. If tests fail: STOP. Fix and return to Step 3.
+3. Verify git status is clean (no stray untracked files).
+
+
+
+## Step 8: Push + PR
+
+1. Push with upstream tracking:
+   ```bash
+   git push -u origin HEAD
+   ```
+
+2. **PR Idempotency Check** — detect existing PR before creating a new one:
+   ```bash
+   EXISTING_PR=$(gh pr view --json url,number,state -q 'select(.state == "OPEN") | .number' 2>/dev/null || echo "")
+   ```
+   - If `EXISTING_PR` is non-empty: update the existing PR body with `gh pr edit $EXISTING_PR --body "..."`
+   - If empty: create a new PR
+
+3. Create or update PR:
+   ```bash
+   gh pr create --base main --title "<type>: <summary>" --body "$(cat <<'EOF'
+   ## Summary
+   <summarize ALL changes — group by logical section>
+
+   ## Evaluation Scores
+   | Dimension | Score |
+   |-----------|-------|
+   | Completeness | X/5 |
+   | Design | architect | X/10 |
+   | Completeness | product-owner | X/10 |
+   | Quality | engineer | X/10 |
+   | Regression | qa | X/10 |
+   | Scope | project-manager | X/10 |
+   | **Weighted Average** | | **X.X/10** |
+
+   ## Review Findings
+   - High confidence: N findings
+   - Auto-fixed: M findings
+   - Roles dispatched: architect ✓/✗  product-owner ✓/✗  engineer ✓/✗  qa ✓/✗  project-manager ✓/✗
+
+   ## Plan Completion
+   <completion checklist summary, or "No plan file">
+
+   ## Scope Check
+   <CLEAN or list drift/missing items>
+
+   ## Test Coverage
+   <ASCII coverage diagram summary, or "No coverage audit">
+
+   ## TODOS
+   <N completed, M remaining, or "No TODOS.md">
+
+   ## Test Results
+   - [x] All tests pass (N tests)
+
+   EOF
+   )"
+   ```
+
+   If `gh` is not available: print branch name and remote URL for manual PR creation.
+
+4. Output the PR URL.
+
+---
+
+## Step 8.5: Doc-Release (auto-invoke)
+
+After the PR is created/updated, run the `/harness-doc-release` workflow:
+
+1. Compare the diff against all `.md` files in the project
+2. Auto-fix factual inaccuracies (file paths, version numbers, function names)
+3. Flag narrative/opinion changes for user review
+4. If any docs were updated, amend the last commit or create a new commit:
+   ```bash
+   git add '*.md' && git commit -m "docs: sync documentation with latest changes" && git push
+   ```
+
+If no documentation issues are found: skip silently.
+
+---
+
+## Step 8.75: Ship Metrics Persistence
+
+Write ship metrics to `.agents/tasks/task-NNN/ship-metrics.json` for retrospective consumption:
+
+```json
+{
+  "timestamp": "ISO-8601",
+  "branch": "agent/feature-name",
+  "coverage_pct": 85,
+  "plan_total": 5,
+  "plan_done": 5,
+  "pr_quality_score": 8.5,
+  "findings_critical": 0,
+  "findings_informational": 2,
+  "auto_fixed": 1,
+  "test_count": 285,
+  "eval_rounds": 1,
+  "models_used": ["architect", "product-owner", "engineer", "qa", "project-manager"]
+}
+```
+
+If no task directory exists, write to `.agents/ship-metrics.jsonl` (append one JSON object per line).
+
+---
+
+## State Persistence
+
+All state is persisted in `.agents/tasks/task-NNN/`:
+- `plan.md` — the plan (if exists)
+- `build-rN.log` — build logs per round
+- `evaluation-rN.md` — evaluations per round
+- `evaluation-rN.json` — machine-readable scores
+
+If interrupted, resume by checking which artifacts exist and which round number is latest.
+
+---
+
+## Important Rules
+
+- **Never skip eval.** Step 3.8 MUST run. Step 5.9 verifies it did. No exceptions.
+  "Tests pass" is NOT sufficient — eval catches what tests cannot (security, design, scope).
+- **Never skip tests.** If tests fail after triage, stop.
+- **Never skip the 5-role code review.** All 5 reviewers must be dispatched (degrade per ladder if some fail).
+- **Never force push.** Use regular `git push` only.
+- **Never ask for trivial confirmations.** Auto-commit, auto-push, auto-PR.
+- **Split commits for bisectability** — each commit = one logical change.
+- **Never push without fresh verification evidence.** If code changed after tests, re-run.
+- **The goal is: user says `/harness-ship`, next thing they see is the PR URL.**

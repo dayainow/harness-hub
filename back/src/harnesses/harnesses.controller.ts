@@ -1,0 +1,69 @@
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
+import { ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { AdminGuard } from '../common/admin.guard';
+import { CreateHarnessDto } from './dto/create-harness.dto';
+import { QueryHarnessesDto } from './dto/query-harnesses.dto';
+import { SubmitHarnessDto } from './dto/submit-harness.dto';
+import { HarnessesService } from './harnesses.service';
+
+@ApiTags('harnesses')
+@Controller('harnesses')
+export class HarnessesController {
+  constructor(private readonly harnessesService: HarnessesService) {}
+
+  @Get()
+  @ApiOperation({ summary: 'List harnesses with filters and pagination' })
+  @ApiQuery({ name: 'category', required: false })
+  @ApiQuery({ name: 'modelCompat', required: false })
+  @ApiQuery({ name: 'languages', required: false })
+  @ApiQuery({ name: 'licenseTier', required: false })
+  @ApiQuery({ name: 'verified', required: false })
+  @ApiQuery({ name: 'featured', required: false })
+  @ApiQuery({ name: 'search', required: false })
+  @ApiQuery({ name: 'sort', required: false })
+  @ApiQuery({ name: 'page', required: false })
+  @ApiQuery({ name: 'limit', required: false })
+  findAll(@Query() query: QueryHarnessesDto) {
+    return this.harnessesService.findAll(query);
+  }
+
+  @Get('featured')
+  @ApiOperation({ summary: 'List featured harnesses (curated)' })
+  findFeatured() {
+    return this.harnessesService.findFeatured();
+  }
+
+  @Post('submit')
+  @ApiOperation({
+    summary:
+      'Submit a harness for review (auth optional). Creates a PENDING record.',
+  })
+  submit(@Body() dto: SubmitHarnessDto) {
+    return this.harnessesService.submitHarness(dto);
+  }
+
+  // The slug is "org/name" so we use a wildcard segment.
+  // NestJS supports `:param(.*)` regex matchers on Express adapter.
+  @Get(':org/:name')
+  @ApiOperation({ summary: 'Get a single harness by org/name slug' })
+  @ApiParam({ name: 'org', example: 'princeton-nlp' })
+  @ApiParam({ name: 'name', example: 'SWE-agent' })
+  findBySlug(@Param('org') org: string, @Param('name') name: string) {
+    return this.harnessesService.findBySlug(`${org}/${name}`);
+  }
+
+  @UseGuards(AdminGuard)
+  @Post()
+  @ApiOperation({ summary: '[Admin] Create a harness' })
+  create(@Body() dto: CreateHarnessDto) {
+    return this.harnessesService.create(dto);
+  }
+}

@@ -1,0 +1,28 @@
+---
+description: "Harness workflow conventions: commit format, task state management"
+alwaysApply: true
+---
+
+# Harness Workflow Conventions
+
+## Task State
+
+- All task state lives in `.agents/tasks/task-NNN/`
+- Plan: `plan.md`, Build logs: `build-rN.log`, Evaluations: `evaluation-rN.md`
+- Never delete task artifacts — they form the audit trail
+
+## Commit Format
+
+Use conventional commits: `<type>(scope): description`
+- feat: new feature
+- fix: bug fix
+- refactor: code restructuring
+- test: adding or updating tests
+- docs: documentation changes
+- chore: maintenance tasks
+
+## Branch Convention
+
+- Feature branches: `agent/<task-id>-<short-desc>`
+- Trunk branch: `main`
+- Never commit directly to trunk

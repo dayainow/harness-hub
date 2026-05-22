@@ -1,0 +1,60 @@
+/* Admin Color Variables */
+
+:root {
+
+    /* Gray Shades */
+    --Stone-50:#FAFAF9;
+    --Stone-100:#EFEFEF;
+    --Stone-200:#E7E5E4;
+    --Stone-300:#D6D3D1;
+    --Stone-400:#A8A29E;
+    --Stone-500:#78716C;
+    --Stone-600:#57534E;
+    --Stone-700:#44403C;
+    --Stone-800:#292524;
+    --Stone-900:#1C1917;
+    --Stone-950:#0C0A09;
+
+  /* Primary Colors - Change these to match your brand */
+    --primary-50:#F8FAFC;
+    --primary-100:#F1F5F9;
+    --primary-200:#E2E8F0;
+    --primary-400:#94A3B8;
+    --primary-500:#64748B;   /* Main Color */
+    --primary-700:#334155;
+    --primary-800:#1E293B;
+    --primary-900:#0F172A;
+
+    /* Red Colors */
+    --Red-50: #FEF2F2;
+    --Red-500: #EF4444;
+    --Red-600: #DC2626;
+
+    /* Blue Colors */
+    --blue: #007AFF;
+    --blue-50: #EFF6FF;
+    --darkblue: #475569;
+    --indigo: #5856D6;
+
+  /* White Colors */
+    --White: #FFFFFF;
+    --Slate-50: #F8FAFC;
+    --Slate-200:#E2E8F0;
+    --Slate-500: #64748B;
+
+  /* Status Colors */
+  --positive: #21ba45;
+  --negative: #c10015;
+  --info: #31ccec;
+  --warning: #f2c037;
+
+  /* Semantic Colors */
+  --secondary: #2635a6;
+  --accent: #9c27b0;
+  --dark: rgba(255, 255, 255, 0.05);
+  --dark-page: #0f172a;
+
+  /* Sidebar Colors */
+  --sidebar-hover: #F5F5F4;
+  --sidebar-submenu-bg: #FAFAF9;
+}

@@ -1,0 +1,44 @@
+{
+  "Nav": {
+    "products": "도구 탐색",
+    "market": "AI 실험실",
+    "categories": "카테고리",
+    "ranking": "인기 랭킹",
+    "prompts": "프롬프트",
+    "community": "커뮤니티",
+    "submit": "+ 도구 제출",
+    "search": "검색...",
+    "login": "Google로 로그인",
+    "logout": "로그아웃"
+  },
+  "Home": {
+    "heroTag": "일상을 더 창의롭게 만드는 AI 커뮤니티",
+    "heroTitle1": "함께 배우고,",
+    "heroTitle2": "직접 만들고,",
+    "heroTitle3": "AI로 나의 삶을 풍요롭게",
+    "heroDesc": "글쓰기, 이미지, 영상, 음악, 자동화까지 여러 AI 도구를 실험하고 나누세요.",
+    "searchPlaceholder": "어떤 AI를 함께 써보고 싶으신가요?",
+    "searchBtn": "검색",
+    "suggest": "추천:",
+    "weeklyTools": "이번 주 주목할 명당",
+    "weeklyDesc": "지금 가장 반응이 뜨거운 AI 도구들을 확인해보세요",
+    "allTools": "전체 도구 보기",
+    "recentPosts": "모두를 위한 소식통",
+    "allPosts": "커뮤니티 가기",
+    "categoryTitle": "카테고리 탐색하기"
+  },
+  "Common": {
+    "footerDesc": "Ola는 AI를 사랑하는 사람들의 모임입니다. 우리 모두를 위한 1평짜리 AI 실험실.",
+    "terms": "이용약관",
+    "privacy": "개인정보보호",
+    "quickLinks": "빠른링크"
+  },
+  "Footer": {
+    "privacy": "개인정보보호",
+    "terms": "이용약관",
+    "contact": "문의하기",
+    "careers": "채용",
+    "press": "프레스",
+    "support": "고객지원"
+  }
+}

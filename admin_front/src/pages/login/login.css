@@ -1,0 +1,33 @@
+.login-wrapper{
+    margin: 140px auto 0;
+    max-width: 384px;
+    height: 390px;
+    border: 2px solid var( --Stone-200);
+    border-radius: 14px;
+    padding: 24px;
+}
+.login-header{
+    margin-bottom: 24px;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--primary-500);
+}
+.login-input{
+    height: 40px;
+}
+
+.login-id-input{
+    margin-bottom: 24px;
+}
+
+.login-password-input{
+    margin-bottom: 24px;
+}
+
+.login-info-wrapper{
+    margin-top: 12px;
+    text-align: center;
+}
+.login-info{
+    color: var(--Stone-500);
+}

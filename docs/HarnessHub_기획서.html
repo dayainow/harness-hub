@@ -1,0 +1,2482 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>HarnessHub · Service Proposal</title>
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:         #0A0E14;
+    --bg-elev:    #131822;
+    --bg-card:    #1A1F2E;
+    --bg-raised:  #232A3D;
+    --bg-hover:   #2A3247;
+    --border:     #2A3142;
+    --border-sub: #1F2433;
+    --text:       #F0F6FC;
+    --text-2:     #B6BDC9;
+    --text-3:     #7A8290;
+    --text-4:     #4D5666;
+    --accent:     #00E5FF;
+    --accent-2:   #00BCD4;
+    --accent-mute:#0288A4;
+    --on-accent:  #0A0E14;
+    --secondary:  #A78BFA;
+    --success:    #4ADE80;
+    --warning:    #FBBF24;
+    --danger:     #F87171;
+    --pink:       #F472B6;
+    --sans:  'Pretendard', 'Inter', -apple-system, sans-serif;
+    --mono:  'JetBrains Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1320px; margin: 0 auto; padding: 0 32px; }
+
+  /* ============= COVER ============= */
+  .cover {
+    min-height: 100vh;
+    background:
+      radial-gradient(ellipse at 25% 30%, rgba(0,229,255,0.12) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 75%, rgba(167,139,250,0.10) 0%, transparent 50%),
+      var(--bg);
+    position: relative; overflow: hidden;
+    display: flex; flex-direction: column; justify-content: space-between;
+    padding: 48px 0;
+  }
+  .cover::before {
+    content: ""; position: absolute; inset: 0;
+    background:
+      linear-gradient(transparent 95%, rgba(0,229,255,0.04) 95%),
+      linear-gradient(90deg, transparent 95%, rgba(0,229,255,0.04) 95%);
+    background-size: 60px 60px;
+    pointer-events: none;
+    mask: radial-gradient(ellipse at center, black 0%, transparent 70%);
+  }
+  .cover-top {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--text-3);
+    position: relative; z-index: 1;
+  }
+  .cover-top .logo {
+    display: flex; align-items: center; gap: 8px;
+    color: var(--text);
+  }
+  .cover-top .logo .mark {
+    width: 22px; height: 22px;
+    background: var(--accent); color: var(--on-accent);
+    border-radius: 4px;
+    display: grid; place-items: center;
+    font-weight: 800; font-size: 13px;
+    font-family: var(--mono);
+  }
+  .cover-top .right { display: flex; gap: 28px; }
+  .cover-mid {
+    flex: 1; display: flex; flex-direction: column; justify-content: center;
+    padding: 80px 0; position: relative; z-index: 1;
+  }
+  .cover-mid .label {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .cover-mid .label::before {
+    content: ""; width: 32px; height: 1px; background: var(--accent);
+  }
+  .cover-mid h1 {
+    font-size: clamp(56px, 9vw, 132px); font-weight: 800; line-height: 0.95;
+    letter-spacing: -0.04em; margin-bottom: 28px;
+  }
+  .cover-mid h1 .em { color: var(--accent); font-style: normal; }
+  .cover-mid .tagline {
+    font-size: clamp(18px, 2vw, 26px); font-weight: 500; line-height: 1.5;
+    color: var(--text); max-width: 760px; letter-spacing: -0.005em;
+    margin-bottom: 18px;
+  }
+  .cover-mid .deck {
+    font-size: 16px; color: var(--text-2); max-width: 600px;
+    line-height: 1.6; margin-bottom: 24px;
+  }
+  .cover-mid .terminal {
+    margin-top: 36px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+    font-family: var(--mono); font-size: 13px;
+    max-width: 480px;
+  }
+  .cover-mid .terminal .prompt { color: var(--accent); }
+  .cover-mid .terminal .cmd { color: var(--text); }
+  .cover-mid .terminal .out { color: var(--text-3); margin-top: 4px; }
+  .cover-bot {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--text-3);
+    position: relative; z-index: 1;
+  }
+  .cover-bot .arrow {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--accent); display: grid; place-items: center;
+    color: var(--on-accent);
+  }
+
+  /* ============= SECTION ============= */
+  section.chapter { padding: 110px 0; border-top: 1px solid var(--border); }
+  .chapter-head { margin-bottom: 56px; }
+  .chapter-num {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .chapter-num::before { content: ""; width: 36px; height: 1px; background: var(--accent); }
+  .chapter-h2 {
+    font-size: clamp(32px, 4.5vw, 60px); font-weight: 800; line-height: 1.05;
+    letter-spacing: -0.025em; margin-bottom: 18px;
+  }
+  .chapter-h2 .em { color: var(--accent); }
+  .chapter-lead {
+    font-size: 17px; color: var(--text-2); max-width: 760px; line-height: 1.6;
+  }
+  h3.sub-h {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--text-3);
+    margin-bottom: 16px; padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ============= 01 — VALUE ============= */
+  .values-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+  }
+  .value-card {
+    padding: 28px; background: var(--bg-elev); border: 1px solid var(--border-sub);
+    border-radius: 12px; min-height: 240px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    transition: border-color 0.2s, transform 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .value-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+  .value-card .v-num {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+    color: var(--text-4);
+  }
+  .value-card .v-icon {
+    width: 44px; height: 44px;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--accent);
+    display: grid; place-items: center;
+    font-family: var(--mono); font-size: 18px; font-weight: 800;
+    margin-bottom: 22px;
+  }
+  .value-card .v-title {
+    font-size: 22px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.015em;
+  }
+  .value-card .v-body {
+    font-size: 13.5px; color: var(--text-2); line-height: 1.55;
+  }
+
+  /* ============= 02 — PROBLEM ============= */
+  .problem-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+    align-items: start;
+  }
+  .stat-block {
+    padding: 32px; background: var(--bg-elev); border-radius: 12px;
+    border-left: 3px solid var(--accent);
+  }
+  .stat-block .stat-num {
+    font-size: 56px; font-weight: 800; color: var(--accent);
+    line-height: 1; margin-bottom: 12px; letter-spacing: -0.03em;
+    font-family: var(--mono);
+  }
+  .stat-block .stat-label {
+    font-size: 15px; color: var(--text); font-weight: 600; margin-bottom: 8px;
+  }
+  .stat-block .stat-source {
+    font-family: var(--mono); font-size: 11px; color: var(--text-3);
+    letter-spacing: 0.06em;
+  }
+  .pains { display: flex; flex-direction: column; gap: 14px; }
+  .pain {
+    padding: 22px; background: var(--bg-elev); border: 1px solid var(--border-sub);
+    border-radius: 10px;
+    display: grid; grid-template-columns: 36px 1fr; gap: 18px;
+  }
+  .pain .ico {
+    width: 36px; height: 36px; border-radius: 6px;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    display: grid; place-items: center;
+    font-family: var(--mono); color: var(--accent); font-size: 14px;
+  }
+  .pain .tt { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .pain .dd { font-size: 13.5px; color: var(--text-2); line-height: 1.5; }
+
+  /* ============= 03 — PERSONAS ============= */
+  .personas {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+  }
+  .persona {
+    padding: 28px; background: var(--bg-elev); border: 1px solid var(--border-sub);
+    border-radius: 12px; position: relative; overflow: hidden;
+  }
+  .persona::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--accent);
+  }
+  .persona.purple::before { background: var(--secondary); }
+  .persona.pink::before { background: var(--pink); }
+  .persona-head {
+    display: flex; gap: 14px; align-items: center; margin-bottom: 22px;
+  }
+  .persona-avatar {
+    width: 56px; height: 56px; border-radius: 8px;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    display: grid; place-items: center;
+    color: var(--accent); font-family: var(--mono); font-size: 22px;
+  }
+  .persona.purple .persona-avatar { color: var(--secondary); }
+  .persona.pink .persona-avatar { color: var(--pink); }
+  .persona-meta .name { font-size: 18px; font-weight: 800; }
+  .persona-meta .role { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--text-3); margin-top: 4px; }
+  .persona h4 {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--accent); margin: 16px 0 8px;
+  }
+  .persona.purple h4 { color: var(--secondary); }
+  .persona.pink h4 { color: var(--pink); }
+  .persona ul { list-style: none; padding: 0; }
+  .persona li {
+    font-size: 13px; color: var(--text-2); line-height: 1.55;
+    padding-left: 14px; position: relative; margin-bottom: 5px;
+  }
+  .persona li::before {
+    content: ""; position: absolute; left: 0; top: 9px;
+    width: 6px; height: 1px; background: var(--accent);
+  }
+  .persona.purple li::before { background: var(--secondary); }
+  .persona.pink li::before { background: var(--pink); }
+  .persona-quote {
+    margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border-sub);
+    font-style: italic; color: var(--text); font-size: 14px; line-height: 1.5;
+  }
+
+  /* ============= 04 — SOLUTION ============= */
+  .solution-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+  }
+  .feat-card {
+    padding: 24px; background: var(--bg-elev); border: 1px solid var(--border-sub);
+    border-radius: 12px;
+  }
+  .feat-card .icon {
+    width: 36px; height: 36px; border-radius: 6px;
+    background: rgba(0,229,255,0.1);
+    border: 1px solid rgba(0,229,255,0.3);
+    display: grid; place-items: center;
+    color: var(--accent); margin-bottom: 14px;
+    font-family: var(--mono); font-weight: 700;
+  }
+  .feat-card .feat-title { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+  .feat-card .feat-desc { font-size: 13px; color: var(--text-2); line-height: 1.55; }
+
+  /* ============= 05 — IA DIAGRAM ============= */
+  .diagram-wrap {
+    background: var(--bg-elev); border-radius: 14px; padding: 36px;
+    border: 1px solid var(--border-sub);
+  }
+  svg.diagram { width: 100%; height: auto; }
+
+  /* ============= 06 — FLOW TABS ============= */
+  .flow-tabs {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+    margin-bottom: 28px;
+  }
+  .flow-tab {
+    padding: 18px; background: var(--bg-elev); border: 1px solid var(--border-sub);
+    border-radius: 10px;
+  }
+  .flow-tab .ft-num {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+    color: var(--accent); margin-bottom: 8px;
+  }
+  .flow-tab .ft-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .flow-tab .ft-desc { font-size: 12px; color: var(--text-3); line-height: 1.5; }
+  .flow-diagram {
+    background: var(--bg-elev); border-radius: 14px; padding: 32px;
+    margin-bottom: 14px; border: 1px solid var(--border-sub);
+  }
+  .flow-diagram .flow-h {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 8px;
+  }
+  .flow-diagram .flow-t {
+    font-size: 22px; font-weight: 800; margin-bottom: 20px; letter-spacing: -0.01em;
+  }
+
+  /* ============= 07 — MOCKUPS (Web App) ============= */
+  .mockup-section { display: flex; flex-direction: column; gap: 28px; }
+  .web-mockup {
+    background: var(--bg-elev); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+  }
+  .browser-bar {
+    background: var(--bg-card); padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .browser-dots { display: flex; gap: 6px; }
+  .browser-dots span {
+    width: 11px; height: 11px; border-radius: 50%;
+    background: var(--bg-raised);
+  }
+  .browser-bar .url {
+    flex: 1; padding: 6px 12px;
+    background: var(--bg-raised);
+    border-radius: 6px;
+    font-family: var(--mono); font-size: 11.5px;
+    color: var(--text-2);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .browser-bar .url .lock { color: var(--success); font-size: 10px; }
+
+  /* App nav (web) */
+  .app-nav {
+    background: var(--bg);
+    padding: 14px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .app-logo {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 800; font-size: 15px;
+    color: var(--text);
+  }
+  .app-logo .mark {
+    width: 24px; height: 24px;
+    background: var(--accent); color: var(--on-accent);
+    border-radius: 5px;
+    display: grid; place-items: center;
+    font-weight: 800; font-size: 13px;
+    font-family: var(--mono);
+  }
+  .app-menu {
+    display: flex; gap: 22px;
+    font-size: 13px; font-weight: 500;
+  }
+  .app-menu a { color: var(--text-2); text-decoration: none; }
+  .app-menu a.active { color: var(--text); }
+  .app-search {
+    padding: 7px 14px; background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: var(--mono); font-size: 11.5px; color: var(--text-3);
+    display: flex; align-items: center; gap: 8px;
+    width: 280px;
+  }
+  .app-search .kbd {
+    margin-left: auto; padding: 2px 6px; background: var(--bg-raised);
+    border-radius: 3px; font-size: 10px; color: var(--text-3);
+  }
+  .app-actions { display: flex; gap: 10px; align-items: center; }
+  .btn {
+    padding: 7px 14px; border-radius: 6px;
+    font-size: 12.5px; font-weight: 600;
+    border: 1px solid var(--border);
+    color: var(--text); background: transparent;
+  }
+  .btn.primary {
+    background: var(--accent); color: var(--on-accent);
+    border-color: var(--accent);
+  }
+
+  /* HOME hero */
+  .home-hero {
+    padding: 64px 24px 48px;
+    background:
+      radial-gradient(ellipse at 30% 30%, rgba(0,229,255,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 70% 70%, rgba(167,139,250,0.06) 0%, transparent 60%),
+      transparent;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .home-hero .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 5px 12px;
+    background: rgba(0,229,255,0.08);
+    border: 1px solid rgba(0,229,255,0.3);
+    border-radius: 999px;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--accent); margin-bottom: 22px;
+    letter-spacing: 0.06em;
+  }
+  .home-hero h1 {
+    font-size: 44px; font-weight: 800; line-height: 1.05;
+    letter-spacing: -0.025em; margin-bottom: 16px;
+  }
+  .home-hero h1 .em { color: var(--accent); }
+  .home-hero .deck {
+    font-size: 16px; color: var(--text-2); max-width: 560px; margin: 0 auto 28px;
+    line-height: 1.6;
+  }
+  .home-hero .search-big {
+    max-width: 560px; margin: 0 auto;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+    display: flex; align-items: center; gap: 12px;
+    text-align: left;
+  }
+  .home-hero .search-big .ico { color: var(--text-3); }
+  .home-hero .search-big input { flex: 1; background: transparent; border: 0; color: var(--text); font-size: 14px; outline: none; font-family: var(--mono); }
+  .home-hero .search-big .placeholder { flex: 1; font-family: var(--mono); font-size: 13px; color: var(--text-3); }
+  .home-hero .search-big .go {
+    padding: 6px 12px; background: var(--accent); color: var(--on-accent);
+    border-radius: 6px; font-size: 12px; font-weight: 700;
+  }
+  .home-hero .quick-tags {
+    margin-top: 16px;
+    display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+    font-size: 12px; color: var(--text-3);
+  }
+  .home-hero .quick-tags strong { color: var(--text-2); margin-right: 4px; }
+  .home-hero .quick-tags .tag {
+    padding: 4px 10px; background: var(--bg-card);
+    border: 1px solid var(--border-sub); border-radius: 999px;
+    color: var(--text-2);
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .stat-cell { text-align: center; border-right: 1px solid var(--border); }
+  .stat-cell:last-child { border-right: 0; }
+  .stat-cell .num {
+    font-family: var(--mono); font-size: 28px; font-weight: 700; color: var(--text);
+    line-height: 1; margin-bottom: 6px;
+  }
+  .stat-cell .num .accent { color: var(--accent); }
+  .stat-cell .lb { font-size: 11px; color: var(--text-3); font-family: var(--mono); letter-spacing: 0.1em; text-transform: uppercase; }
+
+  /* Sections in mockup */
+  .mock-section {
+    padding: 36px 24px; border-bottom: 1px solid var(--border);
+  }
+  .mock-section h3 {
+    font-size: 18px; font-weight: 700; margin-bottom: 4px;
+    display: flex; align-items: baseline; gap: 12px;
+  }
+  .mock-section h3 .meta {
+    font-family: var(--mono); font-size: 11px; color: var(--text-3); letter-spacing: 0.08em;
+  }
+  .mock-section .desc { font-size: 13px; color: var(--text-2); margin-bottom: 18px; }
+  .mock-section .more {
+    font-family: var(--mono); font-size: 11px; color: var(--accent);
+    margin-left: auto;
+  }
+
+  /* Harness Card */
+  .harness-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+  }
+  .harness-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 20px;
+    transition: border-color 0.2s;
+  }
+  .harness-card:hover { border-color: var(--accent); }
+  .h-head {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 12px;
+  }
+  .h-head .h-org {
+    font-family: var(--mono); font-size: 11px; color: var(--text-3);
+    margin-bottom: 4px;
+  }
+  .h-head .h-name {
+    font-size: 16px; font-weight: 700;
+  }
+  .h-head .h-name .acc { color: var(--accent); }
+  .h-badge {
+    padding: 3px 8px; border-radius: 4px;
+    font-family: var(--mono); font-size: 10px; font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+  .h-badge.featured { background: var(--accent); color: var(--on-accent); }
+  .h-badge.verified { background: var(--bg-raised); color: var(--success); border: 1px solid var(--success); }
+  .h-badge.new { background: var(--bg-raised); color: var(--secondary); border: 1px solid var(--secondary); }
+  .h-desc { font-size: 13px; color: var(--text-2); line-height: 1.55; margin-bottom: 14px; min-height: 40px; }
+  .h-tags { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+  .h-tag {
+    padding: 3px 8px; background: var(--bg-raised); border-radius: 4px;
+    font-family: var(--mono); font-size: 10.5px; color: var(--text-2);
+  }
+  .h-foot {
+    display: flex; align-items: center; gap: 14px;
+    padding-top: 12px; border-top: 1px solid var(--border-sub);
+    font-family: var(--mono); font-size: 11px; color: var(--text-3);
+  }
+  .h-foot .item { display: flex; align-items: center; gap: 4px; }
+  .h-foot .install {
+    margin-left: auto;
+    padding: 4px 10px; background: var(--bg-raised);
+    border-radius: 4px; color: var(--accent); font-weight: 600;
+  }
+
+  /* CATALOG mockup */
+  .catalog-layout {
+    display: grid; grid-template-columns: 240px 1fr; gap: 0;
+  }
+  .catalog-side {
+    background: var(--bg);
+    border-right: 1px solid var(--border);
+    padding: 24px 20px;
+  }
+  .catalog-side h4 {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em;
+    color: var(--text-3); text-transform: uppercase; margin-bottom: 10px;
+    margin-top: 18px;
+  }
+  .catalog-side h4:first-child { margin-top: 0; }
+  .filter-list { display: flex; flex-direction: column; gap: 6px; }
+  .filter-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 7px 10px; border-radius: 6px;
+    font-size: 13px; color: var(--text-2);
+  }
+  .filter-item.active { background: var(--bg-card); color: var(--text); }
+  .filter-item .ct { font-family: var(--mono); font-size: 11px; color: var(--text-3); }
+  .filter-checkbox {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 10px;
+    font-size: 13px; color: var(--text-2);
+  }
+  .filter-checkbox input { accent-color: var(--accent); }
+
+  .catalog-main { padding: 28px 24px; }
+  .catalog-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 22px;
+  }
+  .catalog-head h2 { font-size: 22px; font-weight: 700; }
+  .catalog-head .meta { font-family: var(--mono); font-size: 11.5px; color: var(--text-3); }
+  .catalog-controls {
+    display: flex; gap: 10px; align-items: center;
+    margin-bottom: 18px;
+  }
+  .ctrl-pill {
+    padding: 6px 12px; background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 12px; color: var(--text-2);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .ctrl-pill.active { color: var(--accent); border-color: var(--accent); }
+  .catalog-controls .right {
+    margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--text-3);
+  }
+
+  /* DETAIL mockup */
+  .detail-layout { display: grid; grid-template-columns: 1fr 320px; gap: 0; }
+  .detail-main {
+    padding: 32px; border-right: 1px solid var(--border);
+  }
+  .detail-breadcrumb {
+    font-family: var(--mono); font-size: 11px; color: var(--text-3);
+    letter-spacing: 0.06em; margin-bottom: 12px;
+  }
+  .detail-breadcrumb .acc { color: var(--accent); }
+  .detail-title {
+    font-size: 30px; font-weight: 800; letter-spacing: -0.02em;
+    line-height: 1.15; margin-bottom: 10px;
+  }
+  .detail-title .acc { color: var(--accent); }
+  .detail-sub {
+    font-size: 14px; color: var(--text-2); line-height: 1.5;
+    margin-bottom: 18px;
+  }
+  .detail-meta-row {
+    display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
+    margin-bottom: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--border);
+    font-family: var(--mono); font-size: 12px; color: var(--text-2);
+  }
+  .detail-meta-row .item { display: flex; gap: 5px; align-items: center; }
+  .detail-meta-row .item .acc { color: var(--accent); }
+  .detail-tags-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 24px; }
+
+  /* README block */
+  .readme {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 22px 24px;
+    font-size: 14px; line-height: 1.6;
+    color: var(--text-2);
+    margin-bottom: 18px;
+  }
+  .readme h4 {
+    color: var(--text); font-size: 18px; font-weight: 700;
+    margin-bottom: 10px; padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-sub);
+  }
+  .readme h4 + p { margin-top: 10px; }
+  .readme p { margin-bottom: 10px; }
+  .readme code.inline {
+    background: var(--bg-raised); padding: 2px 6px; border-radius: 3px;
+    font-family: var(--mono); font-size: 12.5px; color: var(--accent);
+  }
+  pre.code-block {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 6px; padding: 16px;
+    font-family: var(--mono); font-size: 12px; line-height: 1.7;
+    overflow-x: auto; color: var(--text);
+    margin: 12px 0;
+  }
+  pre.code-block .c { color: var(--text-3); }
+  pre.code-block .k { color: var(--secondary); }
+  pre.code-block .s { color: var(--success); }
+  pre.code-block .a { color: var(--accent); }
+
+  /* Detail sidebar */
+  .detail-side { padding: 28px 24px; background: var(--bg); }
+  .install-box {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px;
+    margin-bottom: 18px;
+  }
+  .install-box .lb {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--text-3); margin-bottom: 8px;
+  }
+  .install-box code {
+    display: block; padding: 10px 12px;
+    background: var(--bg);
+    border-radius: 4px;
+    font-family: var(--mono); font-size: 12px; color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .install-box .copy {
+    width: 100%; padding: 8px;
+    background: var(--accent); color: var(--on-accent);
+    border-radius: 6px; font-size: 12px; font-weight: 700;
+    text-align: center;
+  }
+  .side-stat {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 0; border-bottom: 1px solid var(--border-sub);
+    font-size: 13px;
+  }
+  .side-stat .lb { color: var(--text-3); display: flex; gap: 6px; align-items: center; }
+  .side-stat .vl { font-weight: 700; font-family: var(--mono); }
+
+  /* ============= 08 — DATA MODEL ============= */
+  .schema-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .schema-card {
+    background: var(--bg-elev); border: 1px solid var(--border);
+    border-radius: 10px; padding: 24px;
+  }
+  .schema-card h4 {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+    color: var(--accent); margin-bottom: 14px; text-transform: uppercase;
+  }
+  table.schema-table { width: 100%; border-collapse: collapse; }
+  table.schema-table th, table.schema-table td {
+    padding: 10px 0; text-align: left;
+    border-bottom: 1px solid var(--border-sub);
+    font-size: 13px;
+  }
+  table.schema-table th {
+    font-family: var(--mono); font-size: 10.5px; color: var(--text-3);
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  table.schema-table td { color: var(--text-2); }
+  table.schema-table td.field { font-family: var(--mono); color: var(--accent); font-size: 12px; }
+  table.schema-table td.type { font-family: var(--mono); color: var(--secondary); font-size: 11.5px; }
+  table.schema-table tr:last-child td { border-bottom: 0; }
+
+  /* ============= 09 — TECH STACK ============= */
+  .tech-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+  }
+  .tech-card {
+    padding: 22px; background: var(--bg-elev); border: 1px solid var(--border-sub);
+    border-radius: 10px;
+  }
+  .tech-card .layer {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+    color: var(--accent); margin-bottom: 8px;
+  }
+  .tech-card .name { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+  .tech-card .desc { font-size: 12.5px; color: var(--text-2); line-height: 1.55; }
+
+  /* ============= 10 — DIFFERENTIATION ============= */
+  .diff-table {
+    background: var(--bg-elev); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden;
+  }
+  .diff-row {
+    display: grid; grid-template-columns: 200px repeat(3, 1fr);
+    border-bottom: 1px solid var(--border);
+  }
+  .diff-row:last-child { border-bottom: 0; }
+  .diff-row.head {
+    background: var(--bg-card);
+  }
+  .diff-row .cell {
+    padding: 16px 20px; font-size: 13px;
+    border-right: 1px solid var(--border);
+  }
+  .diff-row .cell:last-child { border-right: 0; }
+  .diff-row.head .cell {
+    font-weight: 700; font-size: 14px;
+  }
+  .diff-row .cell.label {
+    background: var(--bg-card); color: var(--text-2);
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em;
+  }
+  .diff-row .cell.us {
+    background: rgba(0,229,255,0.04);
+    color: var(--text);
+  }
+  .diff-row.head .cell.us {
+    color: var(--accent);
+  }
+  .diff-row .cell .check { color: var(--success); margin-right: 6px; }
+  .diff-row .cell .x { color: var(--text-4); margin-right: 6px; }
+
+  /* ============= 11 — ROADMAP ============= */
+  .roadmap {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+  }
+  .phase {
+    padding: 28px; background: var(--bg-elev); border: 1px solid var(--border-sub);
+    border-radius: 12px; position: relative;
+  }
+  .phase.now { border-color: var(--accent); }
+  .phase.now::after {
+    content: "현재"; position: absolute; top: 16px; right: 16px;
+    background: var(--accent); color: var(--on-accent);
+    font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 4px;
+    letter-spacing: 0.05em; font-family: var(--mono);
+  }
+  .phase .ph-num {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+    color: var(--accent); margin-bottom: 8px;
+  }
+  .phase .ph-title { font-size: 20px; font-weight: 800; margin-bottom: 4px; letter-spacing: -0.01em; }
+  .phase .ph-period { font-family: var(--mono); font-size: 11px; color: var(--text-3); margin-bottom: 16px; }
+  .phase ul { list-style: none; }
+  .phase li {
+    padding: 10px 0; border-bottom: 1px solid var(--border-sub);
+    font-size: 13px; color: var(--text-2); display: flex; gap: 10px;
+  }
+  .phase li::before { content: "→"; color: var(--accent); flex-shrink: 0; font-family: var(--mono); }
+
+  /* ============= 12 — METRICS ============= */
+  .metrics {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+  }
+  .metric-card {
+    padding: 24px; background: var(--bg-elev); border: 1px solid var(--border-sub);
+    border-radius: 10px;
+  }
+  .metric-card .m-cat {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+    color: var(--accent); margin-bottom: 10px;
+  }
+  .metric-card .m-name { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .metric-card .m-target {
+    font-family: var(--mono); font-size: 22px; font-weight: 700;
+    color: var(--accent); margin-bottom: 4px;
+  }
+  .metric-card .m-desc { font-size: 11.5px; color: var(--text-3); line-height: 1.5; }
+
+  /* ============= MONETIZATION ============= */
+  .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .pricing-card {
+    padding: 28px; background: var(--bg-elev); border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .pricing-card.featured {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px rgba(0,229,255,0.2);
+    position: relative;
+  }
+  .pricing-card.featured::before {
+    content: "POPULAR"; position: absolute; top: -10px; left: 24px;
+    background: var(--accent); color: var(--on-accent);
+    font-family: var(--mono); font-size: 10px; font-weight: 700;
+    padding: 3px 10px; border-radius: 999px;
+    letter-spacing: 0.1em;
+  }
+  .pricing-card .tier-name { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .pricing-card .tier-price {
+    font-family: var(--mono); font-size: 32px; font-weight: 800;
+    margin-bottom: 4px;
+  }
+  .pricing-card .tier-price .em { color: var(--accent); }
+  .pricing-card .tier-period { font-family: var(--mono); font-size: 11px; color: var(--text-3); margin-bottom: 18px; }
+  .pricing-card ul { list-style: none; padding: 0; margin-bottom: 20px; }
+  .pricing-card li {
+    padding: 8px 0; font-size: 13px; color: var(--text-2);
+    display: flex; gap: 8px;
+  }
+  .pricing-card li::before { content: "✓"; color: var(--accent); flex-shrink: 0; }
+  .pricing-card .tier-cta {
+    width: 100%; padding: 10px;
+    background: var(--bg-raised); border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px; font-weight: 700; text-align: center;
+    color: var(--text);
+  }
+  .pricing-card.featured .tier-cta { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+
+  /* ============= COLOPHON ============= */
+  footer {
+    padding: 80px 0 60px; border-top: 1px solid var(--border);
+    text-align: center;
+  }
+  footer .big {
+    font-size: clamp(36px, 5vw, 60px); font-weight: 800;
+    letter-spacing: -0.025em; margin-bottom: 18px; line-height: 1.05;
+  }
+  footer .big .em { color: var(--accent); }
+  footer .meta {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--text-3);
+  }
+
+  /* ============= RESPONSIVE ============= */
+  @media (max-width: 1100px) {
+    .values-grid { grid-template-columns: repeat(2, 1fr); }
+    .personas { grid-template-columns: 1fr; }
+    .solution-grid { grid-template-columns: 1fr; }
+    .schema-grid { grid-template-columns: 1fr; }
+    .tech-grid { grid-template-columns: 1fr; }
+    .roadmap { grid-template-columns: 1fr; }
+    .metrics { grid-template-columns: 1fr 1fr; }
+    .flow-tabs { grid-template-columns: 1fr 1fr; }
+    .problem-grid { grid-template-columns: 1fr; gap: 28px; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .harness-grid { grid-template-columns: 1fr; }
+    .catalog-layout { grid-template-columns: 1fr; }
+    .catalog-side { display: none; }
+    .detail-layout { grid-template-columns: 1fr; }
+    .diff-row { grid-template-columns: 140px 1fr 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================ -->
+<!-- COVER                                       -->
+<!-- ============================================ -->
+<section class="cover">
+  <div class="wrap cover-top">
+    <span class="logo">
+      <span class="mark">{ }</span>
+      HarnessHub
+    </span>
+    <div class="right">
+      <span>v1.0 · Service Proposal</span>
+      <span>2026.05</span>
+    </div>
+  </div>
+
+  <div class="wrap cover-mid">
+    <div class="label">Service Proposal · 서비스 기획서</div>
+    <h1>
+      Harness<span class="em">Hub</span>
+    </h1>
+    <p class="tagline">
+      GitHub의 모든 <span style="color:var(--accent);">AI 에이전트 하네스</span>를<br/>
+      한 곳에서 발견·설치·공유하세요.
+    </p>
+    <p class="deck">
+      The marketplace for AI agent harnesses — discover, install, ship.<br/>
+      하네스 엔지니어링 시대의 npm/PyPI를 표방한다.
+    </p>
+    <div class="terminal">
+      <div><span class="prompt">$</span> <span class="cmd">npx harnesshub install swe-agent</span></div>
+      <div class="out">→ Pulling from github.com/princeton-nlp/SWE-agent ...</div>
+      <div class="out">→ Resolved 14 dependencies · ready in 3.2s ✓</div>
+    </div>
+  </div>
+
+  <div class="wrap cover-bot">
+    <span>15 sections · 8 mockups · 4 user flows · License-safe by design</span>
+    <span style="font-family:var(--sans);font-size:13px;color:var(--text-2);">Scroll →</span>
+    <div class="arrow">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 01 — WHY NOW                                -->
+<!-- ============================================ -->
+<section class="chapter">
+  <div class="wrap">
+    <div class="chapter-head">
+      <div class="chapter-num">01 — Why Now · 왜 지금인가</div>
+      <h2 class="chapter-h2">하네스 엔지니어링은<br/><span class="em">학문</span>이 되고 있다.</h2>
+      <p class="chapter-lead">
+        2024년부터 SWE-agent, OpenHands, Aider, Cline, METR ResearchAgent 같은 에이전트 하네스가 폭발적으로 등장했다. 모델보다 하네스가 성능을 좌우하는 시대다. 하지만 정작 이 하네스들은 GitHub 어딘가에 흩어져 있다.
+      </p>
+    </div>
+
+    <div class="values-grid">
+      <div class="value-card">
+        <div class="v-num">VALUE 01</div>
+        <div>
+          <div class="v-icon">⌕</div>
+          <div class="v-title">Discover</div>
+          <div class="v-body">GitHub 전역에서 자동 수집한 하네스를 카테고리·프레임워크·모델별로 큐레이션한다.</div>
+        </div>
+      </div>
+      <div class="value-card">
+        <div class="v-num">VALUE 02</div>
+        <div>
+          <div class="v-icon">↓</div>
+          <div class="v-title">Install</div>
+          <div class="v-body">한 줄 명령어로 설치 가능. CLI · Docker · npm · pip 통합 제공.</div>
+        </div>
+      </div>
+      <div class="value-card">
+        <div class="v-num">VALUE 03</div>
+        <div>
+          <div class="v-icon">★</div>
+          <div class="v-title">Evaluate</div>
+          <div class="v-body">SWE-bench 등 표준 벤치마크 점수와 커뮤니티 리뷰를 한눈에 비교.</div>
+        </div>
+      </div>
+      <div class="value-card">
+        <div class="v-num">VALUE 04</div>
+        <div>
+          <div class="v-icon">⤴</div>
+          <div class="v-title">Share</div>
+          <div class="v-body">자신의 하네스를 등록하면 GitHub 푸시할 때마다 자동 동기화된다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 02 — PROBLEM                                -->
+<!-- ============================================ -->
+<section class="chapter">
+  <div class="wrap">
+    <div class="chapter-head">
+      <div class="chapter-num">02 — Problem &amp; Opportunity</div>
+      <h2 class="chapter-h2">하네스는 흩어져 있다,<br/><span class="em">가치는 잠겨 있다</span>.</h2>
+      <p class="chapter-lead">
+        에이전트 하네스 생태계는 폭발적으로 자라지만, 발견 가능성·재현성·표준이 부재하다. "이런 게 있는지 몰랐어요"가 가장 많이 듣는 말이다.
+      </p>
+    </div>
+
+    <div class="problem-grid">
+      <div>
+        <div class="stat-block">
+          <div class="stat-num">12,400+</div>
+          <div class="stat-label">2025년 1년간 GitHub에 등장한 "agent" 토픽 신규 리포</div>
+          <div class="stat-source">SOURCE · GitHub Search API, 2025 추정</div>
+        </div>
+        <div class="stat-block" style="margin-top:14px;">
+          <div class="stat-num">73%</div>
+          <div class="stat-label">"하네스 선택에 1주일 이상 걸렸다"고 답한 ML 엔지니어</div>
+          <div class="stat-source">SOURCE · 가상 설문, n=120 (실제 출시 시 검증 필요)</div>
+        </div>
+        <div class="stat-block" style="margin-top:14px;">
+          <div class="stat-num">∅</div>
+          <div class="stat-label">현재 "AI 에이전트 하네스" 전용 큐레이션 마켓플레이스의 수</div>
+          <div class="stat-source">SOURCE · 경쟁 분석 (Claude Skills · MCP 마켓은 있지만 하네스는 없음)</div>
+        </div>
+      </div>
+      <div class="pains">
+        <div class="pain">
+          <div class="ico">⊕</div>
+          <div>
+            <div class="tt">발견 비용이 너무 높다</div>
+            <div class="dd">GitHub Trending, Awesome 리스트, 트위터, 블로그를 뒤져야 한다. 표준 디렉터리가 없다.</div>
+          </div>
+        </div>
+        <div class="pain">
+          <div class="ico">⊗</div>
+          <div>
+            <div class="tt">메타데이터가 제각각</div>
+            <div class="dd">어떤 모델 호환되는지, 어떤 도구 사용하는지, 라이선스가 무엇인지 — README를 다 읽어야 안다.</div>
+          </div>
+        </div>
+        <div class="pain">
+          <div class="ico">⊘</div>
+          <div>
+            <div class="tt">설치·실행 진입장벽</div>
+            <div class="dd">의존성, API 키, Docker 설정 등 환경 구성이 복잡. 한 줄로 시도해볼 방법이 없다.</div>
+          </div>
+        </div>
+        <div class="pain">
+          <div class="ico">⊜</div>
+          <div>
+            <div class="tt">평가·비교 어려움</div>
+            <div class="dd">"이 하네스가 정말 좋은가?"를 판단할 표준 메트릭이 없다. 별점만으론 부족하다.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 03 — PERSONAS                              -->
+<!-- ============================================ -->
+<section class="chapter">
+  <div class="wrap">
+    <div class="chapter-head">
+      <div class="chapter-num">03 — Target Personas</div>
+      <h2 class="chapter-h2">세 명의 <span class="em">개발자</span>.</h2>
+      <p class="chapter-lead">
+        HarnessHub은 일반 개발자도 진입 가능하도록 설계된다. AI 박사학위는 필요 없다. 호기심과 한 줄 명령어 실행 능력만 있으면 된다.
+      </p>
+    </div>
+
+    <div class="personas">
+      <div class="persona">
+        <div class="persona-head">
+          <div class="persona-avatar">{ }</div>
+          <div class="persona-meta">
+            <div class="name">민준</div>
+            <div class="role">Backend Dev · 27 · 3yrs</div>
+          </div>
+        </div>
+        <h4>Goals</h4>
+        <ul>
+          <li>회사 사이드 프로젝트에 코딩 에이전트 도입</li>
+          <li>주말에 트렌드 따라잡기</li>
+          <li>한 줄로 실행해보고 싶음</li>
+        </ul>
+        <h4>Frustrations</h4>
+        <ul>
+          <li>"agent" 키워드만 쳐도 결과가 너무 많음</li>
+          <li>README 읽다가 환경 설정에서 포기</li>
+          <li>어떤 게 검증된 건지 모름</li>
+        </ul>
+        <div class="persona-quote">"Vercel처럼 'Deploy' 버튼 한 번이면 좋겠어요. 그 정도 바라는 게 욕심인가요?"</div>
+      </div>
+      <div class="persona purple">
+        <div class="persona-head">
+          <div class="persona-avatar">⚡</div>
+          <div class="persona-meta">
+            <div class="name">서연</div>
+            <div class="role">ML Engineer · 32 · Senior</div>
+          </div>
+        </div>
+        <h4>Goals</h4>
+        <ul>
+          <li>SOTA 하네스 비교·평가</li>
+          <li>자체 하네스 오픈소스 기여 / 홍보</li>
+          <li>벤치마크 점수 한눈에 보기</li>
+        </ul>
+        <h4>Frustrations</h4>
+        <ul>
+          <li>SWE-bench 점수가 페이퍼마다 다름</li>
+          <li>내 하네스를 알릴 채널이 트위터 뿐</li>
+          <li>버전 호환성·deps 추적 안 됨</li>
+        </ul>
+        <div class="persona-quote">"내가 만든 하네스를 한 곳에 올리면 GitHub 별표보다 의미있는 신호가 모이면 좋겠어요."</div>
+      </div>
+      <div class="persona pink">
+        <div class="persona-head">
+          <div class="persona-avatar">⌘</div>
+          <div class="persona-meta">
+            <div class="name">은지</div>
+            <div class="role">Tech Lead · 38 · Eng Manager</div>
+          </div>
+        </div>
+        <h4>Goals</h4>
+        <ul>
+          <li>팀 도입할 검증된 하네스 선정</li>
+          <li>라이선스·보안 컴플라이언스 확인</li>
+          <li>SaaS / Self-host 선택지 비교</li>
+        </ul>
+        <h4>Frustrations</h4>
+        <ul>
+          <li>오픈소스 하네스의 production-readiness 모호</li>
+          <li>법무 검토용 라이선스 표시 부재</li>
+          <li>유지보수 지속성 불확실</li>
+        </ul>
+        <div class="persona-quote">"npm에 'maintenance' 뱃지 보고 결정하듯, 하네스도 그런 신호가 있으면 도입 결정이 빠르겠어요."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 04 — SOLUTION                              -->
+<!-- ============================================ -->
+<section class="chapter">
+  <div class="wrap">
+    <div class="chapter-head">
+      <div class="chapter-num">04 — Solution Overview</div>
+      <h2 class="chapter-h2">GitHub과 <span class="em">동기화</span>되는<br/>큐레이션 마켓플레이스.</h2>
+      <p class="chapter-lead">
+        HarnessHub은 npm registry처럼 자동화되고, Vercel Templates처럼 큐레이션되며, Product Hunt처럼 커뮤니티가 살아있는 — 세 가지를 결합한 새로운 카테고리다.
+      </p>
+    </div>
+
+    <div class="solution-grid">
+      <div class="feat-card">
+        <div class="icon">G</div>
+        <div class="feat-title">GitHub Auto-Sync</div>
+        <div class="feat-desc">리포 등록 → README/manifest 파싱 → 메타데이터 추출 → 별·릴리즈·이슈 추적. 푸시될 때마다 자동 갱신.</div>
+      </div>
+      <div class="feat-card">
+        <div class="icon">⌕</div>
+        <div class="feat-title">Faceted Discovery</div>
+        <div class="feat-desc">언어·프레임워크·모델 호환·평가 점수·라이선스로 필터링. Algolia 기반 즉각 검색.</div>
+      </div>
+      <div class="feat-card">
+        <div class="icon">$</div>
+        <div class="feat-title">One-Line Install</div>
+        <div class="feat-desc"><code style="font-family:var(--mono);font-size:11px;color:var(--accent);background:var(--bg-raised);padding:2px 4px;border-radius:3px;">npx harnesshub run &lt;name&gt;</code> 한 줄로 Docker 컨테이너 실행 또는 의존성 설치.</div>
+      </div>
+      <div class="feat-card">
+        <div class="icon">⭐</div>
+        <div class="feat-title">Verified Badges</div>
+        <div class="feat-desc">CI 통과 · 릴리즈 활성 · 라이선스 명시 · 보안 스캔 통과 등 객관적 신호를 뱃지로 표시.</div>
+      </div>
+      <div class="feat-card">
+        <div class="icon">📊</div>
+        <div class="feat-title">Benchmark Hub</div>
+        <div class="feat-desc">SWE-bench, MLE-bench, AgentBench 점수 통합. 같은 환경에서 측정한 점수만 비교 가능.</div>
+      </div>
+      <div class="feat-card">
+        <div class="icon">⚒</div>
+        <div class="feat-title">Recipes &amp; Stacks</div>
+        <div class="feat-desc">"Coding 에이전트 + Sandbox + LLM 클라이언트" 조합 레시피. 실전 스택을 그대로 가져다 쓴다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 05 — IA                                    -->
+<!-- ============================================ -->
+<section class="chapter">
+  <div class="wrap">
+    <div class="chapter-head">
+      <div class="chapter-num">05 — Information Architecture</div>
+      <h2 class="chapter-h2">사이트 <span class="em">맵</span>.</h2>
+      <p class="chapter-lead">
+        랜딩 → 카탈로그 → 상세 → 설치의 4단계 핵심 동선. 그 외 커뮤니티(리뷰), 등록(Submit), 대시보드를 갖는다.
+      </p>
+    </div>
+
+    <div class="diagram-wrap">
+      <svg class="diagram" viewBox="0 0 1200 540" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#7A8290"/></marker>
+          <marker id="arrAcc" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#00E5FF"/></marker>
+        </defs>
+
+        <!-- Root -->
+        <rect x="500" y="20" width="200" height="60" rx="10" fill="#00E5FF"/>
+        <text x="600" y="46" text-anchor="middle" font-family="Inter" font-size="14" font-weight="800" fill="#0A0E14">harnesshub.dev</text>
+        <text x="600" y="64" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#0A0E14" letter-spacing="2">ROOT</text>
+
+        <!-- Auth flow -->
+        <rect x="80" y="120" width="160" height="50" rx="8" fill="#1A1F2E" stroke="#2A3142"/>
+        <text x="160" y="142" text-anchor="middle" font-family="Inter" font-size="12" font-weight="700" fill="#F0F6FC">로그인</text>
+        <text x="160" y="158" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#7A8290">SIGN IN (GH)</text>
+
+        <!-- Main pages -->
+        <rect x="280" y="120" width="160" height="50" rx="8" fill="#1A1F2E" stroke="#00E5FF"/>
+        <text x="360" y="142" text-anchor="middle" font-family="Inter" font-size="12" font-weight="700" fill="#F0F6FC">홈</text>
+        <text x="360" y="158" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#00E5FF">HOME</text>
+
+        <rect x="460" y="120" width="160" height="50" rx="8" fill="#1A1F2E" stroke="#00E5FF"/>
+        <text x="540" y="142" text-anchor="middle" font-family="Inter" font-size="12" font-weight="700" fill="#F0F6FC">카탈로그</text>
+        <text x="540" y="158" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#00E5FF">/explore</text>
+
+        <rect x="640" y="120" width="160" height="50" rx="8" fill="#1A1F2E" stroke="#2A3142"/>
+        <text x="720" y="142" text-anchor="middle" font-family="Inter" font-size="12" font-weight="700" fill="#F0F6FC">컬렉션</text>
+        <text x="720" y="158" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#7A8290">/collections</text>
+
+        <rect x="820" y="120" width="160" height="50" rx="8" fill="#1A1F2E" stroke="#2A3142"/>
+        <text x="900" y="142" text-anchor="middle" font-family="Inter" font-size="12" font-weight="700" fill="#F0F6FC">벤치마크</text>
+        <text x="900" y="158" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#7A8290">/benchmarks</text>
+
+        <rect x="1000" y="120" width="160" height="50" rx="8" fill="#1A1F2E" stroke="#2A3142"/>
+        <text x="1080" y="142" text-anchor="middle" font-family="Inter" font-size="12" font-weight="700" fill="#F0F6FC">문서</text>
+        <text x="1080" y="158" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#7A8290">/docs</text>
+
+        <!-- Detail tier -->
+        <rect x="380" y="220" width="200" height="55" rx="8" fill="#1A1F2E" stroke="#00E5FF"/>
+        <text x="480" y="244" text-anchor="middle" font-family="Inter" font-size="13" font-weight="700" fill="#F0F6FC">하네스 상세</text>
+        <text x="480" y="262" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#00E5FF">/h/[org]/[name]</text>
+
+        <rect x="620" y="220" width="180" height="55" rx="8" fill="#1A1F2E" stroke="#2A3142"/>
+        <text x="710" y="244" text-anchor="middle" font-family="Inter" font-size="13" font-weight="700" fill="#F0F6FC">컬렉션 상세</text>
+        <text x="710" y="262" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#7A8290">/c/[slug]</text>
+
+        <rect x="840" y="220" width="180" height="55" rx="8" fill="#1A1F2E" stroke="#2A3142"/>
+        <text x="930" y="244" text-anchor="middle" font-family="Inter" font-size="13" font-weight="700" fill="#F0F6FC">벤치마크 상세</text>
+        <text x="930" y="262" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#7A8290">/b/[name]</text>
+
+        <!-- Detail children -->
+        <rect x="240" y="330" width="160" height="50" rx="8" fill="#131822" stroke="#2A3142"/>
+        <text x="320" y="352" text-anchor="middle" font-family="Inter" font-size="12" fill="#F0F6FC">README</text>
+
+        <rect x="420" y="330" width="160" height="50" rx="8" fill="#131822" stroke="#2A3142"/>
+        <text x="500" y="352" text-anchor="middle" font-family="Inter" font-size="12" fill="#F0F6FC">설치 / 실행</text>
+
+        <rect x="600" y="330" width="160" height="50" rx="8" fill="#131822" stroke="#2A3142"/>
+        <text x="680" y="352" text-anchor="middle" font-family="Inter" font-size="12" fill="#F0F6FC">리뷰</text>
+
+        <rect x="780" y="330" width="160" height="50" rx="8" fill="#131822" stroke="#2A3142"/>
+        <text x="860" y="352" text-anchor="middle" font-family="Inter" font-size="12" fill="#F0F6FC">벤치마크 결과</text>
+
+        <!-- Submit / Dashboard -->
+        <rect x="80" y="430" width="200" height="55" rx="8" fill="#1A1F2E" stroke="#A78BFA"/>
+        <text x="180" y="454" text-anchor="middle" font-family="Inter" font-size="13" font-weight="700" fill="#F0F6FC">하네스 등록</text>
+        <text x="180" y="472" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#A78BFA">/submit</text>
+
+        <rect x="320" y="430" width="200" height="55" rx="8" fill="#1A1F2E" stroke="#A78BFA"/>
+        <text x="420" y="454" text-anchor="middle" font-family="Inter" font-size="13" font-weight="700" fill="#F0F6FC">대시보드</text>
+        <text x="420" y="472" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#A78BFA">/dashboard</text>
+
+        <rect x="560" y="430" width="200" height="55" rx="8" fill="#1A1F2E" stroke="#A78BFA"/>
+        <text x="660" y="454" text-anchor="middle" font-family="Inter" font-size="13" font-weight="700" fill="#F0F6FC">프로필</text>
+        <text x="660" y="472" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#A78BFA">/u/[username]</text>
+
+        <rect x="800" y="430" width="200" height="55" rx="8" fill="#1A1F2E" stroke="#A78BFA"/>
+        <text x="900" y="454" text-anchor="middle" font-family="Inter" font-size="13" font-weight="700" fill="#F0F6FC">설정</text>
+        <text x="900" y="472" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#A78BFA">/settings</text>
+
+        <!-- Lines -->
+        <line x1="600" y1="80" x2="160" y2="120" stroke="#7A8290" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#arr)"/>
+        <line x1="600" y1="80" x2="360" y2="120" stroke="#00E5FF" stroke-width="2" marker-end="url(#arrAcc)"/>
+        <line x1="600" y1="80" x2="540" y2="120" stroke="#00E5FF" stroke-width="2" marker-end="url(#arrAcc)"/>
+        <line x1="600" y1="80" x2="720" y2="120" stroke="#7A8290" stroke-width="1" marker-end="url(#arr)"/>
+        <line x1="600" y1="80" x2="900" y2="120" stroke="#7A8290" stroke-width="1" marker-end="url(#arr)"/>
+        <line x1="600" y1="80" x2="1080" y2="120" stroke="#7A8290" stroke-width="1" marker-end="url(#arr)"/>
+
+        <line x1="540" y1="170" x2="480" y2="220" stroke="#00E5FF" stroke-width="2" marker-end="url(#arrAcc)"/>
+        <line x1="720" y1="170" x2="710" y2="220" stroke="#7A8290" stroke-width="1" marker-end="url(#arr)"/>
+        <line x1="900" y1="170" x2="930" y2="220" stroke="#7A8290" stroke-width="1" marker-end="url(#arr)"/>
+
+        <line x1="480" y1="275" x2="320" y2="330" stroke="#7A8290" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#arr)"/>
+        <line x1="480" y1="275" x2="500" y2="330" stroke="#7A8290" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#arr)"/>
+        <line x1="480" y1="275" x2="680" y2="330" stroke="#7A8290" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#arr)"/>
+        <line x1="480" y1="275" x2="860" y2="330" stroke="#7A8290" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#arr)"/>
+
+        <line x1="160" y1="170" x2="180" y2="430" stroke="#7A8290" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#arr)"/>
+        <line x1="160" y1="170" x2="420" y2="430" stroke="#7A8290" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#arr)"/>
+        <line x1="160" y1="170" x2="660" y2="430" stroke="#7A8290" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#arr)"/>
+        <line x1="160" y1="170" x2="900" y2="430" stroke="#7A8290" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#arr)"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 06 — USER FLOWS                            -->
+<!-- ============================================ -->
+<section class="chapter">
+  <div class="wrap">
+    <div class="chapter-head">
+      <div class="chapter-num">06 — User Flows</div>
+      <h2 class="chapter-h2">네 가지 핵심 <span class="em">시나리오</span>.</h2>
+      <p class="chapter-lead">
+        실제 사용자가 HarnessHub을 사용하는 가장 핵심적인 4개 흐름. 각 흐름은 첫 진입에서 가치 도달까지 5분 이내를 목표로 한다.
+      </p>
+    </div>
+
+    <div class="flow-tabs">
+      <div class="flow-tab"><div class="ft-num">FLOW 01</div><div class="ft-title">Discover &amp; Install</div><div class="ft-desc">방문 → 검색 → 상세 → 한 줄 설치</div></div>
+      <div class="flow-tab"><div class="ft-num">FLOW 02</div><div class="ft-title">Compare &amp; Decide</div><div class="ft-desc">3개 후보 비교 → 도입 결정</div></div>
+      <div class="flow-tab"><div class="ft-num">FLOW 03</div><div class="ft-title">Submit &amp; Verify</div><div class="ft-desc">자기 하네스 등록 → 자동 검증</div></div>
+      <div class="flow-tab"><div class="ft-num">FLOW 04</div><div class="ft-title">Review &amp; Curate</div><div class="ft-desc">사용 후 리뷰 → 컬렉션 생성</div></div>
+    </div>
+
+    <!-- Flow 01 -->
+    <div class="flow-diagram">
+      <div class="flow-h">FLOW 01</div>
+      <div class="flow-t">Discover &amp; Install — 첫 방문에서 5분 안에 실행까지</div>
+      <svg class="diagram" viewBox="0 0 1200 200" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="ar11" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#00E5FF"/></marker>
+        </defs>
+        <rect x="20"   y="70" width="160" height="60" rx="8" fill="#1A1F2E" stroke="#00E5FF"/>
+        <text x="100" y="96" text-anchor="middle" font-family="Inter" font-size="13" font-weight="700" fill="#F0F6FC">홈 진입</text>
+        <text x="100" y="114" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#00E5FF">LANDING</text>
+
+        <rect x="200" y="70" width="160" height="60" rx="8" fill="#1A1F2E" stroke="#2A3142"/>
+        <text x="280" y="96" text-anchor="middle" font-family="Inter" font-size="13" font-weight="700" fill="#F0F6FC">검색 / 카탈로그</text>
+        <text x="280" y="114" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#7A8290">EXPLORE</text>
+
+        <rect x="380" y="70" width="160" height="60" rx="8" fill="#1A1F2E" stroke="#2A3142"/>
+        <text x="460" y="96" text-anchor="middle" font-family="Inter" font-size="13" font-weight="700" fill="#F0F6FC">필터 적용</text>
+        <text x="460" y="114" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#7A8290">FILTER</text>
+
+        <rect x="560" y="70" width="160" height="60" rx="8" fill="#1A1F2E" stroke="#00E5FF"/>
+        <text x="640" y="96" text-anchor="middle" font-family="Inter" font-size="13" font-weight="700" fill="#F0F6FC">상세 페이지</text>
+        <text x="640" y="114" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#00E5FF">DETAIL</text>
+
+        <rect x="740" y="70" width="160" height="60" rx="8" fill="#1A1F2E" stroke="#2A3142"/>
+        <text x="820" y="96" text-anchor="middle" font-family="Inter" font-size="13" font-weight="700" fill="#F0F6FC">설치 명령 복사</text>
+        <text x="820" y="114" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#7A8290">COPY CMD</text>
+
+        <rect x="920" y="70" width="160" height="60" rx="8" fill="#1A1F2E" stroke="#2A3142"/>
+        <text x="1000" y="96" text-anchor="middle" font-family="Inter" font-size="13" font-weight="700" fill="#F0F6FC">터미널 실행</text>
+        <text x="1000" y="114" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#7A8290">RUN LOCAL</text>
+
+        <rect x="1100" y="70" width="80" height="60" rx="8" fill="#00E5FF"/>
+        <text x="1140" y="96" text-anchor="middle" font-family="Inter" font-size="13" font-weight="800" fill="#0A0E14">실행</text>
+        <text x="1140" y="114" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#0A0E14">DONE</text>
+
+        <line x1="180" y1="100" x2="200" y2="100" stroke="#00E5FF" stroke-width="2" marker-end="url(#ar11)"/>
+        <line x1="360" y1="100" x2="380" y2="100" stroke="#00E5FF" stroke-width="2" marker-end="url(#ar11)"/>
+        <line x1="540" y1="100" x2="560" y2="100" stroke="#00E5FF" stroke-width="2" marker-end="url(#ar11)"/>
+        <line x1="720" y1="100" x2="740" y2="100" stroke="#00E5FF" stroke-width="2" marker-end="url(#ar11)"/>
+        <line x1="900" y1="100" x2="920" y2="100" stroke="#00E5FF" stroke-width="2" marker-end="url(#ar11)"/>
+        <line x1="1080" y1="100" x2="1100" y2="100" stroke="#00E5FF" stroke-width="2" marker-end="url(#ar11)"/>
+
+        <text x="600" y="170" text-anchor="middle" font-family="Inter" font-size="13" font-style="italic" fill="#7A8290">목표 · TTV (Time To Value) 5분 이내</text>
+      </svg>
+    </div>
+
+    <!-- Flow 03 -->
+    <div class="flow-diagram">
+      <div class="flow-h">FLOW 03</div>
+      <div class="flow-t">Submit &amp; Verify — 내 하네스 등록 자동화</div>
+      <svg class="diagram" viewBox="0 0 1200 240" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="ar3" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#00E5FF"/></marker>
+          <marker id="ar3p" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#A78BFA"/></marker>
+        </defs>
+        <rect x="20"   y="20" width="160" height="60" rx="8" fill="#1A1F2E" stroke="#00E5FF"/>
+        <text x="100" y="46" text-anchor="middle" font-family="Inter" font-size="13" font-weight="700" fill="#F0F6FC">/submit 진입</text>
+        <text x="100" y="64" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#00E5FF">START</text>
+
+        <rect x="200" y="20" width="160" height="60" rx="8" fill="#1A1F2E" stroke="#2A3142"/>
+        <text x="280" y="46" text-anchor="middle" font-family="Inter" font-size="13" font-weight="700" fill="#F0F6FC">GitHub URL 입력</text>
+        <text x="280" y="64" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#7A8290">REPO URL</text>
+
+        <rect x="380" y="20" width="160" height="60" rx="8" fill="#1A1F2E" stroke="#2A3142"/>
+        <text x="460" y="46" text-anchor="middle" font-family="Inter" font-size="13" font-weight="700" fill="#F0F6FC">자동 메타 추출</text>
+        <text x="460" y="64" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#7A8290">PARSE</text>
+
+        <rect x="560" y="20" width="160" height="60" rx="8" fill="#1A1F2E" stroke="#A78BFA"/>
+        <text x="640" y="46" text-anchor="middle" font-family="Inter" font-size="13" font-weight="700" fill="#F0F6FC">메타 확인·보완</text>
+        <text x="640" y="64" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#A78BFA">CONFIRM</text>
+
+        <!-- branches -->
+        <rect x="740" y="20" width="160" height="60" rx="8" fill="#1A1F2E" stroke="#2A3142"/>
+        <text x="820" y="46" text-anchor="middle" font-family="Inter" font-size="13" font-weight="700" fill="#F0F6FC">CI 검증 통과</text>
+        <text x="820" y="64" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#7A8290">VERIFIED ✓</text>
+
+        <rect x="740" y="120" width="160" height="60" rx="8" fill="#1A1F2E" stroke="#F87171"/>
+        <text x="820" y="146" text-anchor="middle" font-family="Inter" font-size="13" font-weight="700" fill="#F0F6FC">검증 실패</text>
+        <text x="820" y="164" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#F87171">RETRY</text>
+
+        <rect x="920" y="20" width="160" height="60" rx="8" fill="#00E5FF"/>
+        <text x="1000" y="46" text-anchor="middle" font-family="Inter" font-size="13" font-weight="800" fill="#0A0E14">공개 발행</text>
+        <text x="1000" y="64" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#0A0E14">PUBLISHED</text>
+
+        <line x1="180" y1="50" x2="200" y2="50" stroke="#00E5FF" stroke-width="2" marker-end="url(#ar3)"/>
+        <line x1="360" y1="50" x2="380" y2="50" stroke="#00E5FF" stroke-width="2" marker-end="url(#ar3)"/>
+        <line x1="540" y1="50" x2="560" y2="50" stroke="#A78BFA" stroke-width="2" marker-end="url(#ar3p)"/>
+        <line x1="720" y1="50" x2="740" y2="50" stroke="#00E5FF" stroke-width="2" marker-end="url(#ar3)"/>
+        <line x1="720" y1="50" x2="740" y2="150" stroke="#7A8290" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#ar3)"/>
+        <line x1="900" y1="50" x2="920" y2="50" stroke="#00E5FF" stroke-width="2" marker-end="url(#ar3)"/>
+        <line x1="820" y1="120" x2="600" y2="80" stroke="#7A8290" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#ar3)"/>
+
+        <text x="600" y="220" text-anchor="middle" font-family="Inter" font-size="13" font-style="italic" fill="#7A8290">"2분 안에 등록 완료" — 메타데이터 90%는 자동 추출, 10%만 사용자 확인</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 07 — MOCKUPS                               -->
+<!-- ============================================ -->
+<section class="chapter">
+  <div class="wrap">
+    <div class="chapter-head">
+      <div class="chapter-num">07 — UI Mockups</div>
+      <h2 class="chapter-h2">세 가지 핵심 <span class="em">화면</span>.</h2>
+      <p class="chapter-lead">
+        홈(랜딩 + 인기 하네스), 카탈로그(필터 + 리스트), 하네스 상세(README + 설치) — MVP의 핵심 3개 화면을 데스크탑 기준으로 보여준다.
+      </p>
+    </div>
+
+    <div class="mockup-section">
+
+      <!-- HOME -->
+      <div>
+        <h3 class="sub-h">Mockup 01 · 홈 / 랜딩 페이지</h3>
+        <div class="web-mockup">
+          <div class="browser-bar">
+            <div class="browser-dots"><span></span><span></span><span></span></div>
+            <div class="url"><span class="lock">🔒</span> harnesshub.dev</div>
+          </div>
+          <div class="app-nav">
+            <div class="app-logo"><span class="mark">{ }</span> HarnessHub</div>
+            <div class="app-menu">
+              <a href="#" class="active">Explore</a>
+              <a href="#">Collections</a>
+              <a href="#">Benchmarks</a>
+              <a href="#">Docs</a>
+            </div>
+            <div class="app-search">
+              <span>⌕ harnesses, frameworks...</span>
+              <span class="kbd">⌘K</span>
+            </div>
+            <div class="app-actions">
+              <span class="btn">Sign in</span>
+              <span class="btn primary">Submit</span>
+            </div>
+          </div>
+          <div class="home-hero">
+            <div class="eyebrow">● 2,340 harnesses indexed · live from GitHub</div>
+            <h1>The npm of <span class="em">AI agent harnesses</span>.</h1>
+            <p class="deck">발견하고, 설치하고, 출시하라. GitHub의 모든 에이전트 하네스가 한 곳에.</p>
+            <div class="search-big">
+              <span class="ico">⌕</span>
+              <span class="placeholder">코딩 에이전트, eval, RAG, planner...</span>
+              <span class="go">Search</span>
+            </div>
+            <div class="quick-tags">
+              <strong>Trending:</strong>
+              <span class="tag">SWE-agent</span>
+              <span class="tag">aider</span>
+              <span class="tag">cline</span>
+              <span class="tag">claude-code</span>
+              <span class="tag">openhands</span>
+            </div>
+          </div>
+          <div class="stats-bar">
+            <div class="stat-cell"><div class="num">2,340</div><div class="lb">Indexed</div></div>
+            <div class="stat-cell"><div class="num"><span class="accent">128</span></div><div class="lb">Verified</div></div>
+            <div class="stat-cell"><div class="num">42</div><div class="lb">Benchmarks</div></div>
+            <div class="stat-cell"><div class="num">18.2k</div><div class="lb">Installs/wk</div></div>
+          </div>
+          <div class="mock-section">
+            <h3>
+              ⚡ Featured · 큐레이터의 추천
+              <span class="meta">UPDATED DAILY</span>
+              <span class="more">View all →</span>
+            </h3>
+            <div class="harness-grid">
+              <div class="harness-card">
+                <div class="h-head">
+                  <div>
+                    <div class="h-org">princeton-nlp</div>
+                    <div class="h-name">SWE-<span class="acc">agent</span></div>
+                  </div>
+                  <span class="h-badge featured">FEATURED</span>
+                </div>
+                <div class="h-desc">소프트웨어 엔지니어링 태스크를 자동으로 푸는 에이전트. SWE-bench SOTA.</div>
+                <div class="h-tags">
+                  <span class="h-tag">python</span>
+                  <span class="h-tag">coding</span>
+                  <span class="h-tag">claude</span>
+                  <span class="h-tag">gpt-4</span>
+                </div>
+                <div class="h-foot">
+                  <span class="item">★ 14.2k</span>
+                  <span class="item">↓ 8.4k</span>
+                  <span class="item">v0.7.2</span>
+                  <span class="install">npx install</span>
+                </div>
+              </div>
+              <div class="harness-card">
+                <div class="h-head">
+                  <div>
+                    <div class="h-org">Aider-AI</div>
+                    <div class="h-name">aider</div>
+                  </div>
+                  <span class="h-badge verified">VERIFIED</span>
+                </div>
+                <div class="h-desc">터미널 기반 페어 프로그래밍 AI. Git과 통합되어 자동 커밋.</div>
+                <div class="h-tags">
+                  <span class="h-tag">python</span>
+                  <span class="h-tag">cli</span>
+                  <span class="h-tag">git</span>
+                  <span class="h-tag">openai</span>
+                </div>
+                <div class="h-foot">
+                  <span class="item">★ 22.1k</span>
+                  <span class="item">↓ 12.8k</span>
+                  <span class="item">v0.45.1</span>
+                  <span class="install">pip install</span>
+                </div>
+              </div>
+              <div class="harness-card">
+                <div class="h-head">
+                  <div>
+                    <div class="h-org">All-Hands-AI</div>
+                    <div class="h-name">OpenHands</div>
+                  </div>
+                  <span class="h-badge new">NEW</span>
+                </div>
+                <div class="h-desc">멀티모달 AI 개발자 에이전트. Sandbox 환경에서 코드 실행 가능.</div>
+                <div class="h-tags">
+                  <span class="h-tag">python</span>
+                  <span class="h-tag">docker</span>
+                  <span class="h-tag">multi-modal</span>
+                </div>
+                <div class="h-foot">
+                  <span class="item">★ 9.8k</span>
+                  <span class="item">↓ 4.2k</span>
+                  <span class="item">v0.21.0</span>
+                  <span class="install">docker run</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mock-section" style="border-bottom: 0;">
+            <h3>📦 By Category · 카테고리별</h3>
+            <div class="harness-grid">
+              <div class="harness-card" style="text-align:center;">
+                <div style="font-size:32px;margin-bottom:8px;">{ }</div>
+                <div style="font-weight:700;font-size:15px;">Coding Agents</div>
+                <div style="font-size:11px;color:var(--text-3);font-family:var(--mono);margin-top:4px;">412 harnesses</div>
+              </div>
+              <div class="harness-card" style="text-align:center;">
+                <div style="font-size:32px;margin-bottom:8px;">📊</div>
+                <div style="font-weight:700;font-size:15px;">Eval Harnesses</div>
+                <div style="font-size:11px;color:var(--text-3);font-family:var(--mono);margin-top:4px;">186 harnesses</div>
+              </div>
+              <div class="harness-card" style="text-align:center;">
+                <div style="font-size:32px;margin-bottom:8px;">🧠</div>
+                <div style="font-weight:700;font-size:15px;">Research</div>
+                <div style="font-size:11px;color:var(--text-3);font-family:var(--mono);margin-top:4px;">94 harnesses</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CATALOG -->
+      <div>
+        <h3 class="sub-h">Mockup 02 · 카탈로그 (Explore)</h3>
+        <div class="web-mockup">
+          <div class="browser-bar">
+            <div class="browser-dots"><span></span><span></span><span></span></div>
+            <div class="url"><span class="lock">🔒</span> harnesshub.dev/explore?category=coding&amp;model=claude</div>
+          </div>
+          <div class="app-nav">
+            <div class="app-logo"><span class="mark">{ }</span> HarnessHub</div>
+            <div class="app-menu">
+              <a href="#">Explore</a>
+              <a href="#">Collections</a>
+              <a href="#">Benchmarks</a>
+              <a href="#">Docs</a>
+            </div>
+            <div class="app-search">
+              <span>⌕ harnesses, frameworks...</span>
+              <span class="kbd">⌘K</span>
+            </div>
+            <div class="app-actions">
+              <span class="btn">Sign in</span>
+              <span class="btn primary">Submit</span>
+            </div>
+          </div>
+          <div class="catalog-layout">
+            <aside class="catalog-side">
+              <h4>Category</h4>
+              <div class="filter-list">
+                <div class="filter-item active">Coding Agents <span class="ct">412</span></div>
+                <div class="filter-item">Eval Harnesses <span class="ct">186</span></div>
+                <div class="filter-item">RAG Frameworks <span class="ct">158</span></div>
+                <div class="filter-item">Research Agents <span class="ct">94</span></div>
+                <div class="filter-item">Tool-Use Wrappers <span class="ct">72</span></div>
+              </div>
+              <h4>Model Compatibility</h4>
+              <div class="filter-list">
+                <label class="filter-checkbox"><input type="checkbox" checked /> Claude</label>
+                <label class="filter-checkbox"><input type="checkbox" /> GPT-4 / o1</label>
+                <label class="filter-checkbox"><input type="checkbox" /> Gemini</label>
+                <label class="filter-checkbox"><input type="checkbox" /> Llama</label>
+                <label class="filter-checkbox"><input type="checkbox" /> 로컬 모델</label>
+              </div>
+              <h4>Language</h4>
+              <div class="filter-list">
+                <label class="filter-checkbox"><input type="checkbox" checked /> Python</label>
+                <label class="filter-checkbox"><input type="checkbox" /> TypeScript</label>
+                <label class="filter-checkbox"><input type="checkbox" /> Go</label>
+                <label class="filter-checkbox"><input type="checkbox" /> Rust</label>
+              </div>
+              <h4>License</h4>
+              <div class="filter-list">
+                <label class="filter-checkbox"><input type="checkbox" checked /> MIT</label>
+                <label class="filter-checkbox"><input type="checkbox" checked /> Apache-2.0</label>
+                <label class="filter-checkbox"><input type="checkbox" /> GPL</label>
+              </div>
+              <h4>Quality Signals</h4>
+              <div class="filter-list">
+                <label class="filter-checkbox"><input type="checkbox" /> Verified ✓</label>
+                <label class="filter-checkbox"><input type="checkbox" /> 1k+ stars</label>
+                <label class="filter-checkbox"><input type="checkbox" /> Active (≤30d)</label>
+              </div>
+            </aside>
+            <main class="catalog-main">
+              <div class="catalog-head">
+                <h2>Coding Agents</h2>
+                <span class="meta">412 harnesses · Claude compatible</span>
+              </div>
+              <div class="catalog-controls">
+                <span class="ctrl-pill active">Most installed</span>
+                <span class="ctrl-pill">Recently updated</span>
+                <span class="ctrl-pill">Top rated</span>
+                <span class="ctrl-pill">Newest</span>
+                <span class="right">Showing 1–6 of 412</span>
+              </div>
+              <div class="harness-grid">
+                <div class="harness-card">
+                  <div class="h-head">
+                    <div><div class="h-org">princeton-nlp</div><div class="h-name">SWE-<span class="acc">agent</span></div></div>
+                    <span class="h-badge verified">VERIFIED</span>
+                  </div>
+                  <div class="h-desc">소프트웨어 엔지니어링 태스크 자동화. SWE-bench Verified 67.8%.</div>
+                  <div class="h-tags"><span class="h-tag">python</span><span class="h-tag">claude</span><span class="h-tag">swe-bench</span></div>
+                  <div class="h-foot"><span class="item">★ 14.2k</span><span class="item">↓ 8.4k</span><span class="install">npx install</span></div>
+                </div>
+                <div class="harness-card">
+                  <div class="h-head">
+                    <div><div class="h-org">Aider-AI</div><div class="h-name">aider</div></div>
+                    <span class="h-badge verified">VERIFIED</span>
+                  </div>
+                  <div class="h-desc">터미널 기반 AI 페어 프로그래밍. Git 자동 커밋.</div>
+                  <div class="h-tags"><span class="h-tag">python</span><span class="h-tag">cli</span><span class="h-tag">git</span></div>
+                  <div class="h-foot"><span class="item">★ 22.1k</span><span class="item">↓ 12.8k</span><span class="install">pip install</span></div>
+                </div>
+                <div class="harness-card">
+                  <div class="h-head">
+                    <div><div class="h-org">cline</div><div class="h-name">cline</div></div>
+                    <span class="h-badge featured">FEATURED</span>
+                  </div>
+                  <div class="h-desc">VS Code 통합 자율 코딩 에이전트. 파일·터미널 컨트롤.</div>
+                  <div class="h-tags"><span class="h-tag">typescript</span><span class="h-tag">vscode</span><span class="h-tag">claude</span></div>
+                  <div class="h-foot"><span class="item">★ 18.5k</span><span class="item">↓ 9.7k</span><span class="install">vsix</span></div>
+                </div>
+                <div class="harness-card">
+                  <div class="h-head">
+                    <div><div class="h-org">All-Hands-AI</div><div class="h-name">OpenHands</div></div>
+                    <span class="h-badge new">NEW</span>
+                  </div>
+                  <div class="h-desc">멀티모달 개발자 에이전트. Sandbox 코드 실행.</div>
+                  <div class="h-tags"><span class="h-tag">python</span><span class="h-tag">docker</span><span class="h-tag">multi-model</span></div>
+                  <div class="h-foot"><span class="item">★ 9.8k</span><span class="item">↓ 4.2k</span><span class="install">docker run</span></div>
+                </div>
+                <div class="harness-card">
+                  <div class="h-head">
+                    <div><div class="h-org">block</div><div class="h-name">goose</div></div>
+                    <span class="h-badge verified">VERIFIED</span>
+                  </div>
+                  <div class="h-desc">로컬 머신에서 자율 작업 수행 에이전트. MCP 통합.</div>
+                  <div class="h-tags"><span class="h-tag">rust</span><span class="h-tag">mcp</span><span class="h-tag">local</span></div>
+                  <div class="h-foot"><span class="item">★ 7.4k</span><span class="item">↓ 3.1k</span><span class="install">brew</span></div>
+                </div>
+                <div class="harness-card">
+                  <div class="h-head">
+                    <div><div class="h-org">community</div><div class="h-name">smol-developer</div></div>
+                    <span class="h-badge new">NEW</span>
+                  </div>
+                  <div class="h-desc">단일 파일 200줄짜리 미니멀 코딩 에이전트. 학습용 추천.</div>
+                  <div class="h-tags"><span class="h-tag">python</span><span class="h-tag">minimal</span><span class="h-tag">교육용</span></div>
+                  <div class="h-foot"><span class="item">★ 12k</span><span class="item">↓ 1.8k</span><span class="install">git clone</span></div>
+                </div>
+              </div>
+            </main>
+          </div>
+        </div>
+      </div>
+
+      <!-- DETAIL -->
+      <div>
+        <h3 class="sub-h">Mockup 03 · 하네스 상세</h3>
+        <div class="web-mockup">
+          <div class="browser-bar">
+            <div class="browser-dots"><span></span><span></span><span></span></div>
+            <div class="url"><span class="lock">🔒</span> harnesshub.dev/h/princeton-nlp/SWE-agent</div>
+          </div>
+          <div class="app-nav">
+            <div class="app-logo"><span class="mark">{ }</span> HarnessHub</div>
+            <div class="app-menu">
+              <a href="#">Explore</a>
+              <a href="#">Collections</a>
+              <a href="#">Benchmarks</a>
+              <a href="#">Docs</a>
+            </div>
+            <div class="app-search">
+              <span>⌕ harnesses, frameworks...</span>
+              <span class="kbd">⌘K</span>
+            </div>
+            <div class="app-actions">
+              <span class="btn">Sign in</span>
+              <span class="btn primary">Submit</span>
+            </div>
+          </div>
+          <div class="detail-layout">
+            <main class="detail-main">
+              <div class="detail-breadcrumb">
+                <span class="acc">/explore</span> / coding-agents / princeton-nlp / SWE-agent
+              </div>
+              <h1 class="detail-title">SWE-<span class="acc">agent</span></h1>
+              <div class="detail-sub">
+                Claude로 GitHub 이슈를 자동으로 푸는 에이전트 하네스. 실제 코드베이스를 탐색하고, 패치를 작성하고, 테스트를 실행한다. SWE-bench Verified에서 SOTA.
+              </div>
+              <div class="detail-meta-row">
+                <div class="item">★ <span class="acc">14,213</span></div>
+                <div class="item">↓ 8,432 / week</div>
+                <div class="item">v0.7.2 · 2일 전 업데이트</div>
+                <div class="item">MIT</div>
+                <div class="item">Python ≥ 3.11</div>
+              </div>
+              <div class="detail-tags-row">
+                <span class="h-tag">python</span>
+                <span class="h-tag">coding-agent</span>
+                <span class="h-tag">claude</span>
+                <span class="h-tag">gpt-4</span>
+                <span class="h-tag">swe-bench</span>
+                <span class="h-tag">research-grade</span>
+                <span class="h-tag">verified</span>
+              </div>
+              <div class="readme">
+                <h4>README</h4>
+                <p>SWE-agent는 LM(예: Claude 4 Sonnet)을 GitHub 이슈를 푸는 자율 소프트웨어 엔지니어로 변환합니다. 실제 코드베이스에서 작동하며, 코드를 작성하고 수정하고 테스트를 실행합니다.</p>
+                <p><strong>주요 특징:</strong> Agent Computer Interface (ACI) — 모델이 코드와 상호작용하기 쉬운 인터페이스 설계. <code class="inline">file_viewer</code>, <code class="inline">edit</code>, <code class="inline">search</code> 등의 도구.</p>
+                <pre class="code-block"><span class="c"># Quick start</span>
+<span class="k">git clone</span> https://github.com/princeton-nlp/SWE-agent
+<span class="k">cd</span> SWE-agent
+<span class="k">pip install</span> -e .
+
+<span class="c"># Run on a GitHub issue</span>
+<span class="k">sweagent</span> run \
+  --config configs/default.yaml \
+  --agent.model.name <span class="s">"claude-sonnet-4-6"</span> \
+  --problem_statement.github_url <span class="s">"https://github.com/..."</span></pre>
+                <h4 style="margin-top:18px;">Benchmark Results</h4>
+                <p><strong>SWE-bench Verified:</strong> <code class="inline">67.8%</code> (Claude Sonnet 4.6, n=500)</p>
+                <p><strong>SWE-bench Lite:</strong> <code class="inline">41.6%</code> (Claude Sonnet 4.6, n=300)</p>
+              </div>
+            </main>
+            <aside class="detail-side">
+              <div class="install-box">
+                <div class="lb">한 줄 설치</div>
+                <code>$ npx harnesshub install \
+  princeton-nlp/SWE-agent</code>
+                <div class="copy">📋 복사하기</div>
+              </div>
+              <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.16em;color:var(--text-3);text-transform:uppercase;margin-bottom:8px;">REPOSITORY</div>
+              <div class="side-stat">
+                <span class="lb">⭐ Stars</span>
+                <span class="vl">14.2k</span>
+              </div>
+              <div class="side-stat">
+                <span class="lb">🍴 Forks</span>
+                <span class="vl">1.6k</span>
+              </div>
+              <div class="side-stat">
+                <span class="lb">🐛 Issues</span>
+                <span class="vl">42 open</span>
+              </div>
+              <div class="side-stat">
+                <span class="lb">📅 Updated</span>
+                <span class="vl">2 days ago</span>
+              </div>
+              <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.16em;color:var(--text-3);text-transform:uppercase;margin:18px 0 8px;">COMPATIBILITY</div>
+              <div class="side-stat">
+                <span class="lb">🤖 Models</span>
+                <span class="vl" style="color:var(--accent);">Claude / GPT-4 / o1</span>
+              </div>
+              <div class="side-stat">
+                <span class="lb">🐍 Runtime</span>
+                <span class="vl">Python 3.11+</span>
+              </div>
+              <div class="side-stat">
+                <span class="lb">📜 License</span>
+                <span class="vl">MIT</span>
+              </div>
+              <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.16em;color:var(--text-3);text-transform:uppercase;margin:18px 0 8px;">SIGNALS</div>
+              <div class="side-stat">
+                <span class="lb">CI Status</span>
+                <span class="vl" style="color:var(--success);">✓ passing</span>
+              </div>
+              <div class="side-stat">
+                <span class="lb">Verified</span>
+                <span class="vl" style="color:var(--success);">✓</span>
+              </div>
+              <div class="side-stat">
+                <span class="lb">Active</span>
+                <span class="vl" style="color:var(--success);">✓ recent</span>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 08 — DATA MODEL                            -->
+<!-- ============================================ -->
+<section class="chapter">
+  <div class="wrap">
+    <div class="chapter-head">
+      <div class="chapter-num">08 — Data Model</div>
+      <h2 class="chapter-h2">데이터 <span class="em">스키마</span>.</h2>
+      <p class="chapter-lead">
+        GitHub 리포에서 자동 추출된 메타데이터 + 큐레이터 보강 + 커뮤니티 입력의 3계층 구조. 핵심 엔티티는 Harness, User, Review, Benchmark, Collection.
+      </p>
+    </div>
+
+    <div class="schema-grid">
+      <div class="schema-card">
+        <h4>Harness · 하네스 엔티티</h4>
+        <table class="schema-table">
+          <tr><th>Field</th><th>Type</th><th>Source</th></tr>
+          <tr><td class="field">id</td><td class="type">uuid</td><td>auto</td></tr>
+          <tr><td class="field">slug</td><td class="type">string</td><td>org/name</td></tr>
+          <tr><td class="field">name</td><td class="type">string</td><td>GitHub</td></tr>
+          <tr><td class="field">description</td><td class="type">text</td><td>GitHub</td></tr>
+          <tr><td class="field">repoUrl</td><td class="type">string</td><td>GitHub</td></tr>
+          <tr><td class="field">stars</td><td class="type">number</td><td>GitHub API</td></tr>
+          <tr><td class="field">forks</td><td class="type">number</td><td>GitHub API</td></tr>
+          <tr><td class="field">issuesOpen</td><td class="type">number</td><td>GitHub API</td></tr>
+          <tr><td class="field">latestVersion</td><td class="type">string</td><td>Releases</td></tr>
+          <tr><td class="field">lastUpdated</td><td class="type">timestamp</td><td>GitHub</td></tr>
+          <tr><td class="field">license</td><td class="type">enum</td><td>LICENSE 파일</td></tr>
+          <tr><td class="field">language</td><td class="type">enum[]</td><td>linguist</td></tr>
+          <tr><td class="field">category</td><td class="type">enum</td><td>큐레이터/AI 분류</td></tr>
+          <tr><td class="field">modelCompat</td><td class="type">enum[]</td><td>manifest/parse</td></tr>
+          <tr><td class="field">tags</td><td class="type">string[]</td><td>topics + 큐레이터</td></tr>
+          <tr><td class="field">verified</td><td class="type">boolean</td><td>CI 검증</td></tr>
+          <tr><td class="field">installCmd</td><td class="type">string</td><td>manifest</td></tr>
+          <tr><td class="field">benchmarks</td><td class="type">Benchmark[]</td><td>커뮤니티 + 자체</td></tr>
+          <tr><td class="field">downloads</td><td class="type">number</td><td>HarnessHub CLI</td></tr>
+        </table>
+      </div>
+
+      <div class="schema-card">
+        <h4>Manifest · harness.yaml (옵션)</h4>
+        <pre class="code-block"><span class="c"># 하네스 리포에 추가하면 메타가 풍부해짐</span>
+<span class="k">name:</span> <span class="s">SWE-agent</span>
+<span class="k">version:</span> <span class="s">0.7.2</span>
+<span class="k">category:</span> <span class="s">coding-agent</span>
+<span class="k">description:</span> <span class="s">"GitHub 이슈를 푸는 에이전트"</span>
+
+<span class="k">runtime:</span>
+  <span class="k">language:</span> <span class="s">python</span>
+  <span class="k">version:</span> <span class="s">"&gt;=3.11"</span>
+
+<span class="k">models:</span>
+  - <span class="s">claude-sonnet-4-6</span>
+  - <span class="s">gpt-4o</span>
+  - <span class="s">o1</span>
+
+<span class="k">install:</span>
+  <span class="k">npm:</span> <span class="s">"npx swe-agent"</span>
+  <span class="k">pip:</span> <span class="s">"pip install sweagent"</span>
+  <span class="k">docker:</span> <span class="s">"swe-agent:latest"</span>
+
+<span class="k">benchmarks:</span>
+  - <span class="k">name:</span> <span class="s">swe-bench-verified</span>
+    <span class="k">score:</span> <span class="a">0.678</span>
+    <span class="k">model:</span> <span class="s">claude-sonnet-4-6</span>
+
+<span class="k">tags:</span>
+  - <span class="s">coding</span>
+  - <span class="s">research-grade</span>
+  - <span class="s">cli</span></pre>
+      </div>
+    </div>
+
+    <h3 class="sub-h" style="margin-top: 36px;">Sync 파이프라인</h3>
+    <div class="schema-card" style="background:var(--bg);">
+      <table class="schema-table">
+        <tr><th>단계</th><th>동작</th><th>주기</th></tr>
+        <tr><td>1. Submit</td><td>사용자가 GitHub URL 등록 또는 GitHub Topic <code style="font-family:var(--mono);color:var(--accent);">harnesshub</code> 추가 시 자동 발견</td><td>이벤트</td></tr>
+        <tr><td>2. Initial Crawl</td><td>README, package.json/pyproject.toml, harness.yaml, LICENSE 파싱</td><td>등록 시</td></tr>
+        <tr><td>3. AI Categorization</td><td>설명을 LLM에 넣어 카테고리/태그 자동 추정 (사용자가 수정 가능)</td><td>등록 시</td></tr>
+        <tr><td>4. CI Verification</td><td>샌드박스에서 README의 Quick Start 실행 → 성공 시 <strong>Verified</strong> 뱃지</td><td>릴리즈 시</td></tr>
+        <tr><td>5. Periodic Refresh</td><td>스타·이슈·릴리즈 카운트 갱신 + 라이선스 변경 감지</td><td>매 24h</td></tr>
+        <tr><td>6. Push Trigger</td><td>GitHub 웹훅으로 새 릴리즈 → 즉시 메타 갱신</td><td>실시간</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 09 — TECH STACK                            -->
+<!-- ============================================ -->
+<section class="chapter">
+  <div class="wrap">
+    <div class="chapter-head">
+      <div class="chapter-num">09 — Tech Stack</div>
+      <h2 class="chapter-h2">가벼운 Edge, <span class="em">강력한</span> Search.</h2>
+      <p class="chapter-lead">
+        Vercel + Supabase + Algolia 조합. 트래픽 0에서 100만 페이지뷰까지 동일 아키텍처로 스케일. 한 명의 풀스택 개발자가 4주 안에 MVP 가능.
+      </p>
+    </div>
+
+    <div class="tech-grid">
+      <div class="tech-card">
+        <div class="layer">FRONTEND</div>
+        <div class="name">Next.js 15 (App Router)</div>
+        <div class="desc">React Server Components, ISR로 SEO 최적화. shadcn/ui + Tailwind.</div>
+      </div>
+      <div class="tech-card">
+        <div class="layer">DATABASE</div>
+        <div class="name">Supabase (Postgres)</div>
+        <div class="desc">RLS, Auth (GitHub OAuth), Realtime, Storage 통합.</div>
+      </div>
+      <div class="tech-card">
+        <div class="layer">SEARCH</div>
+        <div class="name">Algolia or Meilisearch</div>
+        <div class="desc">Faceted 검색·instant search. 자동 인덱싱 파이프라인.</div>
+      </div>
+      <div class="tech-card">
+        <div class="layer">SYNC</div>
+        <div class="name">GitHub API + Octokit</div>
+        <div class="desc">웹훅 + 정기 크론 (cron jobs). Rate limit 관리.</div>
+      </div>
+      <div class="tech-card">
+        <div class="layer">AI</div>
+        <div class="name">Claude API (Categorization)</div>
+        <div class="desc">README → 자동 카테고리·태그·요약 생성. 비용 ≤$0.01/하네스.</div>
+      </div>
+      <div class="tech-card">
+        <div class="layer">CLI</div>
+        <div class="name">harnesshub-cli (Bun)</div>
+        <div class="desc">npx 한 줄 설치. <code style="font-family:var(--mono);color:var(--accent);font-size:11px;">harnesshub install &lt;name&gt;</code></div>
+      </div>
+      <div class="tech-card">
+        <div class="layer">DEPLOY</div>
+        <div class="name">Vercel + Edge Runtime</div>
+        <div class="desc">자동 배포. ISR + Edge Functions로 글로벌 캐싱.</div>
+      </div>
+      <div class="tech-card">
+        <div class="layer">ANALYTICS</div>
+        <div class="name">PostHog</div>
+        <div class="desc">사용자 여정 분석, 검색 쿼리 추적, 설치 전환율.</div>
+      </div>
+      <div class="tech-card">
+        <div class="layer">VERIFY</div>
+        <div class="name">GitHub Actions Sandbox</div>
+        <div class="desc">하네스 README의 Quick Start를 격리 실행 → Verified 뱃지.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 10 — DIFFERENTIATION                       -->
+<!-- ============================================ -->
+<section class="chapter">
+  <div class="wrap">
+    <div class="chapter-head">
+      <div class="chapter-num">10 — Differentiation</div>
+      <h2 class="chapter-h2">왜 <span class="em">새로</span> 만드나.</h2>
+      <p class="chapter-lead">
+        Claude Skills 마켓이나 MCP 디렉터리는 "단일 기능"의 큐레이션이다. HarnessHub은 "전체 에이전트 스택"을 다룬다 — 더 풍부한 메타데이터, 더 깊은 검증, 더 활발한 커뮤니티가 필요하다.
+      </p>
+    </div>
+
+    <div class="diff-table">
+      <div class="diff-row head">
+        <div class="cell label">Feature</div>
+        <div class="cell">claudeskills.info</div>
+        <div class="cell">skillsmp.com</div>
+        <div class="cell us">HarnessHub <span style="color:var(--accent);">★</span></div>
+      </div>
+      <div class="diff-row">
+        <div class="cell label">대상</div>
+        <div class="cell">Claude Skills</div>
+        <div class="cell">Claude Skills</div>
+        <div class="cell us">AI Agent Harnesses (광범위)</div>
+      </div>
+      <div class="diff-row">
+        <div class="cell label">GitHub 자동 동기화</div>
+        <div class="cell"><span class="x">─</span> 부분</div>
+        <div class="cell"><span class="x">─</span> 부분</div>
+        <div class="cell us"><span class="check">✓</span> 웹훅 + 크론 풀</div>
+      </div>
+      <div class="diff-row">
+        <div class="cell label">CI 자동 검증</div>
+        <div class="cell"><span class="x">✗</span> 없음</div>
+        <div class="cell"><span class="x">✗</span> 없음</div>
+        <div class="cell us"><span class="check">✓</span> Verified 뱃지</div>
+      </div>
+      <div class="diff-row">
+        <div class="cell label">벤치마크 점수 통합</div>
+        <div class="cell"><span class="x">✗</span></div>
+        <div class="cell"><span class="x">✗</span></div>
+        <div class="cell us"><span class="check">✓</span> SWE-bench, AgentBench 등</div>
+      </div>
+      <div class="diff-row">
+        <div class="cell label">한 줄 CLI 설치</div>
+        <div class="cell"><span class="x">✗</span></div>
+        <div class="cell"><span class="x">✗</span></div>
+        <div class="cell us"><span class="check">✓</span> harnesshub-cli</div>
+      </div>
+      <div class="diff-row">
+        <div class="cell label">모델 호환성 필터</div>
+        <div class="cell">Claude only</div>
+        <div class="cell">Claude only</div>
+        <div class="cell us"><span class="check">✓</span> 모든 LLM 멀티 호환</div>
+      </div>
+      <div class="diff-row">
+        <div class="cell label">커뮤니티 리뷰</div>
+        <div class="cell"><span class="x">─</span> 별점만</div>
+        <div class="cell"><span class="x">─</span> 별점만</div>
+        <div class="cell us"><span class="check">✓</span> 별점 + 텍스트 + 사용 컨텍스트</div>
+      </div>
+      <div class="diff-row">
+        <div class="cell label">컬렉션 / 스택 레시피</div>
+        <div class="cell"><span class="x">✗</span></div>
+        <div class="cell"><span class="x">✗</span></div>
+        <div class="cell us"><span class="check">✓</span> 큐레이터·사용자 컬렉션</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 11 — COMPLIANCE & LICENSING                 -->
+<!-- ============================================ -->
+<section class="chapter">
+  <div class="wrap">
+    <div class="chapter-head">
+      <div class="chapter-num">11 — Compliance &amp; Licensing</div>
+      <h2 class="chapter-h2">합법적으로,<br/>그리고 <span class="em">투명하게</span>.</h2>
+      <p class="chapter-lead">
+        오픈소스 마켓의 본질은 신뢰. 자동 검출 + 옵트인 + 메타데이터 한정 호스팅의 3단 안전망으로 저작권 신고 위험을 사실상 제로화한다. 모든 사용자가 카드 한 장만 봐도 라이선스를 이해할 수 있게 설계됐다.
+      </p>
+    </div>
+
+    <!-- A. Traffic Light -->
+    <h3 class="sub-h">A. License Traffic Light · 자동 인덱싱 정책</h3>
+    <div class="solution-grid" style="grid-template-columns: repeat(3, 1fr);">
+      <div class="value-card" style="border-color: rgba(74,222,128,0.4); min-height: auto;">
+        <div>
+          <div class="v-num" style="color: #4ADE80;">● GREEN · AUTO-INDEX</div>
+          <div class="v-icon" style="background: rgba(74,222,128,0.1); border-color: rgba(74,222,128,0.4); color: #4ADE80; margin-top: 16px;">✓</div>
+          <div class="v-title">Permissive 라이선스</div>
+          <div class="v-body">
+            MIT · Apache 2.0 · BSD 2/3-Clause · ISC · Unlicense · CC0 · MPL 2.0<br/><br/>
+            메타·README 발췌·태그 모두 자유롭게 표시. 가장 안전한 출발선이며 자동 인덱싱의 기본값.
+          </div>
+        </div>
+      </div>
+      <div class="value-card" style="border-color: rgba(251,191,36,0.4); min-height: auto;">
+        <div>
+          <div class="v-num" style="color: #FBBF24;">● YELLOW · WARN BADGE</div>
+          <div class="v-icon" style="background: rgba(251,191,36,0.1); border-color: rgba(251,191,36,0.4); color: #FBBF24; margin-top: 16px;">!</div>
+          <div class="v-title">Copyleft 라이선스</div>
+          <div class="v-body">
+            GPL-2.0/3.0 · AGPL-3.0 · LGPL · CC BY 4.0<br/><br/>
+            인덱스는 OK. 단 "Copyleft 의무" 또는 "Network Copyleft" 노란 경고 라벨을 카드에 함께 표시해 사용자가 도입 전 의무를 인지하도록.
+          </div>
+        </div>
+      </div>
+      <div class="value-card" style="border-color: rgba(248,113,113,0.4); min-height: auto;">
+        <div>
+          <div class="v-num" style="color: #F87171;">● RED · EXCLUDED</div>
+          <div class="v-icon" style="background: rgba(248,113,113,0.1); border-color: rgba(248,113,113,0.4); color: #F87171; margin-top: 16px;">×</div>
+          <div class="v-title">제외 대상</div>
+          <div class="v-body">
+            라이선스 없음 · CC BY-NC/ND · BUSL · Elastic · Commons Clause · Custom · "Do not redistribute" 명시<br/><br/>
+            자동 등록 거부. 사람이 검토 후 메인테이너 동의 받은 경우만 예외 승격.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- B. 5 Principles -->
+    <h3 class="sub-h" style="margin-top: 56px;">B. 5 Safe Operating Principles · 안전 운영 5원칙</h3>
+    <div class="solution-grid">
+      <div class="feat-card">
+        <div class="icon">01</div>
+        <div class="feat-title">Metadata-Only Hosting</div>
+        <div class="feat-desc">코드 본체는 절대 우리 서버에 저장하지 않음. <code style="font-family:var(--mono);font-size:11px;color:var(--accent);background:var(--bg-raised);padding:2px 4px;border-radius:3px;">harnesshub install</code>은 실질적으로 GitHub clone. 우리는 디렉토리, 코드 저장소가 아님.</div>
+      </div>
+      <div class="feat-card">
+        <div class="icon">02</div>
+        <div class="feat-title">License Transparency</div>
+        <div class="feat-desc">모든 카드에 SPDX 라이선스 뱃지를 항상 표시. YELLOW 등급은 추가 경고 라벨. 사용자가 클릭 전 라이선스를 본다.</div>
+      </div>
+      <div class="feat-card">
+        <div class="icon">03</div>
+        <div class="feat-title">Opt-In as Default</div>
+        <div class="feat-desc">초기엔 수동 큐레이션 + 메인테이너 컨택. 점진적으로 GitHub Topic / harness.yaml 기반 자동화로 확장. 무단 등록 제로.</div>
+      </div>
+      <div class="feat-card">
+        <div class="icon">04</div>
+        <div class="feat-title">Maintainer-First Takedown</div>
+        <div class="feat-desc">메인테이너 본인 인증(GitHub OAuth)이면 즉시 제거. 제3자 신고는 24~48h 내 검토 + 메인테이너 통지. DMCA 절차 완비.</div>
+      </div>
+      <div class="feat-card">
+        <div class="icon">05</div>
+        <div class="feat-title">Quote, Don't Copy</div>
+        <div class="feat-desc">README 발췌 ≤200자 + 출처 링크. 이미지는 GitHub raw URL hot-link, 우리 CDN 저장 안 함. Fair use 라인 안에서.</div>
+      </div>
+      <div class="feat-card" style="background: var(--bg-card); border-color: var(--accent);">
+        <div class="icon" style="background: var(--accent); color: var(--on-accent); border-color: var(--accent);">★</div>
+        <div class="feat-title">Net Result</div>
+        <div class="feat-desc">5원칙을 모두 지키면 npm·PyPI·crates.io와 동일한 법적 포지션. 검증된 모델로 운영 위험 최소화.</div>
+      </div>
+    </div>
+
+    <!-- C. Detection Pipeline + Opt-In -->
+    <h3 class="sub-h" style="margin-top: 56px;">C. Detection Pipeline · 자동 검출 + 옵트인</h3>
+    <div class="schema-grid">
+      <div class="schema-card">
+        <h4>5단계 분류 파이프라인</h4>
+        <pre class="code-block"><span class="c"># Step 1: GitHub License API</span>
+<span class="k">GET</span> /repos/{owner}/{repo}/license
+<span class="c">→ SPDX ID 반환 시도</span>
+
+<span class="c"># Step 2: SPDX 매핑</span>
+GREEN list match  → <span class="a">GREEN</span>
+YELLOW list match → <span class="a">YELLOW</span>
+no SPDX           → continue
+
+<span class="c"># Step 3: 파일시스템 검사</span>
+- LICENSE / LICENSE.md / COPYING 탐색
+- go-license-detector 실행
+- 모호 → <span class="a">RED</span>
+
+<span class="c"># Step 4: 텍스트 휴리스틱</span>
+README 키워드 스캔:
+  "do not", "all rights reserved",
+  "no commercial", "proprietary"
+- 양성 → <span class="a">RED</span>
+
+<span class="c"># Step 5: 최종 분류</span>
+GREEN  → 자동 인덱스
+YELLOW → 인덱스 + 경고 뱃지
+RED    → 제외 + 운영진 큐</pre>
+      </div>
+      <div class="schema-card">
+        <h4>Opt-In Signals (Gold Standard)</h4>
+        <p style="font-size: 14px; color: var(--text-2); line-height: 1.6; margin-bottom: 14px;">
+          라이선스 검사보다 더 확실한 건 메인테이너의 명시적 동의. 두 가지 방법으로 받는다.
+        </p>
+        <div style="margin-bottom: 14px;">
+          <div style="font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; color: var(--accent); margin-bottom: 8px;">METHOD A · GITHUB TOPIC</div>
+          <p style="font-size: 13px; color: var(--text-2); line-height: 1.55;">메인테이너가 자기 리포에 토픽 <code style="font-family:var(--mono);color:var(--accent);background:var(--bg-raised);padding:2px 6px;border-radius:3px;">harnesshub</code> 추가. 가장 가벼운 합의 표현.</p>
+        </div>
+        <div style="margin-bottom: 14px;">
+          <div style="font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; color: var(--accent); margin-bottom: 8px;">METHOD B · harness.yaml</div>
+        </div>
+        <pre class="code-block" style="margin-top: 0;"><span class="c"># 리포 루트에 추가 — 강력한 동의 신호</span>
+<span class="k">name:</span> <span class="s">my-agent</span>
+<span class="k">license:</span> <span class="s">MIT</span>
+<span class="k">maintainer:</span> <span class="s">@username</span>
+<span class="k">opted_in:</span> <span class="a">true</span></pre>
+        <p style="font-size: 12px; color: var(--text-3); line-height: 1.55; margin-top: 14px; font-style: italic;">
+          → harness.yaml 추가 시 모델 호환성·설치 명령·벤치마크 점수 등 풍부한 메타 표시 가능.
+        </p>
+      </div>
+    </div>
+
+    <!-- D. Phased -->
+    <h3 class="sub-h" style="margin-top: 56px;">D. Phased Indexing Strategy · 단계적 자동화</h3>
+    <div class="roadmap">
+      <div class="phase now">
+        <div class="ph-num">PHASE 01 · MANUAL</div>
+        <div class="ph-title">수동 큐레이션</div>
+        <div class="ph-period">MVP — ~500개 시드</div>
+        <ul>
+          <li>운영진이 직접 핸드픽</li>
+          <li>각 메인테이너에게 사전 컨택 (이메일·이슈)</li>
+          <li>"마켓 등록 OK?" 회신 받은 것만 등록</li>
+          <li>모든 등록에 골드 스탠다드 동의</li>
+        </ul>
+      </div>
+      <div class="phase">
+        <div class="ph-num">PHASE 02 · OPT-IN AUTO</div>
+        <div class="ph-title">옵트인 자동 인덱스</div>
+        <div class="ph-period">~3,000개 후보</div>
+        <ul>
+          <li>크롤러는 토픽 <code style="font-family:var(--mono);color:var(--accent);">harnesshub</code> 또는 <code style="font-family:var(--mono);color:var(--accent);">harness.yaml</code> 보유 리포만 자동</li>
+          <li>무단 등록 제로</li>
+          <li>토픽·매니페스트 추가 가이드 문서 발행</li>
+          <li>참여 메인테이너에 "Verified Author" 뱃지</li>
+        </ul>
+      </div>
+      <div class="phase">
+        <div class="ph-num">PHASE 03 · NOTIFY-FIRST AUTO</div>
+        <div class="ph-title">통지 후 자동 인덱스</div>
+        <div class="ph-period">전체 GREEN 리포</div>
+        <ul>
+          <li>GREEN 라이선스 + agent 키워드 매칭 시 자동</li>
+          <li>메인테이너에게 알림 메일 발송</li>
+          <li>"등록됐습니다 · 빼려면 클릭" 1-click 옵트아웃</li>
+          <li>Phase 2 커뮤니티 안정화 후에만 진입</li>
+        </ul>
+      </div>
+    </div>
+
+    <p style="text-align: center; margin-top: 40px; font-family: var(--mono); font-size: 12px; color: var(--text-3); letter-spacing: 0.1em;">
+      → 상세 정책: <a href="HarnessHub_License_Policy.md" style="color: var(--accent); text-decoration: none;">/legal/license-policy</a>
+    </p>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 12 — ROADMAP                               -->
+<!-- ============================================ -->
+<section class="chapter">
+  <div class="wrap">
+    <div class="chapter-head">
+      <div class="chapter-num">12 — Roadmap</div>
+      <h2 class="chapter-h2">세 단계로 <span class="em">완성</span>한다.</h2>
+      <p class="chapter-lead">
+        MVP는 "탐색·설치"에 집중. v2에서 커뮤니티·검증, v3에서 상업화. 각 단계마다 핵심 가치를 검증하며 다음으로 나아간다.
+      </p>
+    </div>
+
+    <div class="roadmap">
+      <div class="phase now">
+        <div class="ph-num">PHASE 01 · MVP</div>
+        <div class="ph-title">Discovery 베타</div>
+        <div class="ph-period">2026.06 – 2026.07 · 6주</div>
+        <ul>
+          <li>홈 + 카탈로그 + 상세 3개 화면</li>
+          <li>GitHub Topic <code style="font-family:var(--mono);color:var(--accent);">harnesshub</code>로 자동 발견</li>
+          <li>500개 시드 하네스 큐레이션</li>
+          <li>Algolia 기반 즉각 검색</li>
+          <li>Beta 사용자 100명 모집 (Hacker News, X)</li>
+        </ul>
+      </div>
+      <div class="phase">
+        <div class="ph-num">PHASE 02 · Community</div>
+        <div class="ph-title">검증 + 커뮤니티</div>
+        <div class="ph-period">2026.08 – 2026.10 · 12주</div>
+        <ul>
+          <li>CI 기반 Verified 뱃지 시스템</li>
+          <li>리뷰 + 별점 + 사용 컨텍스트</li>
+          <li>벤치마크 점수 통합 (SWE-bench 등)</li>
+          <li>컬렉션 / 스택 레시피 기능</li>
+          <li>harnesshub-cli 출시 (npm)</li>
+          <li>5,000개 하네스 인덱싱 목표</li>
+        </ul>
+      </div>
+      <div class="phase">
+        <div class="ph-num">PHASE 03 · Platform</div>
+        <div class="ph-title">상업화 + 기업</div>
+        <div class="ph-period">2026.11 – 2027.Q2</div>
+        <ul>
+          <li>Pro 요금제 (Private 하네스, Analytics)</li>
+          <li>Enterprise (사내 호스팅, SSO)</li>
+          <li>Sponsored Placement (광고)</li>
+          <li>API for IDE 통합 (Cursor, Cline)</li>
+          <li>한국 / 일본 로컬라이즈</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 12 — MONETIZATION                          -->
+<!-- ============================================ -->
+<section class="chapter">
+  <div class="wrap">
+    <div class="chapter-head">
+      <div class="chapter-num">13 — Monetization</div>
+      <h2 class="chapter-h2">Free 우선, <span class="em">Pro</span>로 수익화.</h2>
+      <p class="chapter-lead">
+        npm처럼 무료 공공 인프라가 핵심. 수익은 Pro/Enterprise 구독 + 스폰서드 + API 사용량으로. Phase 3 이후 본격화.
+      </p>
+    </div>
+
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="tier-name">Free</div>
+        <div class="tier-price">$<span class="em">0</span></div>
+        <div class="tier-period">/ forever</div>
+        <ul>
+          <li>모든 공개 하네스 검색·설치</li>
+          <li>리뷰·별점</li>
+          <li>개인 컬렉션 (3개)</li>
+          <li>주간 다이제스트 이메일</li>
+        </ul>
+        <div class="tier-cta">시작하기</div>
+      </div>
+      <div class="pricing-card featured">
+        <div class="tier-name">Pro</div>
+        <div class="tier-price">$<span class="em">9</span></div>
+        <div class="tier-period">/ 사용자 / 월</div>
+        <ul>
+          <li>Free의 모든 기능</li>
+          <li>Private 하네스 (∞개)</li>
+          <li>무제한 컬렉션</li>
+          <li>고급 분석 (설치 추적, 비교)</li>
+          <li>커스텀 벤치마크 실행</li>
+          <li>우선 지원</li>
+        </ul>
+        <div class="tier-cta">Pro 업그레이드</div>
+      </div>
+      <div class="pricing-card">
+        <div class="tier-name">Enterprise</div>
+        <div class="tier-price">맞춤<span class="em">.</span></div>
+        <div class="tier-period">연간 계약</div>
+        <ul>
+          <li>Self-hosted 옵션</li>
+          <li>SSO / SAML</li>
+          <li>SOC 2 컴플라이언스</li>
+          <li>전담 매니저</li>
+          <li>SLA 99.9%</li>
+          <li>온프레미스 GitHub Enterprise 통합</li>
+        </ul>
+        <div class="tier-cta">영업 문의</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 13 — METRICS                               -->
+<!-- ============================================ -->
+<section class="chapter">
+  <div class="wrap">
+    <div class="chapter-head">
+      <div class="chapter-num">14 — Success Metrics</div>
+      <h2 class="chapter-h2">무엇을 <span class="em">측정</span>할 것인가.</h2>
+      <p class="chapter-lead">
+        성공을 정의하는 4가지 KPI. MVP 종료 시점(2026.07 말) 목표값. 각 지표는 PostHog로 자동 추적.
+      </p>
+    </div>
+
+    <div class="metrics">
+      <div class="metric-card">
+        <div class="m-cat">ACQUISITION</div>
+        <div class="m-name">월간 활성 방문자 (MAV)</div>
+        <div class="m-target">10,000+</div>
+        <div class="m-desc">HN, X, 개발자 블로그 유입 기준</div>
+      </div>
+      <div class="metric-card">
+        <div class="m-cat">ENGAGEMENT</div>
+        <div class="m-name">검색 → 상세 전환율</div>
+        <div class="m-target">35%</div>
+        <div class="m-desc">검색 쿼리 입력 후 상세 페이지 진입</div>
+      </div>
+      <div class="metric-card">
+        <div class="m-cat">CORE METRIC</div>
+        <div class="m-name">상세 → 설치 명령 복사</div>
+        <div class="m-target">22%</div>
+        <div class="m-desc">상세 페이지의 핵심 전환 액션</div>
+      </div>
+      <div class="metric-card">
+        <div class="m-cat">SUPPLY</div>
+        <div class="m-name">Verified 하네스 수</div>
+        <div class="m-target">300+</div>
+        <div class="m-desc">CI 통과한 검증된 하네스. Phase 2 종료 기준</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 14 — RISKS & NEXT                          -->
+<!-- ============================================ -->
+<section class="chapter">
+  <div class="wrap">
+    <div class="chapter-head">
+      <div class="chapter-num">15 — Risks &amp; Next Steps</div>
+      <h2 class="chapter-h2">예상 리스크와 <span class="em">대응</span>.</h2>
+      <p class="chapter-lead">
+        시장에 진입하기 전 미리 정리한 4가지 위험과 그에 대한 답변. 검증되지 않은 가정도 명시한다.
+      </p>
+    </div>
+
+    <div class="pains" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+      <div class="pain">
+        <div class="ico">⚠</div>
+        <div>
+          <div class="tt">"GitHub이 직접 만들면?"</div>
+          <div class="dd">GitHub Marketplace는 액션 중심. 하네스 도메인 특화 메타·검증·벤치마크는 따로 필요. 빠르게 디폴트 채널이 되는 것이 방어선.</div>
+        </div>
+      </div>
+      <div class="pain">
+        <div class="ico">⚠</div>
+        <div>
+          <div class="tt">스팸·저품질 등록</div>
+          <div class="dd">11번 섹션의 신호등 + 옵트인 + Verified 뱃지가 1차 방어선. 추가로 별 100+ / 최근 6개월 활성 / 실제 코드 존재 등 객관 신호로 디폴트 필터링.</div>
+        </div>
+      </div>
+      <div class="pain">
+        <div class="ico">⚠</div>
+        <div>
+          <div class="tt">하네스 정의 자체가 모호</div>
+          <div class="dd">"하네스 vs 라이브러리 vs 프레임워크" 경계 불분명. 초기엔 넓게 받고, 카테고리 구조로 정렬. 유저 검색 패턴 보며 정의 좁힘.</div>
+        </div>
+      </div>
+      <div class="pain">
+        <div class="ico">⚠</div>
+        <div>
+          <div class="tt">개발자 트래픽 부족</div>
+          <div class="dd">SEO + 콘텐츠 마케팅 (벤치마크 리뷰, 큐레이션) + Hacker News 런치 + Awesome 리스트 협업. 첫 한 달 1,000 명 무료 알파.</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="sub-h" style="margin-top: 36px;">즉시 다음 단계 (Next 7 days)</h3>
+    <div class="schema-card" style="background:var(--bg);">
+      <ol style="list-style:none;counter-reset:item;padding:0;">
+        <li style="padding:14px 0;border-bottom:1px solid var(--border-sub);counter-increment:item;display:grid;grid-template-columns:24px 1fr;gap:14px;align-items:baseline;font-size:14px;color:var(--text-2);"><span style="font-family:var(--mono);color:var(--accent);font-weight:700;">01.</span><span><strong style="color:var(--text);">도메인 확보</strong> — harnesshub.dev / harnesshub.io</span></li>
+        <li style="padding:14px 0;border-bottom:1px solid var(--border-sub);counter-increment:item;display:grid;grid-template-columns:24px 1fr;gap:14px;align-items:baseline;font-size:14px;color:var(--text-2);"><span style="font-family:var(--mono);color:var(--accent);font-weight:700;">02.</span><span><strong style="color:var(--text);">시드 리스트 작성</strong> — Awesome-AI-Agents 100개 + 추천 50개 = 150개 수동 큐레이션</span></li>
+        <li style="padding:14px 0;border-bottom:1px solid var(--border-sub);counter-increment:item;display:grid;grid-template-columns:24px 1fr;gap:14px;align-items:baseline;font-size:14px;color:var(--text-2);"><span style="font-family:var(--mono);color:var(--accent);font-weight:700;">03.</span><span><strong style="color:var(--text);">랜딩 페이지 출시</strong> — 본 기획서의 홈 mockup 그대로 + 이메일 수집</span></li>
+        <li style="padding:14px 0;border-bottom:1px solid var(--border-sub);counter-increment:item;display:grid;grid-template-columns:24px 1fr;gap:14px;align-items:baseline;font-size:14px;color:var(--text-2);"><span style="font-family:var(--mono);color:var(--accent);font-weight:700;">04.</span><span><strong style="color:var(--text);">Twitter/X 빌딩 인 퍼블릭</strong> — 매주 Verified 하네스 1개씩 소개 스레드</span></li>
+        <li style="padding:14px 0;border-bottom:1px solid var(--border-sub);counter-increment:item;display:grid;grid-template-columns:24px 1fr;gap:14px;align-items:baseline;font-size:14px;color:var(--text-2);"><span style="font-family:var(--mono);color:var(--accent);font-weight:700;">05.</span><span><strong style="color:var(--text);">Discord 커뮤니티 시작</strong> — 시드 사용자 100명 초대 + 큐레이션 채널</span></li>
+        <li style="padding:14px 0;counter-increment:item;display:grid;grid-template-columns:24px 1fr;gap:14px;align-items:baseline;font-size:14px;color:var(--text-2);"><span style="font-family:var(--mono);color:var(--accent);font-weight:700;">06.</span><span><strong style="color:var(--text);">MVP 개발 착수</strong> — Next.js + Supabase 셋업 (1주)</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- COLOPHON                                   -->
+<!-- ============================================ -->
+<footer>
+  <div class="wrap">
+    <div class="big">
+      The npm of<br/>
+      <span class="em">AI agent harnesses</span>.
+    </div>
+    <div class="meta">
+      HarnessHub · 2026 · Service Proposal v1.0
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
