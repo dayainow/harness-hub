@@ -12,6 +12,11 @@
 - `harness-integrator` — 프론트-백 연동/타입 매핑/환경변수
 - `harness-qa` — 통합 정합성 검증
 
+**배포 시스템:** 상세 배포 가이드 → [`DEPLOYMENT.md`](./DEPLOYMENT.md)
+- 프론트엔드: Vercel (dayainow 계정) — `clientfront-ebon.vercel.app`
+- 백엔드: Railway — `harness-hub-api-production.up.railway.app`
+- DB/Auth: Supabase PostgreSQL
+
 **변경 이력:**
 | 날짜 | 변경 내용 | 대상 | 사유 |
 |------|----------|------|------|
