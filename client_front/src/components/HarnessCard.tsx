@@ -99,10 +99,10 @@ export function HarnessCard({ harness, compact = false }: Props) {
 
       {/* Footer */}
       <div
-        className="flex items-center justify-between text-[11px] font-mono-code pt-3 border-t"
+        className="flex flex-wrap items-center justify-between gap-y-2 text-[11px] font-mono-code pt-3 border-t"
         style={{ borderColor: 'var(--border-sub)', color: 'var(--text-3)' }}
       >
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 shrink-0">
           <span className="inline-flex items-center gap-1">
             <span className="material-symbols-outlined" style={{ fontSize: 13 }}>star</span>
             {formatNumber(harness.stars)}
@@ -117,7 +117,7 @@ export function HarnessCard({ harness, compact = false }: Props) {
         </div>
         {harness.installCmd && (
           <span
-            className="truncate max-w-[40%] text-right opacity-80 group-hover:opacity-100"
+            className="truncate flex-1 min-w-[50px] text-right opacity-80 group-hover:opacity-100 ml-2"
             style={{ color: 'var(--accent)' }}
           >
             ↓ install

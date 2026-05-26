@@ -99,19 +99,19 @@ export default async function DocsPage({ params }: { params: Promise<{ locale: s
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
         {/* Left Column: Significance & How to Use (Span 7) */}
-        <div className="lg:col-span-7 space-y-10">
+        <div className="lg:col-span-7 space-y-8 lg:space-y-10">
           
           {/* 1. Significance */}
-          <section className="bg-[var(--bg-elev)] border border-[var(--border)] rounded-3xl p-8 hover:border-[var(--accent)] transition-colors duration-300 shadow-lg">
+          <section className="bg-[var(--bg-elev)] border border-[var(--border)] rounded-3xl p-6 lg:p-8 hover:border-[var(--accent)] transition-colors duration-300 shadow-lg">
             <div className="flex items-center gap-3 mb-6">
               <span className="material-symbols-outlined text-[var(--accent)] text-3xl">public</span>
-              <h2 className="text-2xl font-bold text-[var(--text)]">
+              <h2 className="text-xl md:text-2xl font-bold text-[var(--text)]">
                 {isKo ? 'HarnessHub의 의의 (Why HarnessHub?)' : 'Significance of HarnessHub'}
               </h2>
             </div>
-            <div className="space-y-4 text-[var(--text-2)] leading-relaxed text-lg">
+            <div className="space-y-4 text-[var(--text-2)] leading-relaxed text-base md:text-lg">
               <p>
                 {isKo 
                   ? '생성형 AI 생태계가 챗봇에서 자율 에이전트(Autonomous Agent) 중심으로 진화하면서 수많은 코딩 에이전트, 리서치 툴, RAG 프레임워크가 깃허브에 쏟아지고 있습니다.' 
@@ -131,10 +131,10 @@ export default async function DocsPage({ params }: { params: Promise<{ locale: s
           </section>
 
           {/* 2. How to Use */}
-          <section className="bg-[var(--bg-elev)] border border-[var(--border)] rounded-3xl p-8 hover:border-[var(--accent)] transition-colors duration-300 shadow-lg">
+          <section className="bg-[var(--bg-elev)] border border-[var(--border)] rounded-3xl p-6 lg:p-8 hover:border-[var(--accent)] transition-colors duration-300 shadow-lg">
             <div className="flex items-center gap-3 mb-6">
               <span className="material-symbols-outlined text-[var(--accent)] text-3xl">rocket_launch</span>
-              <h2 className="text-2xl font-bold text-[var(--text)]">
+              <h2 className="text-xl md:text-2xl font-bold text-[var(--text)]">
                 {isKo ? '어떻게 이용하나요? (How to Use)' : 'How to Use'}
               </h2>
             </div>
@@ -205,10 +205,10 @@ export default async function DocsPage({ params }: { params: Promise<{ locale: s
 
         {/* Right Column: Version History (Span 5) */}
         <div className="lg:col-span-5">
-          <section className="bg-[var(--bg-elev)] border border-[var(--border)] rounded-3xl p-8 shadow-lg sticky top-24">
+          <section className="bg-[var(--bg-elev)] border border-[var(--border)] rounded-3xl p-6 lg:p-8 shadow-lg sticky top-24">
             <div className="flex items-center gap-3 mb-8 border-b border-[var(--border-sub)] pb-4">
               <span className="material-symbols-outlined text-[var(--text)] text-2xl">history</span>
-              <h2 className="text-2xl font-bold text-[var(--text)]">
+              <h2 className="text-xl md:text-2xl font-bold text-[var(--text)]">
                 {isKo ? '버전 히스토리' : 'Version History'}
               </h2>
             </div>

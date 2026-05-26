@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useAuth } from '@/context/AuthContext';
 import { CommandPalette } from '@/components/CommandPalette';
 import { useEffect, useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 function GitHubIcon({ size = 16 }: { size?: number }) {
   return (
@@ -207,68 +208,94 @@ export function TopNavBar() {
           </div>
         </div>
 
-        {/* Mobile menu */}
-        {mobileOpen && (
-          <div
-            className="lg:hidden border-t"
-            style={{ backgroundColor: 'var(--bg-elev)', borderColor: 'var(--border)' }}
-          >
-            <div className="px-6 py-4 flex flex-col gap-3 text-sm font-medium">
-              <Link href="/explore" onClick={() => setMobileOpen(false)} style={{ color: 'var(--text-2)' }}>
-                {t('explore')}
-              </Link>
-              <Link href="/collections" onClick={() => setMobileOpen(false)} style={{ color: 'var(--text-2)' }}>
-                {t('collections')}
-              </Link>
-              <Link href="/benchmarks" onClick={() => setMobileOpen(false)} style={{ color: 'var(--text-2)' }}>
-                {t('benchmarks')}
-              </Link>
-              <Link href="/docs" onClick={() => setMobileOpen(false)} style={{ color: 'var(--text-2)' }}>
-                {t('docs')}
-              </Link>
-              <Link href="/submit" onClick={() => setMobileOpen(false)} style={{ color: 'var(--accent)' }}>
-                {t('submit')}
-              </Link>
-              {!loading &&
-                (user ? (
-                  <>
-                    <Link
-                      href="/profile"
-                      onClick={() => setMobileOpen(false)}
-                      style={{ color: 'var(--text-2)' }}
-                    >
-                      {t('profile')}
-                    </Link>
+        {/* Mobile menu (Drawer) */}
+        <AnimatePresence>
+          {mobileOpen && (
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="lg:hidden fixed inset-0 z-[60] bg-[var(--bg)]/95 backdrop-blur-xl flex flex-col"
+            >
+              {/* Drawer Header */}
+              <div className="flex items-center justify-between px-6 h-16 border-b border-[var(--border)]">
+                <span className="font-bold text-lg" style={{ color: 'var(--text)' }}>Menu</span>
+                <button
+                  onClick={() => setMobileOpen(false)}
+                  className="w-9 h-9 flex items-center justify-center rounded-lg"
+                  style={{ color: 'var(--text-2)' }}
+                  aria-label="Close Menu"
+                >
+                  <span className="material-symbols-outlined" style={{ fontSize: 24 }}>close</span>
+                </button>
+              </div>
+
+              {/* Drawer Content */}
+              <div className="px-6 py-8 flex flex-col gap-6 text-lg font-medium overflow-y-auto h-full">
+                <Link href="/explore" onClick={() => setMobileOpen(false)} className="transition-colors hover:text-[var(--accent)]" style={{ color: 'var(--text)' }}>
+                  {t('explore')}
+                </Link>
+                <Link href="/collections" onClick={() => setMobileOpen(false)} className="transition-colors hover:text-[var(--accent)]" style={{ color: 'var(--text)' }}>
+                  {t('collections')}
+                </Link>
+                <Link href="/benchmarks" onClick={() => setMobileOpen(false)} className="transition-colors hover:text-[var(--accent)]" style={{ color: 'var(--text)' }}>
+                  {t('benchmarks')}
+                </Link>
+                <Link href="/docs" onClick={() => setMobileOpen(false)} className="transition-colors hover:text-[var(--accent)]" style={{ color: 'var(--text)' }}>
+                  {t('docs')}
+                </Link>
+                
+                <hr className="border-[var(--border-sub)] my-2" />
+
+                <Link href="/submit" onClick={() => setMobileOpen(false)} style={{ color: 'var(--accent)' }}>
+                  {t('submit')}
+                </Link>
+
+                {!loading &&
+                  (user ? (
+                    <>
+                      <Link
+                        href="/profile"
+                        onClick={() => setMobileOpen(false)}
+                        className="flex items-center gap-3"
+                        style={{ color: 'var(--text-2)' }}
+                      >
+                        <span className="material-symbols-outlined">person</span>
+                        {t('profile')}
+                      </Link>
+                      <button
+                        onClick={async () => {
+                          setMobileOpen(false);
+                          await signOut();
+                        }}
+                        className="flex items-center gap-3 text-left"
+                        style={{ color: 'var(--danger)' }}
+                      >
+                        <span className="material-symbols-outlined">logout</span>
+                        {t('signOut')}
+                      </button>
+                    </>
+                  ) : (
                     <button
-                      onClick={async () => {
+                      onClick={() => {
                         setMobileOpen(false);
-                        await signOut();
+                        signIn();
                       }}
-                      className="text-left"
-                      style={{ color: 'var(--text-2)' }}
+                      className="inline-flex items-center justify-center gap-2 px-4 py-3 mt-4 rounded-xl font-bold w-full"
+                      style={{
+                        background: 'linear-gradient(135deg, #00E5FF 0%, #A78BFA 100%)',
+                        color: '#0A0E14',
+                      }}
                     >
-                      {t('signOut')}
+                      <GitHubIcon size={18} />
+                      {t('signIn')}
                     </button>
-                  </>
-                ) : (
-                  <button
-                    onClick={() => {
-                      setMobileOpen(false);
-                      signIn();
-                    }}
-                    className="inline-flex items-center gap-2 self-start px-3 py-1.5 rounded-lg font-bold"
-                    style={{
-                      background: 'linear-gradient(135deg, #00E5FF 0%, #A78BFA 100%)',
-                      color: '#0A0E14',
-                    }}
-                  >
-                    <GitHubIcon size={14} />
-                    {t('signIn')}
-                  </button>
-                ))}
-            </div>
-          </div>
-        )}
+                  ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
       <div className="h-16" aria-hidden />
     </>

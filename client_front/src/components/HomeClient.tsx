@@ -72,7 +72,7 @@ export default function HomeClient({
         {/* Interactive 3D Background */}
         <ThreeBackground />
 
-        <div className="relative z-10 max-w-[1200px] mx-auto px-6 pt-24 pb-20 w-full pointer-events-none">
+        <div className="relative z-10 max-w-[1200px] mx-auto px-4 md:px-6 pt-24 pb-20 w-full pointer-events-none">
           <div className="pointer-events-auto">
             <p
             className="font-mono-code text-xs tracking-[0.3em] mb-6"
@@ -84,7 +84,7 @@ export default function HomeClient({
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: 'easeOut' }}
-            className="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight leading-[1.05] text-balance mb-6"
+            className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.05] text-balance mb-6"
             style={{ color: 'var(--text)' }}
           >
             {tHero('titleA')}
@@ -242,7 +242,7 @@ export default function HomeClient({
       </section>
 
       {/* FEATURED */}
-      <section className="max-w-[1200px] mx-auto px-6 py-20">
+      <section className="max-w-[1200px] mx-auto px-4 md:px-6 py-20">
         <div className="flex items-end justify-between mb-8 gap-4 flex-wrap">
           <div>
             <div className="flex items-center gap-3 mb-2">
@@ -287,7 +287,7 @@ export default function HomeClient({
       </section>
 
       {/* BY CATEGORY */}
-      <section className="max-w-[1200px] mx-auto px-6 py-20">
+      <section className="max-w-[1200px] mx-auto px-4 md:px-6 py-20">
         <div className="mb-10">
           <h2 className="text-2xl md:text-3xl font-bold mb-2" style={{ color: 'var(--text)' }}>
             {tCats('title')}
