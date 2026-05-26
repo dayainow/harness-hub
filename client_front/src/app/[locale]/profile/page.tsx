@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
 import { useAuth } from '@/context/AuthContext';
 import {
@@ -12,6 +13,7 @@ import {
 import { HarnessCard } from '@/components/HarnessCard';
 
 export default function ProfilePage() {
+  const t = useTranslations('Profile');
   const { session, user, loading, signOut } = useAuth();
   const router = useRouter();
 
@@ -119,7 +121,7 @@ export default function ProfilePage() {
                 color: 'var(--text-2)',
               }}
             >
-              Sign out
+              {t('signOut')}
             </button>
           </div>
           <h1 className="text-2xl font-bold" style={{ color: 'var(--text)' }}>
@@ -147,7 +149,7 @@ export default function ProfilePage() {
         <div className="flex items-end justify-between mb-4">
           <div>
             <h2 className="text-lg font-bold" style={{ color: 'var(--text)' }}>
-              Bookmarks
+              {t('bookmarks')}
             </h2>
             <p
               className="font-mono-code text-xs mt-0.5"
@@ -173,9 +175,7 @@ export default function ProfilePage() {
             className="rounded-2xl border p-12 text-center"
             style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
           >
-            <p style={{ color: 'var(--text-3)' }}>
-              You haven&apos;t bookmarked any harnesses yet.
-            </p>
+            <p style={{ color: 'var(--text-3)' }}>{t('noBookmarks')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">

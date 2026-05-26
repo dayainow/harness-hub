@@ -1,8 +1,10 @@
 import { notFound } from 'next/navigation';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import { getHarness, CATEGORY_META, formatNumber, relativeTime } from '@/lib/api';
 import { LicenseBadge } from '@/components/LicenseBadge';
 import { InstallBox } from './InstallBox';
+import ReactMarkdown from 'react-markdown';
 
 export const revalidate = 60;
 
@@ -21,8 +23,14 @@ export async function generateMetadata({ params }: PageProps) {
 }
 
 export default async function HarnessDetailPage({ params }: PageProps) {
-  const { org, name } = await params;
-  const harness = await getHarness(org, name);
+  const { locale, org, name } = await params;
+  setRequestLocale(locale);
+
+  const [harness, t, tCommon] = await Promise.all([
+    getHarness(org, name),
+    getTranslations({ locale, namespace: 'Detail' }),
+    getTranslations({ locale, namespace: 'Common' }),
+  ]);
 
   if (!harness) {
     notFound();
@@ -115,7 +123,7 @@ export default async function HarnessDetailPage({ params }: PageProps) {
                     border: '1px solid rgba(0, 229, 255, 0.35)',
                   }}
                 >
-                  verified
+                  {tCommon('verified')}
                   <span className="material-symbols-outlined" style={{ fontSize: 11 }}>verified</span>
                 </span>
               )}
@@ -138,7 +146,7 @@ export default async function HarnessDetailPage({ params }: PageProps) {
               <span className="font-bold" style={{ color: 'var(--text)' }}>
                 {formatNumber(harness.stars)}
               </span>{' '}
-              stars
+              {t('stars').toLowerCase()}
             </span>
             <span style={{ color: 'var(--text-4)' }}>·</span>
             <span className="inline-flex items-center gap-1.5" style={{ color: 'var(--text-2)' }}>
@@ -164,7 +172,7 @@ export default async function HarnessDetailPage({ params }: PageProps) {
           {harness.benchmarks && harness.benchmarks.length > 0 && (
             <section className="mb-10">
               <h2 className="text-lg font-bold mb-4" style={{ color: 'var(--text)' }}>
-                Benchmark Results
+                {t('benchmarks')}
               </h2>
               <div
                 className="rounded-2xl border overflow-hidden"
@@ -205,7 +213,7 @@ export default async function HarnessDetailPage({ params }: PageProps) {
           <section>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-bold" style={{ color: 'var(--text)' }}>
-                README
+                {t('readme')}
               </h2>
               <a
                 href={harness.repoUrl}
@@ -214,7 +222,7 @@ export default async function HarnessDetailPage({ params }: PageProps) {
                 className="text-sm font-medium inline-flex items-center gap-1"
                 style={{ color: 'var(--accent)' }}
               >
-                View full README
+                {t('viewReadme')}
                 <span className="material-symbols-outlined" style={{ fontSize: 14 }}>
                   open_in_new
                 </span>
@@ -229,11 +237,11 @@ export default async function HarnessDetailPage({ params }: PageProps) {
               }}
             >
               {harness.readmeExcerpt ? (
-                <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed">
-                  {harness.readmeExcerpt}
-                </pre>
+                <div className="prose prose-invert max-w-none prose-sm sm:prose-base prose-a:text-[var(--accent)] prose-a:no-underline hover:prose-a:underline prose-headings:text-[var(--text)] prose-headings:font-bold prose-h3:mt-8 prose-h3:mb-3 prose-p:text-[var(--text-2)] prose-p:leading-relaxed prose-li:text-[var(--text-2)] prose-strong:text-[var(--text)]">
+                  <ReactMarkdown>{harness.readmeExcerpt}</ReactMarkdown>
+                </div>
               ) : (
-                <p style={{ color: 'var(--text-3)' }}>No README excerpt available.</p>
+                <p style={{ color: 'var(--text-3)' }}>{t('noReadme')}</p>
               )}
             </div>
           </section>
@@ -244,23 +252,23 @@ export default async function HarnessDetailPage({ params }: PageProps) {
           <InstallBox harness={harness} />
 
           {/* Stats */}
-          <SidebarBox title="Stats">
-            <SidebarRow icon="star" label="Stars" value={formatNumber(harness.stars)} />
-            <SidebarRow icon="call_split" label="Forks" value={formatNumber(harness.forks)} />
-            <SidebarRow icon="bug_report" label="Issues" value={`${harness.issuesOpen} open`} />
-            <SidebarRow icon="schedule" label="Updated" value={relativeTime(harness.lastUpdated ?? harness.updatedAt)} />
+          <SidebarBox title={t('stats')}>
+            <SidebarRow icon="star" label={t('stars')} value={formatNumber(harness.stars)} />
+            <SidebarRow icon="call_split" label={t('forks')} value={formatNumber(harness.forks)} />
+            <SidebarRow icon="bug_report" label={t('issues')} value={`${harness.issuesOpen} open`} />
+            <SidebarRow icon="schedule" label={t('updated')} value={relativeTime(harness.lastUpdated ?? harness.updatedAt)} />
           </SidebarBox>
 
           {/* Compatibility */}
-          <SidebarBox title="Compatibility">
+          <SidebarBox title={t('compatibility')}>
             <SidebarRow
               icon="psychology"
-              label="Models"
-              value={harness.modelCompat.slice(0, 2).join(', ') || '—'}
+              label={t('models')}
+              value={harness.modelCompat.slice(0, 2).join(', ') || t('noCompatibility')}
             />
             <SidebarRow
               icon="code"
-              label="Runtime"
+              label={t('runtime')}
               value={harness.languages.join(', ') || '—'}
             />
             <div className="flex items-center justify-between py-2 text-sm">
@@ -268,24 +276,24 @@ export default async function HarnessDetailPage({ params }: PageProps) {
                 <span className="material-symbols-outlined" style={{ fontSize: 16 }}>
                   gavel
                 </span>
-                License
+                {t('license')}
               </span>
               <LicenseBadge tier={harness.licenseTier} license={harness.license} />
             </div>
           </SidebarBox>
 
           {/* Quality */}
-          <SidebarBox title="Quality Signals">
-            <SidebarRow icon="check_circle" label="CI Status" value="passing" valueColor="var(--success)" />
+          <SidebarBox title={t('quality')}>
+            <SidebarRow icon="check_circle" label={t('ciStatus')} value={t('passing')} valueColor="var(--success)" />
             <SidebarRow
               icon="verified"
-              label="Verified"
+              label={t('verified')}
               value={harness.verified ? 'yes' : 'no'}
               valueColor={harness.verified ? 'var(--success)' : 'var(--text-3)'}
             />
             <SidebarRow
               icon="bolt"
-              label="Active"
+              label={t('active')}
               value={harness.lastUpdated ? relativeTime(harness.lastUpdated) : 'unknown'}
               valueColor="var(--accent)"
             />

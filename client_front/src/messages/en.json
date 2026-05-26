@@ -72,16 +72,37 @@
     "models": "Models",
     "runtime": "Runtime",
     "bookmark": "Bookmark",
+    "bookmarked": "Bookmarked",
     "github": "GitHub",
     "readme": "README",
+    "viewReadme": "View full README",
     "viewFullReadme": "View full README",
+    "noReadme": "No README excerpt available.",
     "benchmarks": "Benchmark Results",
-    "compatibility": "Compatibility",
+    "compatibility": "Model Compatibility",
+    "noCompatibility": "No compatibility info",
     "quality": "Quality Signals",
     "ciStatus": "CI Status",
+    "passing": "passing",
     "active": "Active",
+    "verified": "Verified",
     "stats": "Stats",
-    "install": "Install"
+    "install": "Install",
+    "installCmd": "Install Command",
+    "bookmarkLoginRequired": "Sign in to bookmark harnesses."
+  },
+  "Profile": {
+    "bookmarks": "Bookmarks",
+    "noBookmarks": "No bookmarked harnesses yet.",
+    "myProfile": "My Profile",
+    "signOut": "Sign Out"
+  },
+  "Common": {
+    "verified": "Verified",
+    "featured": "Featured",
+    "install": "Install",
+    "copy": "Copy",
+    "copied": "Copied!"
   },
   "Submit": {
     "title": "Submit a Harness",

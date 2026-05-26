@@ -1,10 +1,33 @@
 'use client';
 
-import { useState } from 'react';
-import type { Harness } from '@/lib/api';
+import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { useAuth } from '@/context/AuthContext';
+import { getBookmarkStatus, toggleBookmark, type Harness } from '@/lib/api';
 
-export function InstallBox({ harness }: { harness: Harness }) {
+interface Props {
+  harness: Harness;
+  initialBookmarked?: boolean;
+}
+
+export function InstallBox({ harness, initialBookmarked = false }: Props) {
+  const t = useTranslations('Detail');
+  const tCommon = useTranslations('Common');
+  const { session } = useAuth();
+
   const [copied, setCopied] = useState(false);
+  const [bookmarked, setBookmarked] = useState<boolean>(initialBookmarked);
+  const [bookmarking, setBookmarking] = useState(false);
+
+  // 마운트 후 실제 북마크 상태 동기화
+  useEffect(() => {
+    const token = session?.access_token;
+    if (!token) return;
+    getBookmarkStatus(harness.slug, token)
+      .then((status) => setBookmarked(status))
+      .catch(() => { /* 실패 시 initialBookmarked 유지 */ });
+  }, [harness.slug, session?.access_token]);
+
   const installCmd = harness.installCmd ?? `pip install ${harness.name.toLowerCase()}`;
 
   const copy = async () => {
@@ -14,6 +37,30 @@ export function InstallBox({ harness }: { harness: Harness }) {
       setTimeout(() => setCopied(false), 1500);
     } catch {
       /* ignore */
+    }
+  };
+
+  const onBookmark = async () => {
+    const token = session?.access_token;
+    if (!token) {
+      window.alert(t('bookmarkLoginRequired'));
+      return;
+    }
+    if (bookmarking) return;
+
+    // Optimistic update
+    const prev = bookmarked;
+    setBookmarked(!prev);
+    setBookmarking(true);
+    try {
+      const result = await toggleBookmark(harness.slug, token);
+      setBookmarked(result.bookmarked);
+    } catch (err) {
+      // Roll back on failure
+      console.warn('[InstallBox] Failed to toggle bookmark:', err);
+      setBookmarked(prev);
+    } finally {
+      setBookmarking(false);
     }
   };
 
@@ -48,7 +95,7 @@ export function InstallBox({ harness }: { harness: Harness }) {
           onClick={copy}
           className="shrink-0 w-7 h-7 rounded-md flex items-center justify-center transition-colors"
           style={{ backgroundColor: 'var(--bg-raised)', color: 'var(--text-2)' }}
-          aria-label="Copy install command"
+          aria-label={tCommon('copy')}
         >
           <span className="material-symbols-outlined" style={{ fontSize: 16 }}>
             {copied ? 'check' : 'content_copy'}
@@ -58,17 +105,28 @@ export function InstallBox({ harness }: { harness: Harness }) {
 
       <div className="flex gap-2">
         <button
-          className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border text-sm font-medium transition-colors"
+          type="button"
+          onClick={onBookmark}
+          disabled={bookmarking}
+          aria-pressed={bookmarked}
+          aria-label={bookmarked ? t('bookmarked') : t('bookmark')}
+          className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border text-sm font-medium transition-colors disabled:opacity-60"
           style={{
-            backgroundColor: 'var(--bg-raised)',
-            borderColor: 'var(--border)',
-            color: 'var(--text)',
+            backgroundColor: bookmarked ? 'rgba(0, 229, 255, 0.12)' : 'var(--bg-raised)',
+            borderColor: bookmarked ? 'var(--accent)' : 'var(--border)',
+            color: bookmarked ? 'var(--accent)' : 'var(--text)',
           }}
         >
-          <span className="material-symbols-outlined" style={{ fontSize: 16 }}>
-            bookmark_border
+          <span
+            className="material-symbols-outlined"
+            style={{
+              fontSize: 16,
+              fontVariationSettings: bookmarked ? "'FILL' 1" : "'FILL' 0",
+            }}
+          >
+            {bookmarked ? 'bookmark' : 'bookmark_add'}
           </span>
-          Bookmark
+          {bookmarked ? t('bookmarked') : t('bookmark')}
         </button>
         <a
           href={harness.repoUrl}

@@ -269,6 +269,41 @@ export async function getMyBookmarks(token: string): Promise<BookmarkItem[]> {
   }
 }
 
+/**
+ * Toggle bookmark for a harness (requires authenticated Supabase token).
+ * `slug` must be the harness "org/name" slug.
+ */
+export async function toggleBookmark(
+  slug: string,
+  token: string,
+): Promise<{ bookmarked: boolean }> {
+  const res = await fetch(`${API_BASE}/harnesses/${slug}/bookmark`, {
+    method: 'POST',
+    headers: authHeaders(token),
+    signal: AbortSignal.timeout(DEFAULT_TIMEOUT_MS),
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to toggle bookmark (${res.status})`);
+  }
+  return (await res.json()) as { bookmarked: boolean };
+}
+
+/**
+ * Returns whether the current user has bookmarked the given harness slug.
+ * Resolves to `false` on any error (including unauthenticated state).
+ */
+export async function getBookmarkStatus(
+  slug: string,
+  token: string,
+): Promise<boolean> {
+  try {
+    const items = await getMyBookmarks(token);
+    return items.some((b) => b.harness?.slug === slug);
+  } catch {
+    return false;
+  }
+}
+
 export interface SubmitHarnessPayload {
   repoUrl: string;
   name?: string;

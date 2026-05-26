@@ -305,7 +305,7 @@ function LeaderboardTableRow({
   const medalColor = rank <= 3 ? MEDAL_COLORS[rank - 1] : null;
   return (
     <tr
-      className="border-t transition-colors hover:bg-(--bg-raised)"
+      className="border-t transition-colors hover:bg-[var(--bg-raised)]"
       style={{ borderColor: 'var(--border-sub)' }}
     >
       <td className="px-5 py-4 align-middle">

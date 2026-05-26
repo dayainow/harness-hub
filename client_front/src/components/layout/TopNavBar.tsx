@@ -151,7 +151,7 @@ export function TopNavBar() {
                       <Link
                         href="/profile"
                         onClick={() => setMenuOpen(false)}
-                        className="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors hover:bg-(--bg-raised)"
+                        className="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors hover:bg-[var(--bg-raised)]"
                         style={{ color: 'var(--text-2)' }}
                       >
                         <span
@@ -168,7 +168,7 @@ export function TopNavBar() {
                           setMenuOpen(false);
                           await signOut();
                         }}
-                        className="flex items-center gap-2 w-full px-4 py-2.5 text-sm transition-colors hover:bg-(--bg-raised) text-left"
+                        className="flex items-center gap-2 w-full px-4 py-2.5 text-sm transition-colors hover:bg-[var(--bg-raised)] text-left"
                         style={{ color: 'var(--text-2)' }}
                       >
                         <span

@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { LicenseBadge } from '@/components/LicenseBadge';
 import { CATEGORY_META, formatNumber, type Harness } from '@/lib/api';
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export function HarnessCard({ harness, compact = false }: Props) {
+  const tCommon = useTranslations('Common');
   const [org, name] = harness.slug.split('/');
   const meta = CATEGORY_META[harness.category];
 
@@ -43,7 +45,7 @@ export function HarnessCard({ harness, compact = false }: Props) {
             }}
           >
             <span className="material-symbols-outlined" style={{ fontSize: 11 }}>verified</span>
-            Verified
+            {tCommon('verified')}
           </span>
         )}
         <LicenseBadge tier={harness.licenseTier} license={harness.license} className="ml-auto" />
