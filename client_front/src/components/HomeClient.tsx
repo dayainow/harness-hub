@@ -209,7 +209,11 @@ export default function HomeClient({
       </section>
 
       {/* STATS BAR */}
-      <section
+      <motion.section
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.6 }}
         className="border-y"
         style={{
           backgroundColor: 'var(--bg-elev)',
@@ -239,10 +243,16 @@ export default function HomeClient({
             </div>
           ))}
         </div>
-      </section>
+      </motion.section>
 
       {/* FEATURED */}
-      <section className="max-w-[1200px] mx-auto px-4 md:px-6 py-20">
+      <motion.section 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.6 }}
+        className="max-w-[1200px] mx-auto px-4 md:px-6 py-20"
+      >
         <div className="flex items-end justify-between mb-8 gap-4 flex-wrap">
           <div>
             <div className="flex items-center gap-3 mb-2">
@@ -279,15 +289,29 @@ export default function HomeClient({
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {featured.slice(0, 6).map((h) => (
-              <HarnessCard key={h.id} harness={h} />
+            {featured.slice(0, 6).map((h, i) => (
+              <motion.div
+                key={h.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+              >
+                <HarnessCard harness={h} />
+              </motion.div>
             ))}
           </div>
         )}
-      </section>
+      </motion.section>
 
       {/* BY CATEGORY */}
-      <section className="max-w-[1200px] mx-auto px-4 md:px-6 py-20">
+      <motion.section 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.6 }}
+        className="max-w-[1200px] mx-auto px-4 md:px-6 py-20"
+      >
         <div className="mb-10">
           <h2 className="text-2xl md:text-3xl font-bold mb-2" style={{ color: 'var(--text)' }}>
             {tCats('title')}
@@ -296,13 +320,19 @@ export default function HomeClient({
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {CATEGORY_ORDER.map((cat) => {
+          {CATEGORY_ORDER.map((cat, i) => {
             const meta = CATEGORY_META[cat];
             const count = categoryCounts[cat] ?? 0;
             return (
-              <Link
+              <motion.div
                 key={cat}
-                href={`/explore?category=${cat}`}
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.05 }}
+              >
+                <Link
+                  href={`/explore?category=${cat}`}
                 className="group rounded-2xl p-6 border transition-all hover:-translate-y-1"
                 style={{
                   backgroundColor: 'var(--bg-card)',
@@ -333,10 +363,11 @@ export default function HomeClient({
                   {tCats('count', { count })}
                 </p>
               </Link>
+            </motion.div>
             );
           })}
         </div>
-      </section>
+      </motion.section>
     </main>
   );
 }

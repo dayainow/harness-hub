@@ -63,8 +63,27 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/princeton-nlp/SWE-agent',
     description:
       'GitHub 이슈를 자동으로 해결하는 AI 소프트웨어 엔지니어링 에이전트',
-    readmeExcerpt:
-      'SWE-agent는 Claude 또는 GPT-4를 GitHub 이슈를 푸는 자율 소프트웨어 엔지니어로 변환합니다.',
+    readmeExcerpt: `SWE-agent는 소프트웨어 엔지니어링 역량을 갖춘 자율 AI 에이전트입니다. 주어진 GitHub 이슈나 로컬 작업 지시를 스스로 파악하고, 코드를 분석한 뒤 필요한 수정 사항을 직접 작성합니다.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **GitHub 이슈 자동 해결**: 버그 리포트나 기능 추가 요청이 들어오면 스스로 PR을 생성합니다.
+- **코드베이스 대규모 리팩토링**: 프로젝트 전체에 걸친 반복적인 변경 사항을 안전하게 처리합니다.
+- **레거시 코드 분석**: 복잡한 레거시 코드를 읽고 이해하여 주석을 달거나 문서를 생성합니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- ACI (Agent-Computer Interface)를 통한 터미널 명령어 자율 실행
+- 파일 시스템 탐색, 코드 검색 및 심층 분석
+- Claude 3.5 Sonnet 및 GPT-4o 등 최상위 LLM 네이티브 지원
+- SWE-bench 기준 현존 최고 수준의 문제 해결률(Resolution Rate) 달성
+
+### 👍 장점 (Pros)
+- 사람 개입 없이 처음부터 끝까지 문제를 해결하고 PR까지 올릴 수 있습니다.
+- 환경 격리(Docker)를 통해 로컬 환경을 오염시키지 않고 안전하게 실행됩니다.
+- 연구 목적으로 개발되어 학술적으로 성능이 검증된 강력한 벤치마크 점수를 가집니다.
+
+### 👎 단점 및 한계 (Cons)
+- 실행 환경(Docker 등)을 초기에 세팅하는 과정이 다소 번거로울 수 있습니다.
+- 복잡한 아키텍처 결정을 내리기엔 아직 한계가 있으며, 비용(API Token) 소모가 클 수 있습니다.`,
     stars: 14200,
     forks: 1600,
     issuesOpen: 42,
@@ -100,8 +119,27 @@ const harnesses: SeedHarness[] = [
     orgName: 'Aider-AI',
     repoUrl: 'https://github.com/Aider-AI/aider',
     description: '터미널 기반 AI 페어 프로그래밍 도구. Git과 통합되어 자동 커밋.',
-    readmeExcerpt:
-      'aider는 터미널에서 Claude 또는 GPT와 함께 실제 코드베이스를 편집하는 AI 페어 프로그래머입니다.',
+    readmeExcerpt: `aider는 터미널에 상주하며 개발자와 함께 코딩하는 AI 페어 프로그래머입니다. IDE를 벗어나지 않고 터미널에서 즉각적으로 코드를 편집하고 Git 커밋까지 자동화해 줍니다.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **빠른 프로토타이핑**: 스크립트 작성이나 보일러플레이트 코드를 순식간에 생성합니다.
+- **TDD (테스트 주도 개발)**: 에러 로그나 실패한 테스트 결과를 그대로 넘겨주면 알아서 코드를 수정합니다.
+- **터미널 환경 선호자**: VIM/Neovim 등 터미널 기반 개발 환경을 사용하는 개발자에게 완벽합니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 터미널 텍스트 인터페이스(TUI)를 통해 LLM과 대화하며 코드베이스 수정
+- 변경 사항을 알아서 판단해 의미 있는 커밋 메시지와 함께 Git Commit 자동화
+- 파일간의 컨텍스트를 스스로 읽어오는 Repo-map 기능 내장
+- 브라우저나 외부 IDE 확장이 필요 없는 완벽한 독립 실행 환경
+
+### 👍 장점 (Pros)
+- 설정이 거의 필요 없이 \`pip install aider-chat\` 한 줄로 즉시 사용 가능합니다.
+- Git 워크플로우와 완벽하게 통합되어 있어 생산성이 폭발적으로 증가합니다.
+- 로컬 파일 시스템에 직접 접근하므로 복사/붙여넣기 할 필요가 없습니다.
+
+### 👎 단점 및 한계 (Cons)
+- GUI 환경에 익숙한 개발자에게는 터미널 인터페이스가 낯설 수 있습니다.
+- 대규모 코드베이스에서는 컨텍스트 윈도우 한계로 엉뚱한 파일을 수정할 위험이 존재합니다.`,
     stars: 22100,
     forks: 2100,
     issuesOpen: 78,
@@ -132,8 +170,27 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/cline/cline',
     description:
       'VS Code 통합 자율 코딩 에이전트. 파일·터미널·브라우저를 직접 제어.',
-    readmeExcerpt:
-      'Cline은 VS Code 확장으로서 Claude를 통해 파일 생성·편집, 터미널 명령 실행, 브라우저 자동화를 수행합니다.',
+    readmeExcerpt: `Cline은 VS Code 환경 내에서 직접 동작하는 강력한 자율 코딩 확장 프로그램입니다. 터미널 명령어를 실행하고, 브라우저를 띄워 확인하고, 파일을 생성 및 수정하는 모든 과정을 편집기 안에서 수행합니다.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **웹 서비스 엔드투엔드 개발**: 프론트엔드부터 백엔드까지 복잡한 풀스택 프로젝트 구축
+- **GUI 기반 자율 코딩**: VScode 사이드바에서 지시만 내리고 AI가 일하는 과정을 실시간 모니터링
+- **실시간 디버깅**: 로컬 서버를 띄우고 브라우저 콘솔 에러를 스스로 읽어 고치도록 지시
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 파일 시스템 제어 (읽기, 쓰기, 생성, 삭제)
+- VS Code 내장 터미널에 직접 접근해 명령어 실행 (npm install, 빌드 등)
+- 브라우저 자동화 도구를 띄워 시각적인 UI 버그나 런타임 에러를 스스로 파악
+- Human-in-the-loop: 위험한 작업(파일 삭제, 명령어 실행) 전 사용자 승인 요청
+
+### 👍 장점 (Pros)
+- VS Code 확장이기 때문에 기존 개발 환경을 전혀 바꿀 필요가 없습니다.
+- AI가 터미널 명령어의 결과값을 읽고 다음 행동을 결정하는 능력이 탁월합니다.
+- 다양한 API 제공자(Anthropic, OpenAI, OpenRouter, 로컬 Ollama 등)를 유연하게 지원합니다.
+
+### 👎 단점 및 한계 (Cons)
+- 승인(Approve) 프로세스가 안전하긴 하지만, 긴 작업 시 계속 버튼을 눌러줘야 해서 피곤할 수 있습니다.
+- VS Code 외부 환경(타 IDE 등)에서는 사용할 수 없습니다.`,
     stars: 18500,
     forks: 1900,
     issuesOpen: 156,
@@ -161,8 +218,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'All-Hands-AI',
     repoUrl: 'https://github.com/All-Hands-AI/OpenHands',
     description: '멀티모달 AI 개발자 에이전트. Sandbox 환경에서 코드를 직접 실행.',
-    readmeExcerpt:
-      'OpenHands는 Docker 기반 샌드박스에서 AI가 코드를 작성·실행·디버깅하는 플랫폼입니다.',
+    readmeExcerpt: `멀티모달 AI 개발자 에이전트. Sandbox 환경에서 코드를 직접 실행.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **코드베이스 분석 및 자동화**: 복잡한 버그 수정이나 보일러플레이트 코드 작성 시 시간을 획기적으로 단축합니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 자율적인 코드 생성 및 파일 시스템 조작\n- 다양한 프로그래밍 언어 지원 및 IDE 통합
+
+### 👍 장점 (Pros)
+- 개발자 생산성 극대화 및 단순 반복 작업 제거\n- 최신 LLM 아키텍처에 대응하는 유연한 인터페이스
+
+### 👎 단점 및 한계 (Cons)
+- 코드베이스가 너무 방대할 경우 컨텍스트 한계 발생 가능성\n- 자율 실행 코드의 보안 및 무결성 검토 필수`,
     stars: 9800,
     forks: 1100,
     issuesOpen: 203,
@@ -192,8 +260,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'block',
     repoUrl: 'https://github.com/block/goose',
     description: '로컬 머신에서 자율적으로 작업을 수행하는 AI 에이전트. MCP 통합.',
-    readmeExcerpt:
-      'goose는 MCP(Model Context Protocol)를 통해 다양한 도구와 통합되는 로컬 AI 에이전트입니다.',
+    readmeExcerpt: `로컬 머신에서 자율적으로 작업을 수행하는 AI 에이전트. MCP 통합.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 로컬 머신에서 자율적으로 작업을 수행하는 AI 에이전트. MCP 통합.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 7400,
     forks: 680,
     issuesOpen: 91,
@@ -217,8 +296,27 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/microsoft/autogen',
     description:
       '멀티 에이전트 대화 프레임워크. 복잡한 태스크를 여러 AI 에이전트가 협업으로 해결.',
-    readmeExcerpt:
-      'AutoGen은 여러 AI 에이전트가 서로 대화하며 복잡한 문제를 협력 해결하는 프레임워크입니다.',
+    readmeExcerpt: `AutoGen은 마이크로소프트가 개발한 오픈소스 멀티 에이전트 대화 프레임워크입니다. 하나의 거대한 AI가 모든 것을 처리하는 대신, 서로 다른 역할을 가진 여러 AI 에이전트들이 서로 대화하고 협력하며 문제를 해결하도록 설계되었습니다.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **복잡한 코딩 및 검증 시스템**: 코드 작성 에이전트, 코드 리뷰 에이전트, 실행 및 테스터 에이전트가 협업하는 파이프라인
+- **데이터 분석 및 시각화**: 데이터를 추출하는 에이전트와 이를 그래프로 그리는 에이전트 간의 자동화된 협업
+- **시뮬레이션 및 토론**: 서로 다른 성향(Persona)을 가진 AI들을 모아놓고 특정 주제에 대해 토론시키는 시스템
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 커스터마이징 가능한 에이전트 역할(프로그래머, 리뷰어, 매니저 등) 부여
+- 사람(Human-in-the-loop)이 대화 중간에 개입하여 피드백을 주고 방향을 수정 가능
+- 에이전트 간의 자동화된 대화 라우팅 및 상태 관리
+- 로컬 LLM 환경(Ollama 등)과의 원활한 연동 지원
+
+### 👍 장점 (Pros)
+- 단일 LLM이 해결하지 못하는 복잡하고 논리적인 태스크를 에이전트 간의 분업(Divide & Conquer)으로 훌륭히 풀어냅니다.
+- 코드를 스스로 실행하고 에러가 나면 다른 에이전트에게 피드백을 주는 자가 치유(Self-healing) 기능이 뛰어납니다.
+- 마이크로소프트의 지속적인 지원을 받아 엔터프라이즈 환경 적용이 용이합니다.
+
+### 👎 단점 및 한계 (Cons)
+- 에이전트끼리 대화가 무한 루프(Infinite loop)에 빠지거나 엉뚱한 결론으로 흘러갈 위험이 존재합니다.
+- 토큰(Token) 사용량이 기하급수적으로 늘어날 수 있어 API 비용 관리에 주의해야 합니다.`,
     stars: 38200,
     forks: 5500,
     issuesOpen: 312,
@@ -242,8 +340,19 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/langchain-ai/langgraph',
     description:
       '상태 기반 멀티 에이전트 워크플로우 프레임워크. 복잡한 에이전트 그래프 구성.',
-    readmeExcerpt:
-      'LangGraph는 복잡한 에이전트 워크플로우를 방향성 비순환 그래프(DAG)로 정의하는 프레임워크입니다.',
+    readmeExcerpt: `상태 기반 멀티 에이전트 워크플로우 프레임워크. 복잡한 에이전트 그래프 구성.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 상태 기반 멀티 에이전트 워크플로우 프레임워크. 복잡한 에이전트 그래프 구성.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 11200,
     forks: 1800,
     issuesOpen: 178,
@@ -266,8 +375,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'BerriAI',
     repoUrl: 'https://github.com/BerriAI/litellm',
     description: '100+ LLM API를 OpenAI 호환 형식으로 통합하는 프록시 프레임워크.',
-    readmeExcerpt:
-      'LiteLLM은 Claude, GPT, Gemini, Llama 등 100개 이상의 LLM을 동일한 인터페이스로 호출하는 게이트웨이입니다.',
+    readmeExcerpt: `100+ LLM API를 OpenAI 호환 형식으로 통합하는 프록시 프레임워크.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 100+ LLM API를 OpenAI 호환 형식으로 통합하는 프록시 프레임워크.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 16800,
     forks: 1950,
     issuesOpen: 445,
@@ -292,8 +412,19 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/continuedev/continue',
     description:
       'VS Code와 JetBrains에서 사용하는 오픈소스 AI 코드 어시스턴트. 자체 모델 연결 가능.',
-    readmeExcerpt:
-      'Continue는 IDE 내에서 작동하는 오픈소스 AI 코딩 어시스턴트로 자체 모델·룰·도구를 커스텀합니다.',
+    readmeExcerpt: `VS Code와 JetBrains에서 사용하는 오픈소스 AI 코드 어시스턴트. 자체 모델 연결 가능.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **코드베이스 분석 및 자동화**: 복잡한 버그 수정이나 보일러플레이트 코드 작성 시 시간을 획기적으로 단축합니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 자율적인 코드 생성 및 파일 시스템 조작\n- 다양한 프로그래밍 언어 지원 및 IDE 통합
+
+### 👍 장점 (Pros)
+- 개발자 생산성 극대화 및 단순 반복 작업 제거\n- 최신 LLM 아키텍처에 대응하는 유연한 인터페이스
+
+### 👎 단점 및 한계 (Cons)
+- 코드베이스가 너무 방대할 경우 컨텍스트 한계 발생 가능성\n- 자율 실행 코드의 보안 및 무결성 검토 필수`,
     stars: 19400,
     forks: 1700,
     issuesOpen: 287,
@@ -324,8 +455,19 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/sourcegraph/cody',
     description:
       'Sourcegraph의 코드베이스 인식 AI 코딩 어시스턴트. 엔터프라이즈 코드 검색과 통합.',
-    readmeExcerpt:
-      'Cody는 전체 코드베이스를 컨텍스트로 활용해 정확한 코드 생성·리팩토링·설명을 제공합니다.',
+    readmeExcerpt: `Sourcegraph의 코드베이스 인식 AI 코딩 어시스턴트. 엔터프라이즈 코드 검색과 통합.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **코드베이스 분석 및 자동화**: 복잡한 버그 수정이나 보일러플레이트 코드 작성 시 시간을 획기적으로 단축합니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 자율적인 코드 생성 및 파일 시스템 조작\n- 다양한 프로그래밍 언어 지원 및 IDE 통합
+
+### 👍 장점 (Pros)
+- 개발자 생산성 극대화 및 단순 반복 작업 제거\n- 최신 LLM 아키텍처에 대응하는 유연한 인터페이스
+
+### 👎 단점 및 한계 (Cons)
+- 코드베이스가 너무 방대할 경우 컨텍스트 한계 발생 가능성\n- 자율 실행 코드의 보안 및 무결성 검토 필수`,
     stars: 3200,
     forks: 410,
     issuesOpen: 124,
@@ -349,8 +491,19 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/smol-ai/developer',
     description:
       '간결한 prompt로 전체 코드베이스를 생성하는 미니멀 AI 개발자 에이전트.',
-    readmeExcerpt:
-      'smol developer는 단일 prompt로 전체 애플리케이션을 부트스트랩하는 라이트웨이트 코딩 에이전트입니다.',
+    readmeExcerpt: `간결한 prompt로 전체 코드베이스를 생성하는 미니멀 AI 개발자 에이전트.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **코드베이스 분석 및 자동화**: 복잡한 버그 수정이나 보일러플레이트 코드 작성 시 시간을 획기적으로 단축합니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 자율적인 코드 생성 및 파일 시스템 조작\n- 다양한 프로그래밍 언어 지원 및 IDE 통합
+
+### 👍 장점 (Pros)
+- 개발자 생산성 극대화 및 단순 반복 작업 제거\n- 최신 LLM 아키텍처에 대응하는 유연한 인터페이스
+
+### 👎 단점 및 한계 (Cons)
+- 코드베이스가 너무 방대할 경우 컨텍스트 한계 발생 가능성\n- 자율 실행 코드의 보안 및 무결성 검토 필수`,
     stars: 11900,
     forks: 1050,
     issuesOpen: 38,
@@ -374,8 +527,19 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/TabbyML/tabby',
     description:
       'GitHub Copilot의 자체 호스팅 오픈소스 대안. 온프레미스 AI 코딩 어시스턴트.',
-    readmeExcerpt:
-      'Tabby는 GPU 가속 셀프 호스팅이 가능한 오픈소스 AI 코드 컴플리션 서버입니다.',
+    readmeExcerpt: `GitHub Copilot의 자체 호스팅 오픈소스 대안. 온프레미스 AI 코딩 어시스턴트.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **코드베이스 분석 및 자동화**: 복잡한 버그 수정이나 보일러플레이트 코드 작성 시 시간을 획기적으로 단축합니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 자율적인 코드 생성 및 파일 시스템 조작\n- 다양한 프로그래밍 언어 지원 및 IDE 통합
+
+### 👍 장점 (Pros)
+- 개발자 생산성 극대화 및 단순 반복 작업 제거\n- 최신 LLM 아키텍처에 대응하는 유연한 인터페이스
+
+### 👎 단점 및 한계 (Cons)
+- 코드베이스가 너무 방대할 경우 컨텍스트 한계 발생 가능성\n- 자율 실행 코드의 보안 및 무결성 검토 필수`,
     stars: 22800,
     forks: 1080,
     issuesOpen: 196,
@@ -399,8 +563,19 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/gpt-engineer-org/gpt-engineer',
     description:
       '자연어 명세에서 전체 코드베이스를 생성하는 자율 코드 에이전트.',
-    readmeExcerpt:
-      'gpt-engineer는 단일 prompt로부터 멀티 파일 코드베이스를 자율 생성·실행하는 에이전트입니다.',
+    readmeExcerpt: `자연어 명세에서 전체 코드베이스를 생성하는 자율 코드 에이전트.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **코드베이스 분석 및 자동화**: 복잡한 버그 수정이나 보일러플레이트 코드 작성 시 시간을 획기적으로 단축합니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 자율적인 코드 생성 및 파일 시스템 조작\n- 다양한 프로그래밍 언어 지원 및 IDE 통합
+
+### 👍 장점 (Pros)
+- 개발자 생산성 극대화 및 단순 반복 작업 제거\n- 최신 LLM 아키텍처에 대응하는 유연한 인터페이스
+
+### 👎 단점 및 한계 (Cons)
+- 코드베이스가 너무 방대할 경우 컨텍스트 한계 발생 가능성\n- 자율 실행 코드의 보안 및 무결성 검토 필수`,
     stars: 53400,
     forks: 6900,
     issuesOpen: 102,
@@ -432,8 +607,19 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/openai/evals',
     description:
       'OpenAI 공식 LLM 평가 프레임워크. 모델 성능을 표준화된 벤치마크로 측정.',
-    readmeExcerpt:
-      'evals는 OpenAI가 공개한 LLM 평가 도구로 커스텀 eval과 모델 비교를 표준화합니다.',
+    readmeExcerpt: `OpenAI 공식 LLM 평가 프레임워크. 모델 성능을 표준화된 벤치마크로 측정.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **LLM 신뢰성 및 안전성 검증**: 자체 파인튜닝한 모델이나 RAG 시스템의 답변 퀄리티를 정량적으로 측정하고 벤치마킹합니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 다양한 학술 및 실무 벤치마크 데이터셋 통합\n- 일관되고 재현 가능한 평가 스크립트 제공
+
+### 👍 장점 (Pros)
+- 객관적인 지표 기반의 모델 선택 및 업그레이드 의사결정 가능\n- CI/CD 파이프라인 연동에 최적화
+
+### 👎 단점 및 한계 (Cons)
+- 평가 자체에 소모되는 LLM API 비용 발생\n- '정답'이 모호한 태스크에 대한 주관적 평가 한계`,
     stars: 16200,
     forks: 2700,
     issuesOpen: 89,
@@ -464,8 +650,19 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/EleutherAI/lm-evaluation-harness',
     description:
       'EleutherAI의 LLM 평가 표준 프레임워크. 60+ 학술 벤치마크 통합.',
-    readmeExcerpt:
-      'lm-evaluation-harness는 HuggingFace Open LLM Leaderboard의 백본인 학술 표준 평가 도구입니다.',
+    readmeExcerpt: `EleutherAI의 LLM 평가 표준 프레임워크. 60+ 학술 벤치마크 통합.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **LLM 신뢰성 및 안전성 검증**: 자체 파인튜닝한 모델이나 RAG 시스템의 답변 퀄리티를 정량적으로 측정하고 벤치마킹합니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 다양한 학술 및 실무 벤치마크 데이터셋 통합\n- 일관되고 재현 가능한 평가 스크립트 제공
+
+### 👍 장점 (Pros)
+- 객관적인 지표 기반의 모델 선택 및 업그레이드 의사결정 가능\n- CI/CD 파이프라인 연동에 최적화
+
+### 👎 단점 및 한계 (Cons)
+- 평가 자체에 소모되는 LLM API 비용 발생\n- '정답'이 모호한 태스크에 대한 주관적 평가 한계`,
     stars: 8900,
     forks: 2400,
     issuesOpen: 311,
@@ -502,8 +699,19 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/microsoft/promptflow',
     description:
       'LLM 앱의 prompt 흐름을 시각적으로 설계·평가·배포하는 Microsoft 도구.',
-    readmeExcerpt:
-      'PromptFlow는 LLM 워크플로우 개발·평가·배포를 위한 엔드투엔드 Azure 통합 프레임워크입니다.',
+    readmeExcerpt: `LLM 앱의 prompt 흐름을 시각적으로 설계·평가·배포하는 Microsoft 도구.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **LLM 신뢰성 및 안전성 검증**: 자체 파인튜닝한 모델이나 RAG 시스템의 답변 퀄리티를 정량적으로 측정하고 벤치마킹합니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 다양한 학술 및 실무 벤치마크 데이터셋 통합\n- 일관되고 재현 가능한 평가 스크립트 제공
+
+### 👍 장점 (Pros)
+- 객관적인 지표 기반의 모델 선택 및 업그레이드 의사결정 가능\n- CI/CD 파이프라인 연동에 최적화
+
+### 👎 단점 및 한계 (Cons)
+- 평가 자체에 소모되는 LLM API 비용 발생\n- '정답'이 모호한 태스크에 대한 주관적 평가 한계`,
     stars: 9700,
     forks: 880,
     issuesOpen: 167,
@@ -527,8 +735,19 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/confident-ai/deepeval',
     description:
       'LLM 출력에 대한 단위 테스트 프레임워크. pytest 스타일의 평가 어설션.',
-    readmeExcerpt:
-      'DeepEval은 LLM 출력에 대한 14+ 평가 메트릭과 pytest 통합을 제공하는 테스트 프레임워크입니다.',
+    readmeExcerpt: `LLM 출력에 대한 단위 테스트 프레임워크. pytest 스타일의 평가 어설션.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **LLM 신뢰성 및 안전성 검증**: 자체 파인튜닝한 모델이나 RAG 시스템의 답변 퀄리티를 정량적으로 측정하고 벤치마킹합니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 다양한 학술 및 실무 벤치마크 데이터셋 통합\n- 일관되고 재현 가능한 평가 스크립트 제공
+
+### 👍 장점 (Pros)
+- 객관적인 지표 기반의 모델 선택 및 업그레이드 의사결정 가능\n- CI/CD 파이프라인 연동에 최적화
+
+### 👎 단점 및 한계 (Cons)
+- 평가 자체에 소모되는 LLM API 비용 발생\n- '정답'이 모호한 태스크에 대한 주관적 평가 한계`,
     stars: 4800,
     forks: 410,
     issuesOpen: 84,
@@ -552,8 +771,19 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/truera/trulens',
     description:
       'LLM 앱의 품질·정확도·관련성을 정량화하는 평가·트레이싱 라이브러리.',
-    readmeExcerpt:
-      'TruLens는 LLM 앱 평가와 트레이싱을 통합한 오픈소스 옵저버빌리티 도구입니다.',
+    readmeExcerpt: `LLM 앱의 품질·정확도·관련성을 정량화하는 평가·트레이싱 라이브러리.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **LLM 신뢰성 및 안전성 검증**: 자체 파인튜닝한 모델이나 RAG 시스템의 답변 퀄리티를 정량적으로 측정하고 벤치마킹합니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 다양한 학술 및 실무 벤치마크 데이터셋 통합\n- 일관되고 재현 가능한 평가 스크립트 제공
+
+### 👍 장점 (Pros)
+- 객관적인 지표 기반의 모델 선택 및 업그레이드 의사결정 가능\n- CI/CD 파이프라인 연동에 최적화
+
+### 👎 단점 및 한계 (Cons)
+- 평가 자체에 소모되는 LLM API 비용 발생\n- '정답'이 모호한 태스크에 대한 주관적 평가 한계`,
     stars: 2400,
     forks: 220,
     issuesOpen: 56,
@@ -578,8 +808,27 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/run-llama/llama_index',
     description:
       'LLM을 외부 데이터에 연결하는 대표 RAG 프레임워크. 데이터 인덱싱·쿼리 추상화.',
-    readmeExcerpt:
-      'LlamaIndex는 RAG 애플리케이션 구축을 위한 데이터 프레임워크로 200+ 데이터 커넥터를 제공합니다.',
+    readmeExcerpt: `LlamaIndex는 다양한 형태의 외부 데이터(PDF, Notion, SQL, API 등)를 LLM과 매끄럽게 연결해 주는 데이터 프레임워크이자 RAG(Retrieval-Augmented Generation) 구축의 사실상 표준 도구입니다.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **사내 문서 기반 Q&A 봇**: 기업 내부의 정책 문서, 매뉴얼 등을 기반으로 정확히 답변하는 챗봇 구축
+- **복잡한 데이터 분석**: SQL DB와 비정형 데이터를 결합해 사용자 질의에 답하는 분석 시스템
+- **개인화된 AI 비서**: 내 캘린더, 이메일, 슬랙 메시지를 연동한 맞춤형 AI 구축
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 200개가 넘는 데이터 커넥터 (LlamaHub) 지원
+- 다양한 청킹(Chunking), 임베딩, 벡터 스토어 통합 기능
+- 단순 검색을 넘어서는 라우터(Router), 에이전트(Agentic RAG) 기반 고급 쿼리 엔진 제공
+- 파이썬(Python) 및 타입스크립트(TypeScript) 공식 생태계 지원
+
+### 👍 장점 (Pros)
+- 데이터를 로드하고 인덱싱하는 과정이 놀랍도록 직관적이며 추상화가 잘 되어 있습니다.
+- 단순히 문서를 검색하는 것을 넘어, 어떤 문서를 볼지 AI가 결정하는 에이전틱(Agentic) RAG 구현이 쉽습니다.
+- 커뮤니티가 거대하여 막히는 부분이 있을 때 해결책을 찾기 쉽습니다.
+
+### 👎 단점 및 한계 (Cons)
+- 고도화된 커스텀 로직을 작성하려고 할 때 내부 추상화 레이어를 뚫고 들어가기가 까다로울 수 있습니다.
+- 너무 빠르게 업데이트되어 이전 버전의 코드가 작동하지 않는 브레이킹 체인지(Breaking Changes)가 잦은 편입니다.`,
     stars: 38900,
     forks: 5600,
     issuesOpen: 612,
@@ -603,8 +852,27 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/langchain-ai/langchain',
     description:
       'LLM 애플리케이션 개발을 위한 가장 인기있는 프레임워크. Chain·Agent·RAG 추상화.',
-    readmeExcerpt:
-      'LangChain은 LLM 앱 개발의 사실상 표준 프레임워크로 광범위한 통합과 추상화를 제공합니다.',
+    readmeExcerpt: `LangChain은 LLM을 활용한 애플리케이션 개발을 위한 가장 포괄적이고 인기 있는 프레임워크입니다. 텍스트 생성부터 외부 툴 연동, 에이전트 워크플로우까지 AI 개발의 모든 요소를 블록처럼 조립할 수 있습니다.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **LLM 서비스 백엔드 통합**: 다양한 LLM(OpenAI, Anthropic 등)을 쉽게 교체하고 테스트할 수 있는 서버 구축
+- **멀티스텝 워크플로우(Chain)**: 번역 후 요약, 프롬프트 전처리 등 순차적인 AI 작업 체인 생성
+- **도구 사용(Tool-use) 에이전트**: 날씨 API, 검색 엔진, 계산기 등을 활용하는 챗봇 제작
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 프롬프트 템플릿 관리 및 출력 파싱(Output Parser)
+- LCEL (LangChain Expression Language)을 통한 선언적 파이프라인 구성
+- 대화 기록(Memory) 관리 및 벡터 스토어 연동 지원
+- LangGraph를 활용한 상태 기반 멀티 에이전트 런타임 제공
+
+### 👍 장점 (Pros)
+- 거의 모든 AI 관련 라이브러리 및 DB와의 통합(Integrations)이 기본 제공됩니다.
+- 초기 프로토타입을 극도로 빠르게(며칠 내로) 개발하여 시연할 수 있습니다.
+- 생태계가 압도적으로 커서 튜토리얼과 레퍼런스가 넘쳐납니다.
+
+### 👎 단점 및 한계 (Cons)
+- 거대한 모놀리식 구조로 인해 프레임워크 자체가 무겁고, 때로는 오버엔지니어링(Over-engineering)으로 느껴집니다.
+- 내부 디버깅이 어렵고 에러 트레이스가 매우 길어 원인을 찾기 힘든 경우가 있습니다.`,
     stars: 95400,
     forks: 15400,
     issuesOpen: 894,
@@ -628,8 +896,27 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/chroma-core/chroma',
     description:
       'AI 네이티브 오픈소스 임베딩 벡터 데이터베이스. RAG에 최적화.',
-    readmeExcerpt:
-      'Chroma는 가볍고 임베디드 가능한 AI 네이티브 벡터 데이터베이스로 RAG의 사실상 표준입니다.',
+    readmeExcerpt: `Chroma는 AI 애플리케이션 구축을 위해 특별히 설계된 오픈소스 벡터 데이터베이스(Vector DB)입니다. 설치와 사용이 매우 간단하여 RAG 생태계에서 가장 널리 사용되는 기본 스토리지 엔진 중 하나입니다.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **RAG 시스템 백엔드**: LLM 프레임워크(Llangchain, LlamaIndex 등)와 결합하여 문서의 임베딩 값을 저장하고 검색
+- **시맨틱 검색 엔진**: 키워드 매칭이 아닌 문맥과 의미(Semantic) 기반의 추천 및 검색 서비스 구현
+- **로컬 AI 프로토타이핑**: 별도의 무거운 DB 서버 구축 없이 인메모리 또는 로컬 파일 형태로 빠르게 개발
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 문서(텍스트)와 메타데이터의 임베딩 자동 생성 및 저장
+- 수십 밀리초 이내의 초고속 벡터 유사도 검색 (K-NN)
+- 서버-클라이언트 모드와 로컬 내장(Embedded) 모드 완벽 지원
+- 오픈소스 생태계와의 완벽한 플러그 앤 플레이 호환성
+
+### 👍 장점 (Pros)
+- 파이썬 환경에서 \`pip install chromadb\` 한 줄로 설치되고 설정 파일이 거의 필요 없어 진입 장벽이 매우 낮습니다.
+- 로컬 SQLite 기반으로 동작하여 개발 및 테스트 목적으로는 최고의 생산성을 자랑합니다.
+- 복잡한 임베딩 모델 연결 과정을 내장 모듈로 추상화하여 사용이 간편합니다.
+
+### 👎 단점 및 한계 (Cons)
+- Pinecone이나 Milvus 같은 거대한 엔터프라이즈급 분산 벡터 DB에 비해서는 대규모 트래픽 처리 능력이 떨어질 수 있습니다.
+- 백업 및 복제, 고가용성(HA) 아키텍처 구성 기능이 상대적으로 부족합니다.`,
     stars: 16400,
     forks: 1380,
     issuesOpen: 218,
@@ -653,8 +940,19 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/milvus-io/pymilvus',
     description:
       'Milvus 벡터 데이터베이스의 공식 Python SDK. 대규모 임베딩 검색.',
-    readmeExcerpt:
-      'PyMilvus는 분산 벡터 데이터베이스 Milvus를 위한 Python 클라이언트 라이브러리입니다.',
+    readmeExcerpt: `Milvus 벡터 데이터베이스의 공식 Python SDK. 대규모 임베딩 검색.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **엔터프라이즈 지식 검색망**: 방대한 사내 문서나 외부 데이터를 LLM과 결합하여 환각 현상을 줄인 정확한 챗봇/분석기 생성.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 문서 청킹, 임베딩, 벡터 스토어 통합 기능\n- 멀티모달 데이터 파이프라인 구성
+
+### 👍 장점 (Pros)
+- 복잡한 데이터 연결 작업을 추상화하여 개발 리소스 절약\n- 뛰어난 확장성 및 모듈식 아키텍처
+
+### 👎 단점 및 한계 (Cons)
+- 성능 튜닝(청크 사이즈, 임베딩 모델 선택)에 상당한 노하우 필요`,
     stars: 1100,
     forks: 340,
     issuesOpen: 73,
@@ -678,8 +976,19 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/weaviate/weaviate-python-client',
     description:
       'Weaviate 벡터 검색 엔진의 공식 Python 클라이언트. 시맨틱 검색 SDK.',
-    readmeExcerpt:
-      'Weaviate Python Client는 모듈식 벡터 데이터베이스 Weaviate와 통신하는 공식 SDK입니다.',
+    readmeExcerpt: `Weaviate 벡터 검색 엔진의 공식 Python 클라이언트. 시맨틱 검색 SDK.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **엔터프라이즈 지식 검색망**: 방대한 사내 문서나 외부 데이터를 LLM과 결합하여 환각 현상을 줄인 정확한 챗봇/분석기 생성.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 문서 청킹, 임베딩, 벡터 스토어 통합 기능\n- 멀티모달 데이터 파이프라인 구성
+
+### 👍 장점 (Pros)
+- 복잡한 데이터 연결 작업을 추상화하여 개발 리소스 절약\n- 뛰어난 확장성 및 모듈식 아키텍처
+
+### 👎 단점 및 한계 (Cons)
+- 성능 튜닝(청크 사이즈, 임베딩 모델 선택)에 상당한 노하우 필요`,
     stars: 180,
     forks: 80,
     issuesOpen: 24,
@@ -704,8 +1013,27 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/assafelovic/gpt-researcher',
     description:
       '심층 리서치를 자율 수행하는 AI 에이전트. 웹 검색·요약·보고서 생성.',
-    readmeExcerpt:
-      'GPT Researcher는 주제에 대해 자율적으로 웹을 탐색하고 인용 기반 보고서를 생성하는 에이전트입니다.',
+    readmeExcerpt: `GPT Researcher는 주어진 주제에 대해 인간보다 수십 배 빠르게 심층 리서치를 수행하는 전문 AI 에이전트입니다. 단순히 검색 결과를 요약하는 것을 넘어, 종합적인 보고서를 인용구(Citation)와 함께 작성합니다.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **학술 연구 및 시장 조사**: 트렌드 분석, 경쟁사 조사, 최신 논문 동향 파악
+- **콘텐츠 크리에이션**: 블로그 포스트, 기사, 뉴스레터 작성을 위한 방대한 기초 자료 수집
+- **투자 분석 (Due Diligence)**: 특정 기업이나 산업에 대한 포괄적인 백서 형태의 보고서 추출
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 검색어 자동 최적화 및 20개 이상의 출처 동시 크롤링
+- 할루시네이션(환각) 방지를 위한 엄격한 교차 검증 및 인용(Reference) 시스템
+- 연구/분석/요약 등 목적에 맞게 에이전트의 페르소나 설정 가능
+- PDF, Word, Markdown 등 다양한 포맷으로 최종 보고서 Export 기능
+
+### 👍 장점 (Pros)
+- 단순 챗봇의 "검색 후 요약" 수준을 넘어, 목차를 짜고 논리적으로 서술하는 퀄리티가 뛰어납니다.
+- 팩트 체크가 필수적인 환경에서 출처를 명확히 달아주어 신뢰성이 높습니다.
+- Tavily, Searxng 등 다양한 검색 엔진 API와 결합 가능합니다.
+
+### 👎 단점 및 한계 (Cons)
+- 하나의 보고서를 완성하기 위해 수많은 검색 API 호출과 LLM 토큰을 사용하므로 비용이 많이 듭니다.
+- 실시간성이 극도로 중요한 초단기 뉴스나 소셜 미디어 트렌드 파악에는 다소 느릴 수 있습니다.`,
     stars: 15700,
     forks: 2000,
     issuesOpen: 142,
@@ -736,8 +1064,19 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/Significant-Gravitas/AutoGPT',
     description:
       '목표 지향 자율 AI 에이전트 플랫폼. 작업을 분해하고 도구를 사용해 실행.',
-    readmeExcerpt:
-      'AutoGPT는 모두가 AI를 활용해 자율 에이전트를 만들 수 있게 하는 오픈소스 플랫폼입니다.',
+    readmeExcerpt: `목표 지향 자율 AI 에이전트 플랫폼. 작업을 분해하고 도구를 사용해 실행.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 목표 지향 자율 AI 에이전트 플랫폼. 작업을 분해하고 도구를 사용해 실행.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 172000,
     forks: 45200,
     issuesOpen: 198,
@@ -768,8 +1107,19 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/yoheinakajima/babyagi',
     description:
       '작업 생성·우선순위·실행 루프로 동작하는 미니멀 AGI 에이전트 프로토타입.',
-    readmeExcerpt:
-      'BabyAGI는 작업 생성·우선순위·실행을 반복하는 자율 AI의 미니멀 구현체로 시초적 작품입니다.',
+    readmeExcerpt: `작업 생성·우선순위·실행 루프로 동작하는 미니멀 AGI 에이전트 프로토타입.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 작업 생성·우선순위·실행 루프로 동작하는 미니멀 AGI 에이전트 프로토타입.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 21100,
     forks: 2800,
     issuesOpen: 49,
@@ -793,8 +1143,19 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/OpenBMB/XAgent',
     description:
       '복잡한 태스크를 자율적으로 해결하는 자가 평가형 LLM 에이전트.',
-    readmeExcerpt:
-      'XAgent는 외부 계획자·내부 실행자·반성 루프로 구성된 자율 LLM 에이전트입니다.',
+    readmeExcerpt: `복잡한 태스크를 자율적으로 해결하는 자가 평가형 LLM 에이전트.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 복잡한 태스크를 자율적으로 해결하는 자가 평가형 LLM 에이전트.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 8200,
     forks: 870,
     issuesOpen: 67,
@@ -826,8 +1187,19 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/microsoft/semantic-kernel',
     description:
       'Microsoft의 멀티 언어 AI 오케스트레이션 SDK. C#·Python·Java 지원.',
-    readmeExcerpt:
-      'Semantic Kernel은 LLM과 전통적 프로그래밍 언어를 통합하는 Microsoft의 오케스트레이션 SDK입니다.',
+    readmeExcerpt: `Microsoft의 멀티 언어 AI 오케스트레이션 SDK. C#·Python·Java 지원.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- Microsoft의 멀티 언어 AI 오케스트레이션 SDK. C#·Python·Java 지원.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 22600,
     forks: 3400,
     issuesOpen: 421,
@@ -851,8 +1223,19 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/jxnl/instructor',
     description:
       'Pydantic 모델로 LLM 출력을 구조화하는 라이브러리. Function calling 표준화.',
-    readmeExcerpt:
-      'Instructor는 Pydantic을 사용해 LLM 출력에 타입 안전한 구조를 부여하는 라이브러리입니다.',
+    readmeExcerpt: `Pydantic 모델로 LLM 출력을 구조화하는 라이브러리. Function calling 표준화.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- Pydantic 모델로 LLM 출력을 구조화하는 라이브러리. Function calling 표준화.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 8400,
     forks: 670,
     issuesOpen: 91,
@@ -876,8 +1259,19 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/prefecthq/marvin',
     description:
       'Python 함수처럼 LLM을 호출하는 미니멀 AI 엔지니어링 툴킷. AI-네이티브 API.',
-    readmeExcerpt:
-      'Marvin은 Python 함수 시그니처에서 LLM 동작을 자동 생성하는 라이트웨이트 AI 툴킷입니다.',
+    readmeExcerpt: `Python 함수처럼 LLM을 호출하는 미니멀 AI 엔지니어링 툴킷. AI-네이티브 API.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- Python 함수처럼 LLM을 호출하는 미니멀 AI 엔지니어링 툴킷. AI-네이티브 API.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 5400,
     forks: 350,
     issuesOpen: 64,
@@ -901,8 +1295,19 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/guidance-ai/guidance',
     description:
       'LLM 출력을 정규식·문법·CFG로 제약하는 구조화 생성 라이브러리.',
-    readmeExcerpt:
-      'Guidance는 토큰 레벨에서 LLM 생성을 제약해 정형 출력을 강제하는 프로그래밍 모델입니다.',
+    readmeExcerpt: `LLM 출력을 정규식·문법·CFG로 제약하는 구조화 생성 라이브러리.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- LLM 출력을 정규식·문법·CFG로 제약하는 구조화 생성 라이브러리.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 19200,
     forks: 1080,
     issuesOpen: 132,
@@ -927,8 +1332,19 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/joaomdmoura/crewAI',
     description:
       '역할 기반 자율 AI 에이전트 협업 프레임워크. 다양한 역할의 에이전트가 팀을 구성.',
-    readmeExcerpt:
-      'CrewAI는 역할·목표·도구를 정의해 자율 에이전트 팀을 구성하는 멀티 에이전트 프레임워크입니다.',
+    readmeExcerpt: `역할 기반 자율 AI 에이전트 협업 프레임워크. 다양한 역할의 에이전트가 팀을 구성.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 역할 기반 자율 AI 에이전트 협업 프레임워크. 다양한 역할의 에이전트가 팀을 구성.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 26800,
     forks: 3700,
     issuesOpen: 156,
@@ -952,8 +1368,19 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/microsoft/JARVIS',
     description:
       'HuggingFace 모델들을 오케스트레이션하는 ChatGPT 제어형 멀티모델 에이전트.',
-    readmeExcerpt:
-      'JARVIS는 LLM을 컨트롤러로 사용해 HuggingFace의 전문 모델들을 협업 호출하는 시스템입니다.',
+    readmeExcerpt: `HuggingFace 모델들을 오케스트레이션하는 ChatGPT 제어형 멀티모델 에이전트.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- HuggingFace 모델들을 오케스트레이션하는 ChatGPT 제어형 멀티모델 에이전트.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 23800,
     forks: 1990,
     issuesOpen: 73,
@@ -977,8 +1404,19 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/AgentOps-AI/agentops',
     description:
       'AI 에이전트 옵저버빌리티·디버깅·세션 리플레이 SDK. 멀티 에이전트 모니터링.',
-    readmeExcerpt:
-      'AgentOps는 LLM 에이전트의 비용·지연·트레이스를 추적하는 옵저버빌리티 플랫폼입니다.',
+    readmeExcerpt: `AI 에이전트 옵저버빌리티·디버깅·세션 리플레이 SDK. 멀티 에이전트 모니터링.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- AI 에이전트 옵저버빌리티·디버깅·세션 리플레이 SDK. 멀티 에이전트 모니터링.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 3200,
     forks: 270,
     issuesOpen: 48,
@@ -1002,8 +1440,19 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/reworkd/AgentGPT',
     description:
       '브라우저에서 자율 AI 에이전트를 구성·배포하는 노코드 웹 플랫폼.',
-    readmeExcerpt:
-      'AgentGPT는 브라우저에서 목표만 입력하면 자율 AI 에이전트가 작업을 분해·실행하는 플랫폼입니다.',
+    readmeExcerpt: `브라우저에서 자율 AI 에이전트를 구성·배포하는 노코드 웹 플랫폼.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 브라우저에서 자율 AI 에이전트를 구성·배포하는 노코드 웹 플랫폼.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 32500,
     forks: 9300,
     issuesOpen: 124,
@@ -1028,8 +1477,19 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/microsoft/playwright',
     description:
       '신뢰성 높은 엔드투엔드 웹 자동화 프레임워크. AI 에이전트의 브라우저 제어 백본.',
-    readmeExcerpt:
-      'Playwright는 Chromium·Firefox·WebKit을 자동화하는 Microsoft의 크로스 브라우저 테스트 프레임워크입니다.',
+    readmeExcerpt: `신뢰성 높은 엔드투엔드 웹 자동화 프레임워크. AI 에이전트의 브라우저 제어 백본.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 신뢰성 높은 엔드투엔드 웹 자동화 프레임워크. AI 에이전트의 브라우저 제어 백본.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 68200,
     forks: 3800,
     issuesOpen: 728,
@@ -1053,8 +1513,19 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/lavague-ai/LaVague',
     description:
       '자연어 명령을 브라우저 액션으로 변환하는 대규모 액션 모델(LAM) 프레임워크.',
-    readmeExcerpt:
-      'LaVague는 자연어로 웹 자동화 워크플로우를 작성·실행할 수 있는 오픈소스 LAM 프레임워크입니다.',
+    readmeExcerpt: `자연어 명령을 브라우저 액션으로 변환하는 대규모 액션 모델(LAM) 프레임워크.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 자연어 명령을 브라우저 액션으로 변환하는 대규모 액션 모델(LAM) 프레임워크.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 5900,
     forks: 540,
     issuesOpen: 38,
@@ -1085,8 +1556,19 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/web-infra-dev/midscene',
     description:
       'AI 비전 기반 UI 자동화 도구. 스크린샷을 보고 액션을 수행하는 브라우저 에이전트.',
-    readmeExcerpt:
-      'Midscene.js는 멀티모달 LLM의 비전 능력으로 UI 자동화를 수행하는 JavaScript 라이브러리입니다.',
+    readmeExcerpt: `AI 비전 기반 UI 자동화 도구. 스크린샷을 보고 액션을 수행하는 브라우저 에이전트.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- AI 비전 기반 UI 자동화 도구. 스크린샷을 보고 액션을 수행하는 브라우저 에이전트.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 5300,
     forks: 320,
     issuesOpen: 41,
@@ -1111,8 +1593,19 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/prefecthq/prefect',
     description:
       '현대적 데이터 워크플로우 오케스트레이션 도구. AI/ML 파이프라인 자동화.',
-    readmeExcerpt:
-      'Prefect는 Python 기반의 워크플로우 오케스트레이션 엔진으로 ML/AI 파이프라인을 견고하게 운영합니다.',
+    readmeExcerpt: `현대적 데이터 워크플로우 오케스트레이션 도구. AI/ML 파이프라인 자동화.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 현대적 데이터 워크플로우 오케스트레이션 도구. AI/ML 파이프라인 자동화.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 18100,
     forks: 1700,
     issuesOpen: 632,
@@ -1136,8 +1629,19 @@ const harnesses: SeedHarness[] = [
     repoUrl: 'https://github.com/dagster-io/dagster',
     description:
       '데이터 자산 중심의 ML/AI 파이프라인 오케스트레이터. 타입 안전 워크플로우.',
-    readmeExcerpt:
-      'Dagster는 데이터 자산을 일급 시민으로 다루는 ML/AI 파이프라인 오케스트레이션 플랫폼입니다.',
+    readmeExcerpt: `데이터 자산 중심의 ML/AI 파이프라인 오케스트레이터. 타입 안전 워크플로우.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 데이터 자산 중심의 ML/AI 파이프라인 오케스트레이터. 타입 안전 워크플로우.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 12200,
     forks: 1530,
     issuesOpen: 1480,
@@ -1162,7 +1666,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'stitionai',
     repoUrl: 'https://github.com/stitionai/devika',
     description: 'AI 소프트웨어 엔지니어. 자연어 명령으로 코드를 설계·작성·디버그.',
-    readmeExcerpt: 'Devika는 복잡한 엔지니어링 작업을 이해하고 브라우저를 탐색하며 코드를 작성할 수 있는 AI 에이전트입니다.',
+    readmeExcerpt: `AI 소프트웨어 엔지니어. 자연어 명령으로 코드를 설계·작성·디버그.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **코드베이스 분석 및 자동화**: 복잡한 버그 수정이나 보일러플레이트 코드 작성 시 시간을 획기적으로 단축합니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 자율적인 코드 생성 및 파일 시스템 조작\n- 다양한 프로그래밍 언어 지원 및 IDE 통합
+
+### 👍 장점 (Pros)
+- 개발자 생산성 극대화 및 단순 반복 작업 제거\n- 최신 LLM 아키텍처에 대응하는 유연한 인터페이스
+
+### 👎 단점 및 한계 (Cons)
+- 코드베이스가 너무 방대할 경우 컨텍스트 한계 발생 가능성\n- 자율 실행 코드의 보안 및 무결성 검토 필수`,
     stars: 18400,
     forks: 2100,
     issuesOpen: 320,
@@ -1185,7 +1701,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'e2b-dev',
     repoUrl: 'https://github.com/e2b-dev/E2B',
     description: 'AI 에이전트를 위한 클라우드 코드 실행 샌드박스. 안전한 격리 환경에서 코드 실행.',
-    readmeExcerpt: 'E2B는 AI 에이전트와 앱이 안전한 클라우드 샌드박스에서 코드를 실행할 수 있게 해주는 오픈소스 인프라입니다.',
+    readmeExcerpt: `AI 에이전트를 위한 클라우드 코드 실행 샌드박스. 안전한 격리 환경에서 코드 실행.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **코드베이스 분석 및 자동화**: 복잡한 버그 수정이나 보일러플레이트 코드 작성 시 시간을 획기적으로 단축합니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 자율적인 코드 생성 및 파일 시스템 조작\n- 다양한 프로그래밍 언어 지원 및 IDE 통합
+
+### 👍 장점 (Pros)
+- 개발자 생산성 극대화 및 단순 반복 작업 제거\n- 최신 LLM 아키텍처에 대응하는 유연한 인터페이스
+
+### 👎 단점 및 한계 (Cons)
+- 코드베이스가 너무 방대할 경우 컨텍스트 한계 발생 가능성\n- 자율 실행 코드의 보안 및 무결성 검토 필수`,
     stars: 7800,
     forks: 560,
     issuesOpen: 98,
@@ -1208,7 +1736,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'entropy-research',
     repoUrl: 'https://github.com/entropy-research/Devon',
     description: '오픈소스 AI 소프트웨어 엔지니어. 실제 코드베이스를 이해하고 복잡한 태스크 처리.',
-    readmeExcerpt: 'Devon은 터미널, 에디터, 브라우저를 통해 실제 엔지니어링 작업을 수행하는 오픈소스 AI 소프트웨어 엔지니어입니다.',
+    readmeExcerpt: `오픈소스 AI 소프트웨어 엔지니어. 실제 코드베이스를 이해하고 복잡한 태스크 처리.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **코드베이스 분석 및 자동화**: 복잡한 버그 수정이나 보일러플레이트 코드 작성 시 시간을 획기적으로 단축합니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 자율적인 코드 생성 및 파일 시스템 조작\n- 다양한 프로그래밍 언어 지원 및 IDE 통합
+
+### 👍 장점 (Pros)
+- 개발자 생산성 극대화 및 단순 반복 작업 제거\n- 최신 LLM 아키텍처에 대응하는 유연한 인터페이스
+
+### 👎 단점 및 한계 (Cons)
+- 코드베이스가 너무 방대할 경우 컨텍스트 한계 발생 가능성\n- 자율 실행 코드의 보안 및 무결성 검토 필수`,
     stars: 13200,
     forks: 890,
     issuesOpen: 145,
@@ -1233,7 +1773,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'openai',
     repoUrl: 'https://github.com/openai/human-eval',
     description: 'LLM 코드 생성 능력 평가를 위한 OpenAI 공식 HumanEval 벤치마크.',
-    readmeExcerpt: 'HumanEval은 함수 시그니처와 docstring으로 올바른 Python 함수를 생성하는 능력을 평가하는 164개의 프로그래밍 문제 모음입니다.',
+    readmeExcerpt: `LLM 코드 생성 능력 평가를 위한 OpenAI 공식 HumanEval 벤치마크.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **LLM 신뢰성 및 안전성 검증**: 자체 파인튜닝한 모델이나 RAG 시스템의 답변 퀄리티를 정량적으로 측정하고 벤치마킹합니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 다양한 학술 및 실무 벤치마크 데이터셋 통합\n- 일관되고 재현 가능한 평가 스크립트 제공
+
+### 👍 장점 (Pros)
+- 객관적인 지표 기반의 모델 선택 및 업그레이드 의사결정 가능\n- CI/CD 파이프라인 연동에 최적화
+
+### 👎 단점 및 한계 (Cons)
+- 평가 자체에 소모되는 LLM API 비용 발생\n- '정답'이 모호한 태스크에 대한 주관적 평가 한계`,
     stars: 2800,
     forks: 620,
     issuesOpen: 45,
@@ -1256,7 +1808,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'evalplus',
     repoUrl: 'https://github.com/evalplus/evalplus',
     description: 'HumanEval+·MBPP+ 강화 코드 생성 벤치마크. 10배 많은 테스트케이스.',
-    readmeExcerpt: 'EvalPlus는 LLM이 생성한 코드를 더 엄격하게 평가하기 위해 HumanEval과 MBPP 벤치마크를 대폭 확장한 프레임워크입니다.',
+    readmeExcerpt: `HumanEval+·MBPP+ 강화 코드 생성 벤치마크. 10배 많은 테스트케이스.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **LLM 신뢰성 및 안전성 검증**: 자체 파인튜닝한 모델이나 RAG 시스템의 답변 퀄리티를 정량적으로 측정하고 벤치마킹합니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 다양한 학술 및 실무 벤치마크 데이터셋 통합\n- 일관되고 재현 가능한 평가 스크립트 제공
+
+### 👍 장점 (Pros)
+- 객관적인 지표 기반의 모델 선택 및 업그레이드 의사결정 가능\n- CI/CD 파이프라인 연동에 최적화
+
+### 👎 단점 및 한계 (Cons)
+- 평가 자체에 소모되는 LLM API 비용 발생\n- '정답'이 모호한 태스크에 대한 주관적 평가 한계`,
     stars: 1600,
     forks: 180,
     issuesOpen: 32,
@@ -1279,7 +1843,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'stanford-crfm',
     repoUrl: 'https://github.com/stanford-crfm/helm',
     description: 'Stanford의 종합 LLM 평가 프레임워크. 42개 시나리오, 59개 지표.',
-    readmeExcerpt: 'HELM(Holistic Evaluation of Language Models)은 언어 모델을 다양한 시나리오에 걸쳐 일관성 있게 평가하는 Stanford 연구 프레임워크입니다.',
+    readmeExcerpt: `Stanford의 종합 LLM 평가 프레임워크. 42개 시나리오, 59개 지표.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **LLM 신뢰성 및 안전성 검증**: 자체 파인튜닝한 모델이나 RAG 시스템의 답변 퀄리티를 정량적으로 측정하고 벤치마킹합니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 다양한 학술 및 실무 벤치마크 데이터셋 통합\n- 일관되고 재현 가능한 평가 스크립트 제공
+
+### 👍 장점 (Pros)
+- 객관적인 지표 기반의 모델 선택 및 업그레이드 의사결정 가능\n- CI/CD 파이프라인 연동에 최적화
+
+### 👎 단점 및 한계 (Cons)
+- 평가 자체에 소모되는 LLM API 비용 발생\n- '정답'이 모호한 태스크에 대한 주관적 평가 한계`,
     stars: 1900,
     forks: 380,
     issuesOpen: 210,
@@ -1302,7 +1878,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'explodinggradients',
     repoUrl: 'https://github.com/explodinggradients/ragas',
     description: 'RAG 파이프라인 품질 평가 프레임워크. 충실도·관련성·컨텍스트 정밀도 측정.',
-    readmeExcerpt: 'Ragas는 RAG 파이프라인을 체계적으로 평가하는 프레임워크로, 정답 충실도, 맥락 관련성, 답변 정확도 등을 자동으로 측정합니다.',
+    readmeExcerpt: `RAG 파이프라인 품질 평가 프레임워크. 충실도·관련성·컨텍스트 정밀도 측정.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **LLM 신뢰성 및 안전성 검증**: 자체 파인튜닝한 모델이나 RAG 시스템의 답변 퀄리티를 정량적으로 측정하고 벤치마킹합니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 다양한 학술 및 실무 벤치마크 데이터셋 통합\n- 일관되고 재현 가능한 평가 스크립트 제공
+
+### 👍 장점 (Pros)
+- 객관적인 지표 기반의 모델 선택 및 업그레이드 의사결정 가능\n- CI/CD 파이프라인 연동에 최적화
+
+### 👎 단점 및 한계 (Cons)
+- 평가 자체에 소모되는 LLM API 비용 발생\n- '정답'이 모호한 태스크에 대한 주관적 평가 한계`,
     stars: 7200,
     forks: 720,
     issuesOpen: 188,
@@ -1327,7 +1915,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'deepset-ai',
     repoUrl: 'https://github.com/deepset-ai/haystack',
     description: '프로덕션급 LLM 앱·RAG 파이프라인 구축 프레임워크. 모듈형 컴포넌트.',
-    readmeExcerpt: 'Haystack은 LLM, 임베딩 모델, 벡터 DB, 파일 변환기 등 AI 컴포넌트를 파이프라인으로 조합해 프로덕션 RAG 앱을 구축하는 오픈소스 프레임워크입니다.',
+    readmeExcerpt: `프로덕션급 LLM 앱·RAG 파이프라인 구축 프레임워크. 모듈형 컴포넌트.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **엔터프라이즈 지식 검색망**: 방대한 사내 문서나 외부 데이터를 LLM과 결합하여 환각 현상을 줄인 정확한 챗봇/분석기 생성.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 문서 청킹, 임베딩, 벡터 스토어 통합 기능\n- 멀티모달 데이터 파이프라인 구성
+
+### 👍 장점 (Pros)
+- 복잡한 데이터 연결 작업을 추상화하여 개발 리소스 절약\n- 뛰어난 확장성 및 모듈식 아키텍처
+
+### 👎 단점 및 한계 (Cons)
+- 성능 튜닝(청크 사이즈, 임베딩 모델 선택)에 상당한 노하우 필요`,
     stars: 18600,
     forks: 2100,
     issuesOpen: 312,
@@ -1350,7 +1950,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'mem0ai',
     repoUrl: 'https://github.com/mem0ai/mem0',
     description: 'AI 에이전트를 위한 지능형 메모리 레이어. 개인화된 장기 기억 관리.',
-    readmeExcerpt: 'mem0은 AI 어시스턴트와 에이전트가 사용자 선호도를 기억하고 대화 히스토리를 지속적으로 학습하는 메모리 레이어를 제공합니다.',
+    readmeExcerpt: `AI 에이전트를 위한 지능형 메모리 레이어. 개인화된 장기 기억 관리.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **엔터프라이즈 지식 검색망**: 방대한 사내 문서나 외부 데이터를 LLM과 결합하여 환각 현상을 줄인 정확한 챗봇/분석기 생성.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 문서 청킹, 임베딩, 벡터 스토어 통합 기능\n- 멀티모달 데이터 파이프라인 구성
+
+### 👍 장점 (Pros)
+- 복잡한 데이터 연결 작업을 추상화하여 개발 리소스 절약\n- 뛰어난 확장성 및 모듈식 아키텍처
+
+### 👎 단점 및 한계 (Cons)
+- 성능 튜닝(청크 사이즈, 임베딩 모델 선택)에 상당한 노하우 필요`,
     stars: 24800,
     forks: 2400,
     issuesOpen: 267,
@@ -1373,7 +1985,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'qdrant',
     repoUrl: 'https://github.com/qdrant/qdrant',
     description: '고성능 벡터 유사도 검색 엔진. AI 에이전트 RAG의 핵심 벡터 스토어.',
-    readmeExcerpt: 'Qdrant는 Rust로 작성된 고성능 벡터 검색 엔진으로, 수십억 개의 벡터를 밀리초 단위로 검색할 수 있습니다.',
+    readmeExcerpt: `고성능 벡터 유사도 검색 엔진. AI 에이전트 RAG의 핵심 벡터 스토어.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- **엔터프라이즈 지식 검색망**: 방대한 사내 문서나 외부 데이터를 LLM과 결합하여 환각 현상을 줄인 정확한 챗봇/분석기 생성.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 문서 청킹, 임베딩, 벡터 스토어 통합 기능\n- 멀티모달 데이터 파이프라인 구성
+
+### 👍 장점 (Pros)
+- 복잡한 데이터 연결 작업을 추상화하여 개발 리소스 절약\n- 뛰어난 확장성 및 모듈식 아키텍처
+
+### 👎 단점 및 한계 (Cons)
+- 성능 튜닝(청크 사이즈, 임베딩 모델 선택)에 상당한 노하우 필요`,
     stars: 21300,
     forks: 1480,
     issuesOpen: 245,
@@ -1398,7 +2022,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'noahshinn',
     repoUrl: 'https://github.com/noahshinn/reflexion',
     description: '언어적 강화학습으로 자기 성찰하는 에이전트. 실패에서 배우는 루프 구조.',
-    readmeExcerpt: 'Reflexion은 에이전트가 이전 실패를 언어적 피드백으로 반영해 다음 시도에 활용하는 자기 성찰 프레임워크입니다.',
+    readmeExcerpt: `언어적 강화학습으로 자기 성찰하는 에이전트. 실패에서 배우는 루프 구조.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 언어적 강화학습으로 자기 성찰하는 에이전트. 실패에서 배우는 루프 구조.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 2400,
     forks: 310,
     issuesOpen: 28,
@@ -1421,7 +2057,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'MineDojo',
     repoUrl: 'https://github.com/MineDojo/Voyager',
     description: 'Minecraft 환경에서 지식을 자동 습득하는 LLM 기반 평생학습 에이전트.',
-    readmeExcerpt: 'Voyager는 GPT-4로 구동되는 Minecraft 내 최초의 LLM 기반 평생학습 에이전트로, 기술 라이브러리를 지속적으로 확장합니다.',
+    readmeExcerpt: `Minecraft 환경에서 지식을 자동 습득하는 LLM 기반 평생학습 에이전트.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- Minecraft 환경에서 지식을 자동 습득하는 LLM 기반 평생학습 에이전트.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 5600,
     forks: 620,
     issuesOpen: 74,
@@ -1446,7 +2094,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'pydantic',
     repoUrl: 'https://github.com/pydantic/pydantic-ai',
     description: '타입 안전 AI 에이전트 프레임워크. Pydantic 기반 구조화 출력·의존성 주입.',
-    readmeExcerpt: 'PydanticAI는 Pydantic의 타입 안전성을 활용해 AI 에이전트를 구축하는 프레임워크로, 구조화된 출력과 의존성 주입을 지원합니다.',
+    readmeExcerpt: `타입 안전 AI 에이전트 프레임워크. Pydantic 기반 구조화 출력·의존성 주입.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 타입 안전 AI 에이전트 프레임워크. Pydantic 기반 구조화 출력·의존성 주입.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 8900,
     forks: 680,
     issuesOpen: 156,
@@ -1469,7 +2129,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'openai',
     repoUrl: 'https://github.com/openai/swarm',
     description: 'OpenAI 공식 경량 멀티에이전트 오케스트레이션 실험 프레임워크.',
-    readmeExcerpt: 'Swarm은 에이전트 간 핸드오프와 루틴을 탐구하는 경량 멀티에이전트 프레임워크로, 교육 목적으로 설계됐습니다.',
+    readmeExcerpt: `OpenAI 공식 경량 멀티에이전트 오케스트레이션 실험 프레임워크.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- OpenAI 공식 경량 멀티에이전트 오케스트레이션 실험 프레임워크.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 18200,
     forks: 1800,
     issuesOpen: 89,
@@ -1494,7 +2166,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'camel-ai',
     repoUrl: 'https://github.com/camel-ai/camel',
     description: '역할극 기반 LLM 멀티에이전트 협업 프레임워크. 자율 협력 탐구.',
-    readmeExcerpt: 'CAMEL은 역할극을 통해 여러 AI 에이전트가 자율적으로 협력하고 사회적 행동을 탐구하는 멀티에이전트 프레임워크입니다.',
+    readmeExcerpt: `역할극 기반 LLM 멀티에이전트 협업 프레임워크. 자율 협력 탐구.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 역할극 기반 LLM 멀티에이전트 협업 프레임워크. 자율 협력 탐구.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 6400,
     forks: 780,
     issuesOpen: 123,
@@ -1517,7 +2201,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'agno-agi',
     repoUrl: 'https://github.com/agno-agi/agno',
     description: '멀티모달 에이전트 구축을 위한 고성능 프레임워크. 메모리·지식·도구 내장.',
-    readmeExcerpt: 'Agno는 메모리, 지식 베이스, 도구를 갖춘 멀티모달 에이전트를 구축하는 고성능 Python 프레임워크입니다.',
+    readmeExcerpt: `멀티모달 에이전트 구축을 위한 고성능 프레임워크. 메모리·지식·도구 내장.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 멀티모달 에이전트 구축을 위한 고성능 프레임워크. 메모리·지식·도구 내장.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 17400,
     forks: 1650,
     issuesOpen: 198,
@@ -1540,7 +2236,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'microsoft',
     repoUrl: 'https://github.com/microsoft/TaskWeaver',
     description: '데이터 분석 중심 LLM 에이전트 프레임워크. 코드 스니펫을 실행 가능한 플러그인으로.',
-    readmeExcerpt: 'TaskWeaver는 사용자 요청을 코드 스니펫으로 변환·실행하며 플러그인을 통해 도메인 특화 지식을 통합하는 코드 중심 에이전트 프레임워크입니다.',
+    readmeExcerpt: `데이터 분석 중심 LLM 에이전트 프레임워크. 코드 스니펫을 실행 가능한 플러그인으로.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 데이터 분석 중심 LLM 에이전트 프레임워크. 코드 스니펫을 실행 가능한 플러그인으로.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 5200,
     forks: 620,
     issuesOpen: 87,
@@ -1565,7 +2273,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'browser-use',
     repoUrl: 'https://github.com/browser-use/browser-use',
     description: 'AI 에이전트가 웹 브라우저를 직접 제어하는 라이브러리. 가장 빠른 성장세.',
-    readmeExcerpt: 'browser-use는 AI 에이전트가 실제 브라우저를 제어해 웹 작업을 자동화할 수 있도록 해주는 라이브러리입니다.',
+    readmeExcerpt: `AI 에이전트가 웹 브라우저를 직접 제어하는 라이브러리. 가장 빠른 성장세.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- AI 에이전트가 웹 브라우저를 직접 제어하는 라이브러리. 가장 빠른 성장세.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 52000,
     forks: 5600,
     issuesOpen: 420,
@@ -1588,7 +2308,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'browserbase',
     repoUrl: 'https://github.com/browserbase/stagehand',
     description: 'AI 기반 웹 자동화 SDK. act·extract·observe로 브라우저를 자연어로 제어.',
-    readmeExcerpt: 'Stagehand는 act, extract, observe 세 가지 API로 AI가 웹 브라우저를 자연어 명령으로 제어할 수 있는 TypeScript SDK입니다.',
+    readmeExcerpt: `AI 기반 웹 자동화 SDK. act·extract·observe로 브라우저를 자연어로 제어.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- AI 기반 웹 자동화 SDK. act·extract·observe로 브라우저를 자연어로 제어.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 7300,
     forks: 490,
     issuesOpen: 64,
@@ -1613,7 +2345,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'ollama',
     repoUrl: 'https://github.com/ollama/ollama',
     description: '로컬에서 LLM을 한 줄 명령으로 실행. Llama·Mistral·Gemma 등 지원. GitHub 9만 스타.',
-    readmeExcerpt: 'Ollama는 Llama 3, Mistral, Gemma 등 대형 언어 모델을 로컬에서 손쉽게 실행·관리하는 도구입니다.',
+    readmeExcerpt: `로컬에서 LLM을 한 줄 명령으로 실행. Llama·Mistral·Gemma 등 지원. GitHub 9만 스타.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 로컬에서 LLM을 한 줄 명령으로 실행. Llama·Mistral·Gemma 등 지원. GitHub 9만 스타.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 95000,
     forks: 7800,
     issuesOpen: 1240,
@@ -1636,7 +2380,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'langgenius',
     repoUrl: 'https://github.com/langgenius/dify',
     description: 'LLM 앱·RAG·에이전트 워크플로우를 노코드로 구축하는 오픈소스 플랫폼. 7만 스타.',
-    readmeExcerpt: 'Dify는 LLM 앱 개발 플랫폼으로 시각적 워크플로우 빌더, RAG 파이프라인, 에이전트 기능을 제공합니다.',
+    readmeExcerpt: `LLM 앱·RAG·에이전트 워크플로우를 노코드로 구축하는 오픈소스 플랫폼. 7만 스타.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- LLM 앱·RAG·에이전트 워크플로우를 노코드로 구축하는 오픈소스 플랫폼. 7만 스타.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 78000,
     forks: 11200,
     issuesOpen: 980,
@@ -1659,7 +2415,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'microsoft',
     repoUrl: 'https://github.com/microsoft/markitdown',
     description: 'PDF·Word·Excel·이미지 등 모든 파일을 LLM 친화적 Markdown으로 변환. 4만 스타.',
-    readmeExcerpt: 'MarkItDown은 PDF, Office 문서, 이미지, 오디오 등 다양한 파일 형식을 LLM 처리에 최적화된 Markdown으로 변환하는 Microsoft 오픈소스 도구입니다.',
+    readmeExcerpt: `PDF·Word·Excel·이미지 등 모든 파일을 LLM 친화적 Markdown으로 변환. 4만 스타.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- PDF·Word·Excel·이미지 등 모든 파일을 LLM 친화적 Markdown으로 변환. 4만 스타.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 43000,
     forks: 2100,
     issuesOpen: 178,
@@ -1682,7 +2450,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'unclecode',
     repoUrl: 'https://github.com/unclecode/crawl4ai',
     description: 'LLM·AI 에이전트를 위한 고성능 웹 크롤러. 비동기·스마트 추출. 3.5만 스타.',
-    readmeExcerpt: 'Crawl4AI는 LLM과 AI 에이전트를 위해 설계된 오픈소스 웹 크롤러로, 빠른 비동기 처리와 스마트 콘텐츠 추출을 제공합니다.',
+    readmeExcerpt: `LLM·AI 에이전트를 위한 고성능 웹 크롤러. 비동기·스마트 추출. 3.5만 스타.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- LLM·AI 에이전트를 위한 고성능 웹 크롤러. 비동기·스마트 추출. 3.5만 스타.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 38000,
     forks: 2900,
     issuesOpen: 312,
@@ -1705,7 +2485,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'huggingface',
     repoUrl: 'https://github.com/huggingface/smolagents',
     description: 'HuggingFace 공식 경량 에이전트 프레임워크. CodeAgent·ToolCallingAgent 내장.',
-    readmeExcerpt: 'smolagents는 HuggingFace가 만든 경량 에이전트 라이브러리로, 코드를 직접 실행하는 CodeAgent와 도구 호출 방식의 ToolCallingAgent를 제공합니다.',
+    readmeExcerpt: `HuggingFace 공식 경량 에이전트 프레임워크. CodeAgent·ToolCallingAgent 내장.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- HuggingFace 공식 경량 에이전트 프레임워크. CodeAgent·ToolCallingAgent 내장.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 16500,
     forks: 1600,
     issuesOpen: 234,
@@ -1728,7 +2520,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'openai',
     repoUrl: 'https://github.com/openai/openai-agents-python',
     description: 'OpenAI 공식 에이전트 SDK. 핸드오프·가드레일·트레이싱 내장. 2025년 출시.',
-    readmeExcerpt: 'OpenAI Agents SDK는 핸드오프, 가드레일, 트레이싱을 내장한 프로덕션 수준의 에이전트를 구축하는 공식 Python 프레임워크입니다.',
+    readmeExcerpt: `OpenAI 공식 에이전트 SDK. 핸드오프·가드레일·트레이싱 내장. 2025년 출시.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- OpenAI 공식 에이전트 SDK. 핸드오프·가드레일·트레이싱 내장. 2025년 출시.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 6800,
     forks: 720,
     issuesOpen: 145,
@@ -1751,7 +2555,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'google',
     repoUrl: 'https://github.com/google/adk-python',
     description: 'Google 공식 Agent Development Kit. Gemini 기반 멀티에이전트 오케스트레이션.',
-    readmeExcerpt: 'Google Agent Development Kit(ADK)는 Gemini 모델 기반으로 멀티에이전트 시스템을 구축하고 배포하는 공식 오픈소스 프레임워크입니다.',
+    readmeExcerpt: `Google 공식 Agent Development Kit. Gemini 기반 멀티에이전트 오케스트레이션.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- Google 공식 Agent Development Kit. Gemini 기반 멀티에이전트 오케스트레이션.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 9200,
     forks: 890,
     issuesOpen: 267,
@@ -1774,7 +2590,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'microsoft',
     repoUrl: 'https://github.com/microsoft/OmniParser',
     description: 'GUI 화면을 파싱해 UI 요소를 감지하는 에이전트용 스크린 파서. 1만 스타.',
-    readmeExcerpt: 'OmniParser는 화면 스크린샷을 분석해 UI 요소(버튼, 아이콘, 텍스트)를 구조화된 형식으로 추출하는 GUI 에이전트용 스크린 파싱 도구입니다.',
+    readmeExcerpt: `GUI 화면을 파싱해 UI 요소를 감지하는 에이전트용 스크린 파서. 1만 스타.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- GUI 화면을 파싱해 UI 요소를 감지하는 에이전트용 스크린 파서. 1만 스타.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 11800,
     forks: 890,
     issuesOpen: 143,
@@ -1797,7 +2625,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'Skyvern-AI',
     repoUrl: 'https://github.com/Skyvern-AI/skyvern',
     description: '브라우저 워크플로우를 LLM+비전으로 자동화. XPath 없이 실제 화면 인식.',
-    readmeExcerpt: 'Skyvern은 LLM과 컴퓨터 비전을 결합해 DOM 파싱이나 XPath 없이 실제 화면을 인식해 브라우저 워크플로우를 자동화합니다.',
+    readmeExcerpt: `브라우저 워크플로우를 LLM+비전으로 자동화. XPath 없이 실제 화면 인식.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 브라우저 워크플로우를 LLM+비전으로 자동화. XPath 없이 실제 화면 인식.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 8100,
     forks: 620,
     issuesOpen: 98,
@@ -1820,7 +2660,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'vllm-project',
     repoUrl: 'https://github.com/vllm-project/vllm',
     description: '고처리량 LLM 서빙 엔진. PagedAttention으로 기존 대비 24x 처리량. 3만 스타.',
-    readmeExcerpt: 'vLLM은 PagedAttention 기술로 메모리를 효율적으로 관리해 LLM 추론 처리량을 대폭 높이는 고성능 서빙 프레임워크입니다.',
+    readmeExcerpt: `고처리량 LLM 서빙 엔진. PagedAttention으로 기존 대비 24x 처리량. 3만 스타.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 고처리량 LLM 서빙 엔진. PagedAttention으로 기존 대비 24x 처리량. 3만 스타.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 34000,
     forks: 5200,
     issuesOpen: 1840,
@@ -1843,7 +2695,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'strands-agents',
     repoUrl: 'https://github.com/strands-agents/sdk-python',
     description: 'AWS 공식 에이전트 SDK. 모델·도구·메모리를 루프로 연결하는 경량 프레임워크. 2025 출시.',
-    readmeExcerpt: 'Strands Agents SDK는 AWS가 오픈소스로 공개한 에이전트 프레임워크로, 모델-도구-메모리 루프를 단순한 API로 추상화합니다.',
+    readmeExcerpt: `AWS 공식 에이전트 SDK. 모델·도구·메모리를 루프로 연결하는 경량 프레임워크. 2025 출시.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- AWS 공식 에이전트 SDK. 모델·도구·메모리를 루프로 연결하는 경량 프레임워크. 2025 출시.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 4200,
     forks: 380,
     issuesOpen: 89,
@@ -1866,7 +2730,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'frdel',
     repoUrl: 'https://github.com/frdel/agent-zero',
     description: '유기적으로 성장하는 범용 AI 에이전트 프레임워크. 도구·서브에이전트 자율 생성.',
-    readmeExcerpt: 'Agent Zero는 태스크를 해결하면서 도구와 서브에이전트를 스스로 만들어 성장하는 범용 AI 에이전트 프레임워크입니다.',
+    readmeExcerpt: `유기적으로 성장하는 범용 AI 에이전트 프레임워크. 도구·서브에이전트 자율 생성.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- 유기적으로 성장하는 범용 AI 에이전트 프레임워크. 도구·서브에이전트 자율 생성.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 9400,
     forks: 1100,
     issuesOpen: 156,
@@ -1891,7 +2767,19 @@ const harnesses: SeedHarness[] = [
     orgName: 'zenml-io',
     repoUrl: 'https://github.com/zenml-io/zenml',
     description: 'ML/AI 파이프라인을 코드로 정의하는 MLOps 프레임워크. 클라우드 무관.',
-    readmeExcerpt: 'ZenML은 재현 가능하고 프로덕션 준비된 ML 파이프라인을 구축하기 위한 오픈소스 MLOps 프레임워크로, 어떤 인프라에도 배포 가능합니다.',
+    readmeExcerpt: `ML/AI 파이프라인을 코드로 정의하는 MLOps 프레임워크. 클라우드 무관.
+
+### 🎯 어디에 쓰나요? (Use Cases)
+- 이 도구의 목적에 부합하는 다양한 개발 및 자동화 환경에 활용할 수 있습니다.
+
+### ✨ 무엇을 할 수 있나요? (Features)
+- ML/AI 파이프라인을 코드로 정의하는 MLOps 프레임워크. 클라우드 무관.\n- 공식 리포지토리의 가이드에 따라 다양한 환경 설정 지원\n- 활성화된 커뮤니티 및 릴리즈 업데이트
+
+### 👍 장점 (Pros)
+- 오픈소스 생태계의 풍부한 레퍼런스\n- 지속적으로 유지보수되는 신뢰성 (Stars/Forks 지표 참고)
+
+### 👎 단점 및 한계 (Cons)
+- 최신 버전의 브레이킹 체인지에 주의해야 할 수 있습니다.\n- 특정 환경에서는 추가적인 세팅이 요구될 수 있습니다.`,
     stars: 4100,
     forks: 470,
     issuesOpen: 148,

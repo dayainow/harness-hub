@@ -238,16 +238,16 @@ let finalContent = blocks[0]; // Header part
 for (let i = 1; i < blocks.length; i++) {
   let block = blocks[i];
   // extract slug name
-  const slugMatch = block.match(/^(['"])(.+?)\\1/);
+  const slugMatch = block.match(/^(['"])(.+?)\1/);
   if (!slugMatch) {
     finalContent += 'slug: ' + block;
     continue;
   }
   const slug = slugMatch[2];
-  
+
   // Also extract description to generate generic
-  const descMatch = block.match(/description:\\s*(['"\`])(.*?)\\1/s);
-  const catMatch = block.match(/category:\\s*HarnessCategory\\.(.+?),/);
+  const descMatch = block.match(/description:\s*(['"`])(.*?)\1/s);
+  const catMatch = block.match(/category:\s*HarnessCategory\.(.+?),/);
   
   const harness = {
     description: descMatch ? descMatch[2].replace(/\\n/g, '').trim() : "AI 에이전트 도구",
