@@ -187,6 +187,12 @@ export declare class HarnessesService {
         message: string;
     }>;
     private extractSlugFromRepoUrl;
+    getStats(): Promise<{
+        totalHarnesses: number;
+        verifiedHarnesses: number;
+        totalBenchmarks: number;
+        totalDownloads: number;
+    }>;
     updateStats(slug: string, stats: {
         stars?: number;
         forks?: number;

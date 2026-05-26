@@ -52,7 +52,8 @@ class QueryHarnessesDto {
 exports.QueryHarnessesDto = QueryHarnessesDto;
 __decorate([
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsEnum)(HarnessCategoryEnum),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.Matches)(/^[A-Z_]+(,[A-Z_]+)*$/, { message: 'category must be comma-separated enum values' }),
     __metadata("design:type", String)
 ], QueryHarnessesDto.prototype, "category", void 0);
 __decorate([

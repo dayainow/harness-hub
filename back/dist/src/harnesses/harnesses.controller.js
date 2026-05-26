@@ -31,6 +31,9 @@ let HarnessesController = class HarnessesController {
     findFeatured() {
         return this.harnessesService.findFeatured();
     }
+    getStats() {
+        return this.harnessesService.getStats();
+    }
     submit(dto) {
         return this.harnessesService.submitHarness(dto);
     }
@@ -67,6 +70,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], HarnessesController.prototype, "findFeatured", null);
+__decorate([
+    (0, common_1.Get)('stats'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get aggregate stats for harnesses and benchmarks' }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], HarnessesController.prototype, "getStats", null);
 __decorate([
     (0, common_1.Post)('submit'),
     (0, swagger_1.ApiOperation)({

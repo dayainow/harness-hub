@@ -102,8 +102,8 @@ export default function ExploreClient({ initialData, initialQuery }: Props) {
       label: licenseTier,
       remove: () => setLicenseTier(undefined),
     });
-    if (verified) out.push({ key: 'verified', label: 'Verified ✓', remove: () => setVerified(false) });
-    if (featured) out.push({ key: 'featured', label: 'Featured ⚡', remove: () => setFeatured(false) });
+    if (verified) out.push({ key: 'verified', label: `${t('verified')} ✓`, remove: () => setVerified(false) });
+    if (featured) out.push({ key: 'featured', label: t('featured'), remove: () => setFeatured(false) });
     if (search) out.push({ key: 'search', label: `“${search}”`, remove: () => setSearch('') });
     return out;
   }, [categories, models, languages, licenseTier, verified, featured, search]);
@@ -254,7 +254,7 @@ export default function ExploreClient({ initialData, initialQuery }: Props) {
                 setPage(1);
                 setFeatured(!featured);
               }}
-              label="Featured ⚡"
+              label={t('featured')}
             />
           </FilterGroup>
         </aside>

@@ -17,6 +17,7 @@ async function bootstrap() {
             'https://olalab.kr',
             /\.olalab\.kr$/,
             /^https:\/\/harness-.*\.vercel\.app$/,
+            /^https:\/\/clientfront.*\.vercel\.app$/,
             /^https:\/\/.*\.onrender\.com$/,
         ],
         credentials: true,

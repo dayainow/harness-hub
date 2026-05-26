@@ -179,6 +179,25 @@ let HarnessesService = class HarnessesService {
             return null;
         }
     }
+    async getStats() {
+        const [totalHarnesses, verifiedHarnesses, totalBenchmarks, downloadsAgg] = await Promise.all([
+            this.prisma.harness.count({ where: { status: 'ACTIVE' } }),
+            this.prisma.harness.count({
+                where: { status: 'ACTIVE', verified: true },
+            }),
+            this.prisma.benchmark.count(),
+            this.prisma.harness.aggregate({
+                _sum: { downloadsCount: true },
+                where: { status: 'ACTIVE' },
+            }),
+        ]);
+        return {
+            totalHarnesses,
+            verifiedHarnesses,
+            totalBenchmarks,
+            totalDownloads: downloadsAgg._sum.downloadsCount ?? 0,
+        };
+    }
     async updateStats(slug, stats) {
         return this.prisma.harness.update({
             where: { slug },
@@ -187,8 +206,18 @@ let HarnessesService = class HarnessesService {
     }
     buildWhere(query) {
         const where = { status: 'ACTIVE' };
-        if (query.category)
-            where.category = query.category;
+        if (query.category) {
+            const cats = query.category
+                .split(',')
+                .map((c) => c.trim())
+                .filter(Boolean);
+            if (cats.length === 1) {
+                where.category = cats[0];
+            }
+            else if (cats.length > 1) {
+                where.category = { in: cats };
+            }
+        }
         if (query.licenseTier)
             where.licenseTier = query.licenseTier;
         if (query.verified !== undefined)

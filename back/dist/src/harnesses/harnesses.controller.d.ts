@@ -96,6 +96,12 @@ export declare class HarnessesController {
         downloadsCount: number;
         updatedAt: Date;
     })[]>;
+    getStats(): Promise<{
+        totalHarnesses: number;
+        verifiedHarnesses: number;
+        totalBenchmarks: number;
+        totalDownloads: number;
+    }>;
     submit(dto: SubmitHarnessDto): Promise<{
         success: boolean;
         slug: string;

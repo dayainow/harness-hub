@@ -21,7 +21,7 @@ export declare enum HarnessSortEnum {
     NAME = "name"
 }
 export declare class QueryHarnessesDto {
-    category?: HarnessCategoryEnum;
+    category?: string;
     modelCompat?: string;
     languages?: string;
     licenseTier?: LicenseTierEnum;
