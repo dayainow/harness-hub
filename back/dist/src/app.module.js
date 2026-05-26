@@ -20,6 +20,8 @@ const prisma_module_1 = require("./prisma/prisma.module");
 const reviews_module_1 = require("./reviews/reviews.module");
 const search_module_1 = require("./search/search.module");
 const users_module_1 = require("./users/users.module");
+const schedule_1 = require("@nestjs/schedule");
+const crawler_module_1 = require("./crawler/crawler.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -27,6 +29,8 @@ exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
             config_1.ConfigModule.forRoot({ isGlobal: true }),
+            schedule_1.ScheduleModule.forRoot(),
+            crawler_module_1.CrawlerModule,
             throttler_1.ThrottlerModule.forRoot([
                 {
                     name: 'default',

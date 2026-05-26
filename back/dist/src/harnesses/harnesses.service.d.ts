@@ -118,10 +118,10 @@ export declare class HarnessesService {
             harnessId: string;
             createdAt: Date;
             updatedAt: Date;
+            userId: string;
             rating: number;
             body: string;
             usageContext: string | null;
-            userId: string;
         })[];
         _count: {
             reviews: number;
