@@ -4,7 +4,7 @@ import { execSync } from 'child_process';
 import * as fs from 'fs';
 
 // Change this to production URL when deploying
-const API_BASE = process.env.HARNESSHUB_API_URL || 'http://localhost:3002/api';
+const API_BASE = process.env.HARNESSHUB_API_URL || 'https://harness-hub-api-production.up.railway.app/api';
 
 export async function installCommand(slug: string) {
   console.log(chalk.blue(`\n🔍 Looking up ${chalk.bold(slug)} on HarnessHub...`));

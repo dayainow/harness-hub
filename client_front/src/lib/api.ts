@@ -3,7 +3,7 @@
  * Base URL is configured via NEXT_PUBLIC_API_URL (already includes the /api suffix).
  */
 export const API_BASE =
-  process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3002/api';
+  process.env.NEXT_PUBLIC_API_URL ?? (process.env.NODE_ENV === 'production' ? 'https://harness-hub-api-production.up.railway.app/api' : 'http://localhost:3002/api');
 
 const DEFAULT_TIMEOUT_MS = 8000;
 
