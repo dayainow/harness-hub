@@ -34,6 +34,12 @@ const CATEGORY_ORDER: HarnessCategory[] = [
   'DATA_PIPELINE',
 ];
 
+import dynamic from 'next/dynamic';
+
+const ThreeBackground = dynamic(() => import('@/components/ThreeBackground'), {
+  ssr: false,
+});
+
 export default function HomeClient({
   featured,
   totalIndexed,
@@ -59,11 +65,16 @@ export default function HomeClient({
   return (
     <main>
       {/* HERO */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden min-h-[600px] flex flex-col justify-center">
         <div className="absolute inset-0 grid-bg" aria-hidden />
         <div className="absolute inset-0 hero-radial" aria-hidden />
-        <div className="relative max-w-[1200px] mx-auto px-6 pt-24 pb-20">
-          <p
+        
+        {/* Interactive 3D Background */}
+        <ThreeBackground />
+
+        <div className="relative z-10 max-w-[1200px] mx-auto px-6 pt-24 pb-20 w-full pointer-events-none">
+          <div className="pointer-events-auto">
+            <p
             className="font-mono-code text-xs tracking-[0.3em] mb-6"
             style={{ color: 'var(--accent)' }}
           >
@@ -194,6 +205,7 @@ export default function HomeClient({
             </div>
           </div>
         </div>
+      </div>
       </section>
 
       {/* STATS BAR */}
