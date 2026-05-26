@@ -2,6 +2,7 @@ import HomeClient from '@/components/HomeClient';
 import {
   getFeaturedHarnesses,
   getHarnesses,
+  getStats,
   type HarnessCategory,
 } from '@/lib/api';
 
@@ -19,25 +20,12 @@ const CATS: HarnessCategory[] = [
 ];
 
 export default async function HomePage() {
-  // Parallel fetch: featured + total counts + per-category counts
-  const [featured, totalsRes, verifiedRes, ...byCat] = await Promise.all([
+  // Parallel fetch: featured + site stats + per-category counts
+  const [featured, stats, ...byCat] = await Promise.all([
     getFeaturedHarnesses(),
-    getHarnesses({ limit: 1 }),
-    getHarnesses({ limit: 1, verified: 'true' }),
+    getStats(),
     ...CATS.map((c) => getHarnesses({ category: c, limit: 1 })),
   ]);
-
-  const totalIndexed = totalsRes.pagination?.total ?? 0;
-  const totalVerified = verifiedRes.pagination?.total ?? 0;
-
-  // Benchmarks: derive from featured items' benchmark count (rough)
-  const totalBenchmarks = featured.reduce(
-    (acc, h) => acc + (h.benchmarks?.length ?? 0),
-    0,
-  );
-
-  // Installs/wk: sum of featured downloads as an approximation
-  const totalInstalls = featured.reduce((acc, h) => acc + (h.downloadsCount ?? 0), 0);
 
   const categoryCounts = CATS.reduce(
     (acc, c, i) => {
@@ -50,10 +38,10 @@ export default async function HomePage() {
   return (
     <HomeClient
       featured={featured}
-      totalIndexed={totalIndexed}
-      totalVerified={totalVerified}
-      totalBenchmarks={totalBenchmarks || 42}
-      totalInstalls={totalInstalls || 18200}
+      totalIndexed={stats.totalHarnesses}
+      totalVerified={stats.verifiedHarnesses}
+      totalBenchmarks={stats.totalBenchmarks}
+      totalInstalls={stats.totalDownloads}
       categoryCounts={categoryCounts}
     />
   );

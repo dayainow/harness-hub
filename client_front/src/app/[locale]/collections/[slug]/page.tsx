@@ -97,7 +97,7 @@ export default async function CollectionDetailPage({
               >
                 collections_bookmark
               </span>
-              Collection
+              {t('badge')}
             </span>
             <span
               className="text-[11px] font-mono-code px-2 py-0.5 rounded-md"

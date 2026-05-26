@@ -194,6 +194,32 @@ export class HarnessesService {
     }
   }
 
+  async getStats(): Promise<{
+    totalHarnesses: number;
+    verifiedHarnesses: number;
+    totalBenchmarks: number;
+    totalDownloads: number;
+  }> {
+    const [totalHarnesses, verifiedHarnesses, totalBenchmarks, downloadsAgg] =
+      await Promise.all([
+        this.prisma.harness.count({ where: { status: 'ACTIVE' } }),
+        this.prisma.harness.count({
+          where: { status: 'ACTIVE', verified: true },
+        }),
+        this.prisma.benchmark.count(),
+        this.prisma.harness.aggregate({
+          _sum: { downloadsCount: true },
+          where: { status: 'ACTIVE' },
+        }),
+      ]);
+    return {
+      totalHarnesses,
+      verifiedHarnesses,
+      totalBenchmarks,
+      totalDownloads: downloadsAgg._sum.downloadsCount ?? 0,
+    };
+  }
+
   async updateStats(
     slug: string,
     stats: {

@@ -278,13 +278,26 @@ export default function SubmitPage() {
                   className="form-input"
                 />
               </Field>
-              <Field label="Organization">
-                <input
-                  value={extracted.orgName}
-                  onChange={(e) => onChange('orgName', e.target.value)}
-                  className="form-input"
-                  readOnly
-                />
+              <Field
+                label={t('orgName')}
+                hint={t('orgNameHint')}
+                locked
+              >
+                <div className="relative">
+                  <input
+                    value={extracted.orgName}
+                    disabled
+                    aria-readonly="true"
+                    className="form-input form-input-locked pr-10"
+                  />
+                  <span
+                    className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"
+                    style={{ fontSize: 16, color: 'var(--text-4)' }}
+                    aria-hidden="true"
+                  >
+                    lock
+                  </span>
+                </div>
               </Field>
             </div>
 
@@ -431,6 +444,13 @@ export default function SubmitPage() {
           color: var(--text-3);
           cursor: not-allowed;
         }
+        .form-input:disabled,
+        .form-input-locked {
+          opacity: 0.7;
+          cursor: not-allowed;
+          color: var(--text-3);
+          background-color: var(--bg);
+        }
       `}</style>
     </main>
   );
@@ -439,17 +459,43 @@ export default function SubmitPage() {
 function Field({
   label,
   required,
+  hint,
+  locked,
   children,
 }: {
   label: string;
   required?: boolean;
+  hint?: string;
+  locked?: boolean;
   children: React.ReactNode;
 }) {
   return (
     <div>
-      <label className="block mb-2 text-sm font-medium" style={{ color: 'var(--text-2)' }}>
-        {label}
-        {required && <span style={{ color: 'var(--danger)' }}> *</span>}
+      <label
+        className="mb-2 text-sm font-medium flex items-center gap-1.5 flex-wrap"
+        style={{ color: 'var(--text-2)' }}
+      >
+        <span className="inline-flex items-center gap-1">
+          {locked && (
+            <span
+              className="material-symbols-outlined"
+              style={{ fontSize: 14, color: 'var(--text-4)' }}
+              aria-hidden="true"
+            >
+              lock
+            </span>
+          )}
+          {label}
+          {required && <span style={{ color: 'var(--danger)' }}> *</span>}
+        </span>
+        {hint && (
+          <span
+            className="text-[11px] font-normal"
+            style={{ color: 'var(--text-4)' }}
+          >
+            {hint}
+          </span>
+        )}
       </label>
       {children}
     </div>

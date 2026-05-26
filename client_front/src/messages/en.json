@@ -109,6 +109,8 @@
     "subtitle": "Paste a GitHub URL and we'll extract metadata automatically.",
     "repoUrl": "GitHub Repository URL",
     "name": "Name",
+    "orgName": "Organization",
+    "orgNameHint": "(auto-extracted)",
     "description": "Description",
     "license": "License",
     "languages": "Languages",
@@ -119,6 +121,14 @@
     "submit": "Submit for review",
     "submitting": "Submitting...",
     "success": "Submitted. We'll review within 24 hours."
+  },
+  "CommandPalette": {
+    "trigger": "Search harnesses…",
+    "placeholder": "Search harnesses, orgs, tags...",
+    "tryHeading": "Try",
+    "searching": "Searching...",
+    "noResults": "No harnesses found.",
+    "searchAcrossCatalog": "Search \"{query}\" across catalog →"
   },
   "Benchmarks": {
     "title": "Benchmark Leaderboard",
@@ -136,6 +146,7 @@
   "Collections": {
     "title": "Collections",
     "subtitle": "Browse harness collections hand-picked by expert curators.",
+    "badge": "Collection",
     "harnesses": "{count} harnesses",
     "curatedBy": "Curated by",
     "backToCollections": "← All Collections",

@@ -398,3 +398,18 @@ export function relativeTime(iso: string | null): string {
   if (mo < 12) return `${mo}mo ago`;
   return `${Math.floor(mo / 12)}y ago`;
 }
+
+export interface SiteStats {
+  totalHarnesses: number;
+  verifiedHarnesses: number;
+  totalBenchmarks: number;
+  totalDownloads: number;
+}
+
+export async function getStats(): Promise<SiteStats> {
+  return safeFetch<SiteStats>(
+    `${API_BASE}/harnesses/stats`,
+    { next: { revalidate: 300 } },
+    { totalHarnesses: 0, verifiedHarnesses: 0, totalBenchmarks: 0, totalDownloads: 0 },
+  );
+}

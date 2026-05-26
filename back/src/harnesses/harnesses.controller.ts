@@ -41,6 +41,12 @@ export class HarnessesController {
     return this.harnessesService.findFeatured();
   }
 
+  @Get('stats')
+  @ApiOperation({ summary: 'Get aggregate stats for harnesses and benchmarks' })
+  getStats() {
+    return this.harnessesService.getStats();
+  }
+
   @Post('submit')
   @ApiOperation({
     summary:

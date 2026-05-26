@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
 import { API_BASE } from '@/lib/api';
 
@@ -13,6 +14,7 @@ interface SuggestItem {
 }
 
 export function CommandPalette() {
+  const t = useTranslations('CommandPalette');
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
@@ -94,7 +96,7 @@ export function CommandPalette() {
         <span className="material-symbols-outlined" style={{ fontSize: 16 }}>
           search
         </span>
-        <span>Search harnesses…</span>
+        <span>{t('trigger')}</span>
         <kbd
           className="ml-2 px-1.5 py-0.5 text-[10px] font-mono-code rounded border"
           style={{
@@ -141,7 +143,7 @@ export function CommandPalette() {
                     if (e.key === 'Escape') close();
                     if (e.key === 'Enter') handleGlobalSearch();
                   }}
-                  placeholder="Search harnesses, orgs, tags..."
+                  placeholder={t('placeholder')}
                   className="flex-1 bg-transparent px-3 py-4 outline-none text-base"
                   style={{ color: 'var(--text)' }}
                 />
@@ -160,7 +162,7 @@ export function CommandPalette() {
               <div className="max-h-[60vh] overflow-y-auto p-2">
                 {!query.trim() && (
                   <div className="px-4 py-6 text-center text-sm" style={{ color: 'var(--text-3)' }}>
-                    <p className="mb-3 font-mono-code text-[11px] uppercase tracking-widest">Try</p>
+                    <p className="mb-3 font-mono-code text-[11px] uppercase tracking-widest">{t('tryHeading')}</p>
                     <div className="flex flex-wrap justify-center gap-2">
                       {['SWE-agent', 'aider', 'cline', 'claude-code', 'openhands'].map((t) => (
                         <button
@@ -178,19 +180,19 @@ export function CommandPalette() {
 
                 {loading && (
                   <div className="px-4 py-8 text-center text-sm" style={{ color: 'var(--text-3)' }}>
-                    Searching...
+                    {t('searching')}
                   </div>
                 )}
 
                 {!loading && query && results.length === 0 && (
                   <div className="px-4 py-8 text-center text-sm" style={{ color: 'var(--text-3)' }}>
-                    No harnesses found.
+                    {t('noResults')}
                     <button
                       onClick={handleGlobalSearch}
                       className="block mt-2 mx-auto text-xs"
                       style={{ color: 'var(--accent)' }}
                     >
-                      Search &quot;{query}&quot; across catalog →
+                      {t('searchAcrossCatalog', { query })}
                     </button>
                   </div>
                 )}
