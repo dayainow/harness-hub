@@ -7,6 +7,7 @@ import {
   IsString,
   Max,
   Min,
+  Matches,
 } from 'class-validator';
 
 export enum HarnessCategoryEnum {
@@ -35,9 +36,11 @@ export enum HarnessSortEnum {
 }
 
 export class QueryHarnessesDto {
+  /** Single category or comma-separated list, e.g. "CODING_AGENT,RAG_FRAMEWORK" */
   @IsOptional()
-  @IsEnum(HarnessCategoryEnum)
-  category?: HarnessCategoryEnum;
+  @IsString()
+  @Matches(/^[A-Z_]+(,[A-Z_]+)*$/, { message: 'category must be comma-separated enum values' })
+  category?: string;
 
   /** Comma-separated model IDs, e.g. "claude-sonnet-4-6,gpt-4o" — or a single value. */
   @IsOptional()

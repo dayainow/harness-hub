@@ -8,6 +8,7 @@ import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateHarnessDto } from './dto/create-harness.dto';
 import {
+  HarnessCategoryEnum,
   HarnessSortEnum,
   QueryHarnessesDto,
 } from './dto/query-harnesses.dto';
@@ -212,7 +213,17 @@ export class HarnessesService {
   private buildWhere(query: QueryHarnessesDto): Prisma.HarnessWhereInput {
     const where: Prisma.HarnessWhereInput = { status: 'ACTIVE' };
 
-    if (query.category) where.category = query.category;
+    if (query.category) {
+      const cats = query.category
+        .split(',')
+        .map((c) => c.trim())
+        .filter(Boolean);
+      if (cats.length === 1) {
+        where.category = cats[0] as HarnessCategoryEnum;
+      } else if (cats.length > 1) {
+        where.category = { in: cats as HarnessCategoryEnum[] };
+      }
+    }
     if (query.licenseTier) where.licenseTier = query.licenseTier;
     if (query.verified !== undefined)
       where.verified = query.verified === 'true';

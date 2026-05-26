@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState, useTransition } from 'react';
+import { useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import { useRouter, usePathname } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
 import {
@@ -60,10 +60,11 @@ export default function ExploreClient({ initialData, initialQuery }: Props) {
 
   const [data, setData] = useState<HarnessListResponse>(initialData);
   const [loading, setLoading] = useState(false);
+  const isFirstRender = useRef(true);
 
   // Track selected filters as arrays for multi-select.
   const [categories, setCategories] = useState<string[]>(
-    initialQuery.category ? [initialQuery.category as string] : [],
+    initialQuery.category ? (initialQuery.category as string).split(',').filter(Boolean) : [],
   );
   const [models, setModels] = useState<string[]>(
     initialQuery.modelCompat ? initialQuery.modelCompat.split(',').filter(Boolean) : [],
@@ -107,21 +108,29 @@ export default function ExploreClient({ initialData, initialQuery }: Props) {
     return out;
   }, [categories, models, languages, licenseTier, verified, featured, search]);
 
-  const buildQuery = (): QueryParams => ({
-    category: categories[0] as HarnessCategory | undefined, // backend takes single category
-    modelCompat: models.length ? models.join(',') : undefined,
-    languages: languages.length ? languages.join(',') : undefined,
-    licenseTier: licenseTier as 'GREEN' | 'YELLOW' | 'RED' | undefined,
-    verified: verified ? 'true' : undefined,
-    featured: featured ? 'true' : undefined,
-    search: search || undefined,
-    sort,
-    page,
-    limit: 24,
-  });
+  const buildQuery = (): QueryParams => {
+    const allOrNone = categories.length === 0 || categories.length === CATEGORIES.length;
+    return {
+      category: allOrNone ? undefined : (categories.join(',') as HarnessCategory),
+      modelCompat: models.length ? models.join(',') : undefined,
+      languages: languages.length ? languages.join(',') : undefined,
+      licenseTier: licenseTier as 'GREEN' | 'YELLOW' | 'RED' | undefined,
+      verified: verified ? 'true' : undefined,
+      featured: featured ? 'true' : undefined,
+      search: search || undefined,
+      sort,
+      page,
+      limit: 24,
+    };
+  };
 
   // Sync URL search params and refetch when filters change.
+  // Skip the initial render — SSR already loaded initialData with the correct query.
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     const query = buildQuery();
     const usp = new URLSearchParams();
     for (const [k, v] of Object.entries(query)) {
