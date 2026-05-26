@@ -88,6 +88,9 @@
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   },
+  "overrides": {
+    "@electric-sql/pglite-products": "npm:semver@7.6.0"
+  },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
   },
