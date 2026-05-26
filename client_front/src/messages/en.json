@@ -121,6 +121,19 @@
     "empty": "No collections yet.",
     "emptyItems": "This collection has no harnesses yet."
   },
+  "Docs": {
+    "title": "Documentation",
+    "introTitle": "What is HarnessHub?",
+    "introText": "HarnessHub is the discovery engine for AI agent harnesses — frameworks, eval suites, RAG pipelines, and more. Every harness is sourced from GitHub, enriched with metadata, and ranked by real benchmark scores.",
+    "historyTitle": "How It Works",
+    "historyText": "We index public GitHub repositories that implement AI agent harnesses. Metadata (stars, forks, license, language, install command) is extracted automatically. Benchmark results are submitted by maintainers and verified by our team.",
+    "policyTitle": "Submission Policy",
+    "policyText1": "Anyone can submit a harness for review. We evaluate each submission against the following criteria:",
+    "policyText2": "Submissions are reviewed within 24 hours. Once approved, your harness appears in Explore and is eligible for Featured and Collections.",
+    "policyGreen": "Open-source repository with a clear README and install instructions.",
+    "policyYellow": "Actively maintained (last commit within 6 months) with at least 50 GitHub stars.",
+    "policyRed": "No closed-source, paywalled, or malicious packages."
+  },
   "Footer": {
     "tagline": "The npm of AI Agent Harnesses.",
     "explore": "Explore",

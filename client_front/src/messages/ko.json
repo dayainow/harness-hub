@@ -121,6 +121,19 @@
     "empty": "아직 컬렉션이 없습니다.",
     "emptyItems": "이 컬렉션에는 아직 하네스가 없습니다."
   },
+  "Docs": {
+    "title": "문서",
+    "introTitle": "HarnessHub란?",
+    "introText": "HarnessHub는 AI 에이전트 하네스의 디스커버리 엔진입니다. 프레임워크, 평가 스위트, RAG 파이프라인 등 다양한 하네스를 GitHub에서 소싱하고, 메타데이터를 풍부하게 제공하며, 실제 벤치마크 점수로 순위를 매깁니다.",
+    "historyTitle": "작동 방식",
+    "historyText": "AI 에이전트 하네스를 구현한 공개 GitHub 리포지토리를 인덱싱합니다. 스타 수, 포크, 라이선스, 언어, 설치 명령어 등의 메타데이터는 자동으로 추출됩니다. 벤치마크 결과는 관리자가 제출하고 팀이 검증합니다.",
+    "policyTitle": "제출 정책",
+    "policyText1": "누구든지 검토를 위해 하네스를 제출할 수 있습니다. 다음 기준에 따라 각 제출물을 평가합니다:",
+    "policyText2": "제출물은 24시간 이내에 검토됩니다. 승인되면 하네스가 Explore에 표시되고 Featured 및 Collections에 선정될 수 있습니다.",
+    "policyGreen": "명확한 README와 설치 안내가 있는 오픈소스 리포지토리.",
+    "policyYellow": "활발하게 유지 관리되며(최근 6개월 내 커밋) GitHub 스타 50개 이상.",
+    "policyRed": "클로즈드소스, 유료, 악성 패키지는 허용되지 않습니다."
+  },
   "Footer": {
     "tagline": "The npm of AI Agent Harnesses.",
     "explore": "Explore",
