@@ -1,5 +1,6 @@
 [build]
 builder = "nixpacks"
+buildCommand = "npm install --omit=optional && npm run build"
 
 [deploy]
 startCommand = "node dist/src/main.js"
