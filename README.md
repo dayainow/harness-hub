@@ -35,13 +35,14 @@ HarnessHub prioritizes enterprise safety through an automated SPDX license detec
 A modern, dynamic Next.js 15 (App Router) interface featuring:
 - **Multi-Filtering:** Filter by Agent Category (Coding, Research, RAG), LLM Compatibility (Claude, GPT-4o, Llama), Language, and License Tier.
 - **Real-world Seed Data:** Comes pre-seeded with 40+ industry-leading tools like `SWE-agent`, `AutoGPT`, and `LangGraph`.
+- **Neon-Blue Custom Branding:** A sleek, cybernetic UI designed specifically for AI engineers.
 
 ### 4. HarnessHub CLI Tool 💻
 A dedicated Node.js command-line tool allowing developers to install agents directly from their terminal.
 ```bash
 npx harnesshub install princeton-nlp/SWE-agent
 ```
-The CLI automatically fetches metadata from the HarnessHub backend, warns you of license risks, and executes the appropriate installation command.
+The CLI automatically fetches metadata from the HarnessHub backend, warns you of license risks, and executes the appropriate installation command (or defaults to `git clone`).
 
 ---
 
@@ -49,9 +50,9 @@ The CLI automatically fetches metadata from the HarnessHub backend, warns you of
 
 This project is structured as a monorepo containing the Backend, Frontend, and CLI tool.
 
-- **Frontend (`/client_front`)**: [Next.js 15](https://nextjs.org/) (App Router), React, TailwindCSS, `next-intl` (i18n).
-- **Backend (`/back`)**: [NestJS](https://nestjs.com/), Node.js.
-- **Database**: [PostgreSQL](https://www.postgresql.org/) managed via [Prisma ORM](https://www.prisma.io/).
+- **Frontend (`/client_front`)**: [Next.js 15](https://nextjs.org/) (App Router), React, TailwindCSS, `next-intl` (i18n). Deployed globally via **Vercel**.
+- **Backend (`/back`)**: [NestJS](https://nestjs.com/), Node.js. Deployed on **Railway** as a long-lived process to support `@Cron` jobs.
+- **Database**: [PostgreSQL](https://www.postgresql.org/) managed via [Prisma ORM](https://www.prisma.io/), hosted on **Supabase**.
 - **CLI (`/cli`)**: Node.js, Commander.js, Chalk.
 
 ---
@@ -96,6 +97,13 @@ npm link
 # Test the CLI globally
 harnesshub install princeton-nlp/SWE-agent
 ```
+
+---
+
+## 🚀 Production Deployment
+- **Frontend URL:** [https://client-front-one.vercel.app](https://vercel.com/dayainows-projects/client_front)
+- **Backend API:** [https://harness-hub-api-production.up.railway.app](https://harness-hub-api-production.up.railway.app)
+- Both environments are securely connected, allowing the CLI and Frontend to consume live metadata seamlessly.
 
 ---
 
