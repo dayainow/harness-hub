@@ -1,43 +1,15 @@
 services:
-  # ─────────────────────────────────────────────
-  # Backend — NestJS API on Render
-  # ─────────────────────────────────────────────
   - type: web
-    name: harness-hub-api
-    env: node
-    region: singapore
-    plan: free
-    rootDir: back
-    buildCommand: npm ci --include=dev && npm run build
-    startCommand: node dist/src/main.js
-    healthCheckPath: /api/health
+    name: harnesshub-backend
+    env: docker
+    dockerContext: ./back
+    dockerfilePath: ./back/Dockerfile
     envVars:
-      - key: NODE_ENV
-        value: production
       - key: DATABASE_URL
-        sync: false   # set in Render dashboard
+        sync: false
       - key: DIRECT_URL
-        sync: false   # set in Render dashboard
-
-  # ─────────────────────────────────────────────
-  # Frontend — Next.js on Render
-  # ─────────────────────────────────────────────
-  - type: web
-    name: harness-hub-web
-    env: node
+        sync: false
+      - key: GITHUB_TOKEN
+        sync: false
     region: singapore
-    plan: free
-    rootDir: client_front
-    buildCommand: npm ci && npm run build
-    startCommand: npm run start
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: NEXT_PUBLIC_SUPABASE_URL
-        sync: false
-      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
-        sync: false
-      - key: NEXT_PUBLIC_API_URL
-        sync: false   # set to https://harness-hub-api.onrender.com/api after backend deploys
-      - key: NEXT_PUBLIC_SITE_URL
-        sync: false   # set to https://harness-hub-web.onrender.com
+    plan: starter
