@@ -216,7 +216,8 @@ export function TopNavBar() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="lg:hidden fixed inset-0 z-[60] bg-[var(--bg)]/95 backdrop-blur-xl flex flex-col"
+              className="lg:hidden fixed inset-0 z-[60] backdrop-blur-xl flex flex-col"
+              style={{ backgroundColor: 'rgba(10, 14, 20, 0.95)' }}
             >
               {/* Drawer Header */}
               <div className="flex items-center justify-between px-6 h-16 border-b border-[var(--border)]">

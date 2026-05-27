@@ -2,109 +2,171 @@
 
 import { useRef, useMemo } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { Points, PointMaterial } from '@react-three/drei';
+import * as random from 'maath/random/dist/maath-random.esm';
 import * as THREE from 'three';
 
-function EtherealWave() {
+function GalaxyStars() {
   const ref = useRef<THREE.Points>(null!);
   const { mouse, viewport } = useThree();
 
-  const count = 150;
-  const separation = 0.2;
-  const totalParticles = count * count;
-
-  // Generate particles
-  const { positions, colors } = useMemo(() => {
-    const pos = new Float32Array(totalParticles * 3);
-    const col = new Float32Array(totalParticles * 3);
+  const count = 3000;
+  
+  // Generate random points in a sphere and unique attributes
+  const { positions, colors, sizes } = useMemo(() => {
+    const pos = new Float32Array(count * 3);
+    random.inSphere(pos, { radius: 8 });
+    
+    const col = new Float32Array(count * 3);
+    const sz = new Float32Array(count);
     
     const colorCyan = new THREE.Color('#00E5FF');
     const colorPurple = new THREE.Color('#A78BFA');
+    const colorWhite = new THREE.Color('#FFFFFF');
     const colorMixed = new THREE.Color();
 
-    let i = 0;
-    for (let ix = 0; ix < count; ix++) {
-      for (let iy = 0; iy < count; iy++) {
-        // Create a wider, deeper grid
-        const x = (ix - count / 2) * separation + (Math.random() - 0.5) * 0.1;
-        const z = (iy - count / 2) * separation + (Math.random() - 0.5) * 0.1;
-        const y = (Math.random() - 0.5) * 0.2; // slight random vertical variance
-
-        pos[i * 3] = x;
-        pos[i * 3 + 1] = y;
-        pos[i * 3 + 2] = z;
-
-        colorMixed.lerpColors(colorPurple, colorCyan, Math.random());
-        col[i * 3] = colorMixed.r;
-        col[i * 3 + 1] = colorMixed.g;
-        col[i * 3 + 2] = colorMixed.b;
-
-        i++;
+    for (let i = 0; i < count; i++) {
+      const r = Math.random();
+      // 10% Cyan, 10% Purple, 80% White/Light Blue
+      if (r > 0.9) {
+        colorMixed.copy(colorCyan);
+      } else if (r > 0.8) {
+        colorMixed.copy(colorPurple);
+      } else {
+        colorMixed.copy(colorWhite);
+        // Add a tiny tint of blue to the white stars
+        colorMixed.lerp(colorCyan, Math.random() * 0.3);
       }
+      
+      // Add brightness variance
+      colorMixed.multiplyScalar(0.5 + Math.random() * 0.5);
+
+      col[i * 3] = colorMixed.r;
+      col[i * 3 + 1] = colorMixed.g;
+      col[i * 3 + 2] = colorMixed.b;
+
+      // Make some stars distinctly larger
+      const sizeRandom = Math.random();
+      if (sizeRandom > 0.98) sz[i] = 0.2; // very large (rare)
+      else if (sizeRandom > 0.8) sz[i] = 0.1; // medium
+      else sz[i] = 0.04; // tiny stars
     }
-    return { positions: pos, colors: col };
-  }, [count, separation, totalParticles]);
+    return { positions: pos, colors: col, sizes: sz };
+  }, []);
 
   const originalPositions = useMemo(() => new Float32Array(positions), [positions]);
 
+  // Custom Shader to render glowing circular stars with distinct sizes
+  const shaderArgs = useMemo(() => ({
+    uniforms: {
+      time: { value: 0 },
+    },
+    vertexShader: `
+      attribute float size;
+      attribute vec3 color;
+      varying vec3 vColor;
+      void main() {
+        vColor = color;
+        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+        // Scale size by depth so they get smaller further away
+        gl_PointSize = size * (200.0 / -mvPosition.z);
+        gl_Position = projectionMatrix * mvPosition;
+      }
+    `,
+    fragmentShader: `
+      varying vec3 vColor;
+      void main() {
+        // Create a soft circle
+        vec2 xy = gl_PointCoord.xy - vec2(0.5);
+        float dist = length(xy);
+        if (dist > 0.5) discard;
+        
+        // Soft glowing edge
+        float alpha = (0.5 - dist) * 2.0; 
+        // Core is brighter
+        float core = pow(alpha, 3.0);
+        
+        gl_FragColor = vec4(vColor + vec3(core), alpha * 0.8);
+      }
+    `
+  }), []);
+
   useFrame((state) => {
     if (!ref.current) return;
+    
     const time = state.clock.getElapsedTime();
     const pos = ref.current.geometry.attributes.position.array as Float32Array;
 
-    // Mouse mapping
+    // Mouse coordinates mapped to 3D space
     const mouseX = (mouse.x * viewport.width) / 2;
     const mouseY = (mouse.y * viewport.height) / 2;
 
-    let i = 0;
-    for (let ix = 0; ix < count; ix++) {
-      for (let iy = 0; iy < count; iy++) {
-        const idx = i * 3;
-        const origX = originalPositions[idx];
-        const origZ = originalPositions[idx + 2];
-        
-        // Complex beautiful wave math
-        const waveX = Math.sin(origX * 0.5 + time * 0.5) * 0.5;
-        const waveZ = Math.cos(origZ * 0.5 + time * 0.4) * 0.5;
-        const waveCombined = Math.sin((origX + origZ) * 0.2 + time) * 1.5;
-        
-        let targetY = originalPositions[idx + 1] + waveX + waveZ + waveCombined;
+    for (let i = 0; i < count; i++) {
+      const idx = i * 3;
+      const origX = originalPositions[idx];
+      const origY = originalPositions[idx + 1];
+      const origZ = originalPositions[idx + 2];
+      
+      // Floating space dust motion
+      const floatX = Math.sin(time * 0.3 + origY) * 0.05;
+      const floatY = Math.cos(time * 0.2 + origX) * 0.05;
+      
+      let targetX = origX + floatX;
+      let targetY = origY + floatY;
+      let targetZ = origZ;
 
-        // Interactive mouse repulsion
-        const dx = origX - mouseX * 2;
-        const dz = origZ - (-mouseY * 4); // Scale up depth interaction
-        const dist = Math.sqrt(dx * dx + dz * dz);
+      // Mouse attraction: stars follow the mouse!
+      // Only affect stars that are somewhat in the foreground
+      if (origZ > -3) {
+        const dx = mouseX - targetX;
+        const dy = mouseY - targetY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
         
-        if (dist < 4.0) {
-          const repel = Math.cos((dist / 4.0) * Math.PI / 2);
-          targetY += repel * 3.0; // Pushes particles UP when hovered
+        const attractRadius = 4.0;
+        if (dist < attractRadius) {
+          // Exponential pull towards the mouse
+          const pull = Math.pow(1 - dist / attractRadius, 2.0) * 1.2; 
+          targetX += dx * pull;
+          targetY += dy * pull;
+          targetZ += pull * 2.0; // pop out towards the camera slightly
         }
-
-        // Smooth transition
-        pos[idx + 1] += (targetY - pos[idx + 1]) * 0.1;
-
-        i++;
       }
+
+      // Smooth spring interpolation
+      pos[idx] += (targetX - pos[idx]) * 0.05;
+      pos[idx + 1] += (targetY - pos[idx + 1]) * 0.05;
+      pos[idx + 2] += (targetZ - pos[idx + 2]) * 0.05;
     }
     
-    // Rotate the entire field slowly for an epic cinematic feel
-    ref.current.rotation.y = time * 0.05;
+    // Slowly rotate the entire galaxy
+    ref.current.rotation.y = time * 0.03;
+    ref.current.rotation.x = Math.sin(time * 0.1) * 0.1;
     ref.current.geometry.attributes.position.needsUpdate = true;
   });
 
   return (
-    <group rotation={[0.2, 0, 0]} position={[0, -2, -10]}>
-      <Points ref={ref} positions={positions} colors={colors} stride={3} frustumCulled={false}>
-        <PointMaterial
+    <group>
+      <points ref={ref} frustumCulled={false}>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            args={[positions, 3]}
+          />
+          <bufferAttribute
+            attach="attributes-color"
+            args={[colors, 3]}
+          />
+          <bufferAttribute
+            attach="attributes-size"
+            args={[sizes, 1]}
+          />
+        </bufferGeometry>
+        <shaderMaterial
+          args={[shaderArgs]}
           transparent
-          vertexColors
-          size={0.03}
-          sizeAttenuation={true}
           depthWrite={false}
           blending={THREE.AdditiveBlending}
-          opacity={0.8}
         />
-      </Points>
+      </points>
     </group>
   );
 }
@@ -113,12 +175,12 @@ export default function ThreeBackground() {
   return (
     <div className="absolute inset-0 z-0 pointer-events-auto overflow-hidden">
       <Canvas
-        camera={{ position: [0, 3, 5], fov: 75 }}
+        camera={{ position: [0, 0, 8], fov: 60 }}
         style={{ width: '100%', height: '100%' }}
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
       >
-        <fog attach="fog" args={['#0A0E14', 5, 20]} />
-        <EtherealWave />
+        <fog attach="fog" args={['#0A0E14', 5, 15]} />
+        <GalaxyStars />
       </Canvas>
     </div>
   );
