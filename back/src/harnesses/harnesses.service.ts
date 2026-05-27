@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { HARNESS_DESCRIPTIONS } from '../../prisma/harness-descriptions.generated';
+import { BENCHMARKS as SEED_BENCHMARKS } from '../../prisma/seed-benchmarks';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateHarnessDto } from './dto/create-harness.dto';
 import {
@@ -65,6 +66,66 @@ export class HarnessesService {
       updated,
       missing: skipped.length,
       skipped,
+    };
+  }
+
+  /**
+   * Seed the well-known benchmark numbers shipped with the app into the DB.
+   * Idempotent: skips entries whose (harnessId, name, model) tuple already
+   * exists. Mirrors `prisma/seed-benchmarks.ts` so operators can refresh
+   * benchmarks on Railway without shelling into the container.
+   */
+  async seedBenchmarks(): Promise<{
+    total: number;
+    created: number;
+    skippedExisting: number;
+    skippedMissing: number;
+    missingSlugs: string[];
+  }> {
+    const total = SEED_BENCHMARKS.length;
+    let created = 0;
+    let skippedExisting = 0;
+    const missingSlugs: string[] = [];
+
+    for (const b of SEED_BENCHMARKS) {
+      const harness = await this.prisma.harness.findUnique({
+        where: { slug: b.harnessSlug },
+      });
+      if (!harness) {
+        missingSlugs.push(b.harnessSlug);
+        continue;
+      }
+
+      const existing = await this.prisma.benchmark.findFirst({
+        where: { harnessId: harness.id, name: b.name, model: b.model },
+      });
+      if (existing) {
+        skippedExisting += 1;
+        continue;
+      }
+
+      await this.prisma.benchmark.create({
+        data: {
+          harnessId: harness.id,
+          name: b.name,
+          score: b.score,
+          model: b.model,
+          date: b.date,
+        },
+      });
+      created += 1;
+    }
+
+    this.logger.log(
+      `seedBenchmarks: created=${created} skippedExisting=${skippedExisting} skippedMissing=${missingSlugs.length} total=${total}`,
+    );
+
+    return {
+      total,
+      created,
+      skippedExisting,
+      skippedMissing: missingSlugs.length,
+      missingSlugs,
     };
   }
 

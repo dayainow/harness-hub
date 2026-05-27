@@ -90,4 +90,16 @@ export class HarnessesController {
   syncDescriptions() {
     return this.harnessesService.syncDescriptions();
   }
+
+  // One-shot admin endpoint that mirrors prisma/seed-benchmarks.ts so we can
+  // backfill benchmark data on Railway without shelling into the container.
+  // Idempotent — safe to call repeatedly. Remove once data is stable.
+  @Post('admin/seed-benchmarks')
+  @ApiOperation({
+    summary:
+      '[Admin / temporary] Seed public benchmark numbers (idempotent) from prisma/seed-benchmarks.ts',
+  })
+  async seedBenchmarks() {
+    return this.harnessesService.seedBenchmarks();
+  }
 }

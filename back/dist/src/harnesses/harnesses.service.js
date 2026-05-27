@@ -13,6 +13,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.HarnessesService = void 0;
 const common_1 = require("@nestjs/common");
 const harness_descriptions_generated_1 = require("../../prisma/harness-descriptions.generated");
+const seed_benchmarks_1 = require("../../prisma/seed-benchmarks");
 const prisma_service_1 = require("../prisma/prisma.service");
 const query_harnesses_dto_1 = require("./dto/query-harnesses.dto");
 const DEFAULT_PAGE = 1;
@@ -48,6 +49,46 @@ let HarnessesService = HarnessesService_1 = class HarnessesService {
             updated,
             missing: skipped.length,
             skipped,
+        };
+    }
+    async seedBenchmarks() {
+        const total = seed_benchmarks_1.BENCHMARKS.length;
+        let created = 0;
+        let skippedExisting = 0;
+        const missingSlugs = [];
+        for (const b of seed_benchmarks_1.BENCHMARKS) {
+            const harness = await this.prisma.harness.findUnique({
+                where: { slug: b.harnessSlug },
+            });
+            if (!harness) {
+                missingSlugs.push(b.harnessSlug);
+                continue;
+            }
+            const existing = await this.prisma.benchmark.findFirst({
+                where: { harnessId: harness.id, name: b.name, model: b.model },
+            });
+            if (existing) {
+                skippedExisting += 1;
+                continue;
+            }
+            await this.prisma.benchmark.create({
+                data: {
+                    harnessId: harness.id,
+                    name: b.name,
+                    score: b.score,
+                    model: b.model,
+                    date: b.date,
+                },
+            });
+            created += 1;
+        }
+        this.logger.log(`seedBenchmarks: created=${created} skippedExisting=${skippedExisting} skippedMissing=${missingSlugs.length} total=${total}`);
+        return {
+            total,
+            created,
+            skippedExisting,
+            skippedMissing: missingSlugs.length,
+            missingSlugs,
         };
     }
     async findAll(query) {

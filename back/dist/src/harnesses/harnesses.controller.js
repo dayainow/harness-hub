@@ -47,6 +47,9 @@ let HarnessesController = class HarnessesController {
     syncDescriptions() {
         return this.harnessesService.syncDescriptions();
     }
+    async seedBenchmarks() {
+        return this.harnessesService.seedBenchmarks();
+    }
 };
 exports.HarnessesController = HarnessesController;
 __decorate([
@@ -123,6 +126,15 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], HarnessesController.prototype, "syncDescriptions", null);
+__decorate([
+    (0, common_1.Post)('admin/seed-benchmarks'),
+    (0, swagger_1.ApiOperation)({
+        summary: '[Admin / temporary] Seed public benchmark numbers (idempotent) from prisma/seed-benchmarks.ts',
+    }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], HarnessesController.prototype, "seedBenchmarks", null);
 exports.HarnessesController = HarnessesController = __decorate([
     (0, swagger_1.ApiTags)('harnesses'),
     (0, common_1.Controller)('harnesses'),

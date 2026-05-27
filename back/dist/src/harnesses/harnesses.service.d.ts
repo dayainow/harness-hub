@@ -12,6 +12,13 @@ export declare class HarnessesService {
         missing: number;
         skipped: string[];
     }>;
+    seedBenchmarks(): Promise<{
+        total: number;
+        created: number;
+        skippedExisting: number;
+        skippedMissing: number;
+        missingSlugs: string[];
+    }>;
     findAll(query: QueryHarnessesDto): Promise<{
         items: ({
             benchmarks: {
