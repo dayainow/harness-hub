@@ -333,10 +333,11 @@ export default function HomeClient({
               >
                 <Link
                   href={`/explore?category=${cat}`}
-                className="group rounded-2xl p-6 border transition-all hover:-translate-y-1"
+                className="group flex flex-col rounded-2xl p-6 border transition-all hover:-translate-y-1"
                 style={{
                   backgroundColor: 'var(--bg-card)',
                   borderColor: 'var(--border)',
+                  height: '100%',
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor = 'var(--accent)';

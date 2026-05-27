@@ -2,22 +2,21 @@
 
 import { useRef, useMemo } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Points, PointMaterial } from '@react-three/drei';
 import * as THREE from 'three';
 
-function ParticleWave() {
-  const meshRef = useRef<THREE.InstancedMesh>(null!);
+function EtherealWave() {
+  const ref = useRef<THREE.Points>(null!);
   const { mouse, viewport } = useThree();
-  
-  // Grid settings
-  const count = 100; // 100x100 = 10,000 particles
-  const separation = 0.15;
+
+  const count = 150;
+  const separation = 0.2;
   const totalParticles = count * count;
 
-  // Pre-calculate positions, colors, and scales
-  const { positions, colors, scales } = useMemo(() => {
-    const positions = new Float32Array(totalParticles * 3);
-    const colors = new Float32Array(totalParticles * 3);
-    const scales = new Float32Array(totalParticles);
+  // Generate particles
+  const { positions, colors } = useMemo(() => {
+    const pos = new Float32Array(totalParticles * 3);
+    const col = new Float32Array(totalParticles * 3);
     
     const colorCyan = new THREE.Color('#00E5FF');
     const colorPurple = new THREE.Color('#A78BFA');
@@ -26,105 +25,87 @@ function ParticleWave() {
     let i = 0;
     for (let ix = 0; ix < count; ix++) {
       for (let iy = 0; iy < count; iy++) {
-        // Center the grid
-        const x = (ix - count / 2) * separation;
-        const z = (iy - count / 2) * separation;
-        const y = 0;
+        // Create a wider, deeper grid
+        const x = (ix - count / 2) * separation + (Math.random() - 0.5) * 0.1;
+        const z = (iy - count / 2) * separation + (Math.random() - 0.5) * 0.1;
+        const y = (Math.random() - 0.5) * 0.2; // slight random vertical variance
 
-        positions[i * 3] = x;
-        positions[i * 3 + 1] = y;
-        positions[i * 3 + 2] = z;
+        pos[i * 3] = x;
+        pos[i * 3 + 1] = y;
+        pos[i * 3 + 2] = z;
 
-        // Base color (will update dynamically, but set initial here)
-        colorMixed.lerpColors(colorCyan, colorPurple, 0.5);
-        colors[i * 3] = colorMixed.r;
-        colors[i * 3 + 1] = colorMixed.g;
-        colors[i * 3 + 2] = colorMixed.b;
+        colorMixed.lerpColors(colorPurple, colorCyan, Math.random());
+        col[i * 3] = colorMixed.r;
+        col[i * 3 + 1] = colorMixed.g;
+        col[i * 3 + 2] = colorMixed.b;
 
-        scales[i] = 1;
         i++;
       }
     }
-    return { positions, colors, scales };
+    return { positions: pos, colors: col };
   }, [count, separation, totalParticles]);
 
-  // Create Matrix4 and Color objects for updates
-  const tempObject = useMemo(() => new THREE.Object3D(), []);
-  const tempColor = useMemo(() => new THREE.Color(), []);
-  const colorCyan = useMemo(() => new THREE.Color('#00E5FF'), []);
-  const colorPurple = useMemo(() => new THREE.Color('#A78BFA'), []);
+  const originalPositions = useMemo(() => new Float32Array(positions), [positions]);
 
   useFrame((state) => {
-    if (!meshRef.current) return;
-    
-    const time = state.clock.getElapsedTime() * 0.5;
-    
-    // Map mouse coordinates to 3D space
-    // Assuming camera is at z=5, we project mouse to z=0 plane
+    if (!ref.current) return;
+    const time = state.clock.getElapsedTime();
+    const pos = ref.current.geometry.attributes.position.array as Float32Array;
+
+    // Mouse mapping
     const mouseX = (mouse.x * viewport.width) / 2;
     const mouseY = (mouse.y * viewport.height) / 2;
 
     let i = 0;
     for (let ix = 0; ix < count; ix++) {
       for (let iy = 0; iy < count; iy++) {
-        const x = (ix - count / 2) * separation;
-        const z = (iy - count / 2) * separation;
+        const idx = i * 3;
+        const origX = originalPositions[idx];
+        const origZ = originalPositions[idx + 2];
+        
+        // Complex beautiful wave math
+        const waveX = Math.sin(origX * 0.5 + time * 0.5) * 0.5;
+        const waveZ = Math.cos(origZ * 0.5 + time * 0.4) * 0.5;
+        const waveCombined = Math.sin((origX + origZ) * 0.2 + time) * 1.5;
+        
+        let targetY = originalPositions[idx + 1] + waveX + waveZ + waveCombined;
 
-        // Base wave function
-        let y = Math.sin(ix * 0.2 + time) * 0.3 + Math.sin(iy * 0.2 + time) * 0.3;
-
-        // Mouse interaction (repel/ripple effect)
-        const dx = x - mouseX;
-        const dz = z - (-mouseY * 2); // Invert y and scale a bit for depth effect
+        // Interactive mouse repulsion
+        const dx = origX - mouseX * 2;
+        const dz = origZ - (-mouseY * 4); // Scale up depth interaction
         const dist = Math.sqrt(dx * dx + dz * dz);
         
-        // Add a ripple if close to mouse
-        const maxDist = 3.0;
-        if (dist < maxDist) {
-          const ripple = Math.cos(dist * Math.PI) * (1 - dist / maxDist) * 0.8;
-          y += ripple;
+        if (dist < 4.0) {
+          const repel = Math.cos((dist / 4.0) * Math.PI / 2);
+          targetY += repel * 3.0; // Pushes particles UP when hovered
         }
 
-        // Apply transforms
-        tempObject.position.set(x, y, z);
-        
-        // Scale based on height to emphasize peaks
-        const scale = (y + 1) * 0.5;
-        tempObject.scale.set(scale, scale, scale);
-        
-        tempObject.updateMatrix();
-        meshRef.current.setMatrixAt(i, tempObject.matrix);
-
-        // Color based on height (peaks = Cyan, valleys = Purple)
-        const mixRatio = Math.max(0, Math.min(1, (y + 0.6) / 1.2));
-        tempColor.lerpColors(colorPurple, colorCyan, mixRatio);
-        meshRef.current.setColorAt(i, tempColor);
+        // Smooth transition
+        pos[idx + 1] += (targetY - pos[idx + 1]) * 0.1;
 
         i++;
       }
     }
     
-    meshRef.current.instanceMatrix.needsUpdate = true;
-    if (meshRef.current.instanceColor) {
-      meshRef.current.instanceColor.needsUpdate = true;
-    }
+    // Rotate the entire field slowly for an epic cinematic feel
+    ref.current.rotation.y = time * 0.05;
+    ref.current.geometry.attributes.position.needsUpdate = true;
   });
 
   return (
-    <instancedMesh
-      ref={meshRef}
-      args={[undefined, undefined, totalParticles]}
-      rotation={[-Math.PI / 3, 0, 0]}
-      position={[0, -1, -5]}
-    >
-      <circleGeometry args={[0.025, 8]} />
-      <meshBasicMaterial 
-        transparent 
-        opacity={0.6} 
-        blending={THREE.AdditiveBlending}
-        depthWrite={false}
-      />
-    </instancedMesh>
+    <group rotation={[0.2, 0, 0]} position={[0, -2, -10]}>
+      <Points ref={ref} positions={positions} colors={colors} stride={3} frustumCulled={false}>
+        <PointMaterial
+          transparent
+          vertexColors
+          size={0.03}
+          sizeAttenuation={true}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+          opacity={0.8}
+        />
+      </Points>
+    </group>
   );
 }
 
@@ -132,12 +113,12 @@ export default function ThreeBackground() {
   return (
     <div className="absolute inset-0 z-0 pointer-events-auto overflow-hidden">
       <Canvas
-        camera={{ position: [0, 2, 5], fov: 60 }}
+        camera={{ position: [0, 3, 5], fov: 75 }}
         style={{ width: '100%', height: '100%' }}
-        gl={{ antialias: true, alpha: true }}
+        gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
       >
-        <fog attach="fog" args={['#0A0E14', 3, 10]} />
-        <ParticleWave />
+        <fog attach="fog" args={['#0A0E14', 5, 20]} />
+        <EtherealWave />
       </Canvas>
     </div>
   );
