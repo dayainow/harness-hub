@@ -8,6 +8,7 @@ import {
   submitHarness,
   type HarnessCategory,
 } from '@/lib/api';
+import { toast } from 'sonner';
 
 const CATEGORIES: HarnessCategory[] = [
   'CODING_AGENT',
@@ -128,6 +129,7 @@ export default function SubmitPage() {
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Network error';
       setError(`Failed to fetch repo metadata: ${msg}`);
+      toast.error(`Fetch failed: ${msg}`);
     } finally {
       setFetching(false);
     }
@@ -166,12 +168,13 @@ export default function SubmitPage() {
     if (result.ok) {
       if (result.message) setSuccessMessage(result.message);
       setDone(true);
+      toast.success(t('success'));
     } else {
-      setError(
-        result.message
-          ? `Submission failed: ${result.message}`
-          : 'Submission failed. Please try again.',
-      );
+      const errorMsg = result.message
+        ? `Submission failed: ${result.message}`
+        : 'Submission failed. Please try again.';
+      setError(errorMsg);
+      toast.error(errorMsg);
     }
   };
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { Link } from '@/i18n/routing';
+import { ServerCrash } from 'lucide-react';
 
 export default function GlobalError({
   error,
@@ -14,14 +15,9 @@ export default function GlobalError({
       <div className="max-w-md w-full text-center">
         <div
           className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
-          style={{ backgroundColor: 'rgba(248, 113, 113, 0.12)' }}
+          style={{ backgroundColor: 'rgba(248, 113, 113, 0.12)', color: 'var(--danger)' }}
         >
-          <span
-            className="material-symbols-outlined"
-            style={{ fontSize: 36, color: 'var(--danger)' }}
-          >
-            error
-          </span>
+          <ServerCrash size={40} strokeWidth={1.5} />
         </div>
         <h1 className="text-2xl font-bold mb-3" style={{ color: 'var(--text)' }}>
           Something went wrong

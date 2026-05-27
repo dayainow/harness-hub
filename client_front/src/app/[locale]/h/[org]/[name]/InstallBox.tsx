@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useAuth } from '@/context/AuthContext';
 import { getBookmarkStatus, toggleBookmark, type Harness } from '@/lib/api';
+import { toast } from 'sonner';
 
 interface Props {
   harness: Harness;
@@ -34,9 +35,10 @@ export function InstallBox({ harness, initialBookmarked = false }: Props) {
     try {
       await navigator.clipboard.writeText(installCmd);
       setCopied(true);
+      toast.success(tCommon('copied') || 'Copied to clipboard');
       setTimeout(() => setCopied(false), 1500);
     } catch {
-      /* ignore */
+      toast.error('Failed to copy');
     }
   };
 

@@ -12,6 +12,7 @@ import {
   type QueryParams,
 } from '@/lib/api';
 import { HarnessCard } from '@/components/HarnessCard';
+import { SearchX } from 'lucide-react';
 
 interface Props {
   initialData: HarnessListResponse;
@@ -337,10 +338,33 @@ export default function ExploreClient({ initialData, initialQuery }: Props) {
             </div>
           ) : data.items.length === 0 ? (
             <div
-              className="rounded-2xl border p-16 text-center"
+              className="rounded-2xl border p-20 flex flex-col items-center justify-center text-center"
               style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
             >
-              <p style={{ color: 'var(--text-3)' }}>{t('empty')}</p>
+              <div 
+                className="w-16 h-16 rounded-full mb-4 flex items-center justify-center"
+                style={{ backgroundColor: 'var(--bg-raised)', color: 'var(--text-3)' }}
+              >
+                <SearchX size={32} strokeWidth={1.5} />
+              </div>
+              <p className="text-lg font-medium mb-2" style={{ color: 'var(--text)' }}>
+                No results found
+              </p>
+              <p style={{ color: 'var(--text-3)' }}>
+                {t('empty')}
+              </p>
+              {activeFilters.length > 0 && (
+                <button
+                  onClick={clearAll}
+                  className="mt-6 px-5 py-2.5 rounded-lg text-sm font-bold transition-all"
+                  style={{
+                    background: 'linear-gradient(135deg, #00E5FF 0%, #A78BFA 100%)',
+                    color: '#0A0E14',
+                  }}
+                >
+                  Clear all filters
+                </button>
+              )}
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">

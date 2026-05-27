@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { Toaster } from 'sonner';
 
 export const revalidate = 300;
 
@@ -36,6 +37,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         style={{ background: 'var(--bg)', color: 'var(--text)' }}
       >
         {children}
+        <Toaster theme="dark" position="bottom-right" richColors />
       </body>
     </html>
   );

@@ -1,4 +1,5 @@
 import { Link } from '@/i18n/routing';
+import { Telescope } from 'lucide-react';
 
 export const revalidate = 300;
 
@@ -7,10 +8,10 @@ export default function NotFound() {
     <div className="min-h-screen flex items-center justify-center px-6" style={{ backgroundColor: 'var(--bg)' }}>
       <div className="max-w-md w-full text-center">
         <div
-          className="text-8xl font-black mb-4 select-none font-mono-code"
-          style={{ color: 'var(--bg-raised)' }}
+          className="w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6"
+          style={{ backgroundColor: 'var(--bg-raised)', color: 'var(--text-3)' }}
         >
-          404
+          <Telescope size={48} strokeWidth={1.5} />
         </div>
         <h1 className="text-2xl font-bold mb-3" style={{ color: 'var(--text)' }}>
           Page not found
