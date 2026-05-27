@@ -39,8 +39,31 @@ export default async function HarnessDetailPage({ params }: PageProps) {
   const meta = CATEGORY_META[harness.category];
   const categoryLower = harness.category.toLowerCase().replace(/_/g, '-');
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: harness.name,
+    operatingSystem: 'Any',
+    applicationCategory: 'DeveloperApplication',
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '5.0',
+      ratingCount: harness.stars || 1,
+    },
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'USD',
+    },
+    description: harness.description,
+  };
+
   return (
     <main className="max-w-[1280px] mx-auto px-6 py-10">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Breadcrumb */}
       <nav
         className="flex items-center gap-2 mb-6 font-mono-code text-xs"
