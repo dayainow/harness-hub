@@ -2,9 +2,11 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { HARNESS_DESCRIPTIONS } from '../../prisma/harness-descriptions.generated';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateHarnessDto } from './dto/create-harness.dto';
 import {
@@ -19,7 +21,52 @@ const DEFAULT_LIMIT = 20;
 
 @Injectable()
 export class HarnessesService {
+  private readonly logger = new Logger(HarnessesService.name);
+
   constructor(private readonly prisma: PrismaService) {}
+
+  /**
+   * Non-destructive sync of `description` + `readmeExcerpt` for known
+   * harnesses. Keyed by `slug`, so bookmarks / reviews / collections are
+   * untouched. Mirrors `prisma/update-descriptions.ts` and reads the same
+   * generated data file so both code paths stay aligned.
+   */
+  async syncDescriptions(): Promise<{
+    total: number;
+    updated: number;
+    missing: number;
+    skipped: string[];
+  }> {
+    const total = HARNESS_DESCRIPTIONS.length;
+    let updated = 0;
+    const skipped: string[] = [];
+
+    for (const item of HARNESS_DESCRIPTIONS) {
+      const result = await this.prisma.harness.updateMany({
+        where: { slug: item.slug },
+        data: {
+          description: item.description,
+          readmeExcerpt: item.readmeExcerpt,
+        },
+      });
+      if (result.count > 0) {
+        updated += 1;
+      } else {
+        skipped.push(item.slug);
+      }
+    }
+
+    this.logger.log(
+      `syncDescriptions: updated ${updated}/${total} (${skipped.length} skipped)`,
+    );
+
+    return {
+      total,
+      updated,
+      missing: skipped.length,
+      skipped,
+    };
+  }
 
   async findAll(query: QueryHarnessesDto) {
     const page = query.page ?? DEFAULT_PAGE;

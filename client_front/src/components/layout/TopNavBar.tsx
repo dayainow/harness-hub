@@ -1,7 +1,7 @@
 'use client';
 
-import { Link } from '@/i18n/routing';
-import { useTranslations } from 'next-intl';
+import { Link, useRouter, usePathname } from '@/i18n/routing';
+import { useTranslations, useLocale } from 'next-intl';
 import { useAuth } from '@/context/AuthContext';
 import { CommandPalette } from '@/components/CommandPalette';
 import { useEffect, useRef, useState } from 'react';
@@ -28,6 +28,13 @@ export function TopNavBar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
+  const router = useRouter();
+  const pathname = usePathname();
+  const locale = useLocale();
+
+  const toggleLocale = () => {
+    router.replace(pathname, { locale: locale === 'en' ? 'ko' : 'en' });
+  };
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -101,6 +108,16 @@ export function TopNavBar() {
             >
               {t('submit')}
             </Link>
+            <button
+              type="button"
+              onClick={toggleLocale}
+              className="text-sm font-medium px-2 py-1.5 rounded-lg transition-colors hover:bg-[var(--bg-raised)]"
+              aria-label="Toggle language"
+            >
+              <span style={{ color: locale === 'en' ? 'var(--accent)' : 'var(--text-3)' }}>EN</span>
+              <span style={{ color: 'var(--text-3)' }}> / </span>
+              <span style={{ color: locale === 'ko' ? 'var(--accent)' : 'var(--text-3)' }}>KO</span>
+            </button>
             {!loading &&
               (user ? (
                 <div className="hidden sm:block relative" ref={menuRef}>
@@ -207,8 +224,9 @@ export function TopNavBar() {
             </button>
           </div>
         </div>
+      </nav>
 
-        {/* Mobile menu (Drawer) */}
+      {/* Mobile menu (Drawer) - Moved outside nav to prevent backdrop-blur containment */}
         <AnimatePresence>
           {mobileOpen && (
             <motion.div
@@ -297,7 +315,6 @@ export function TopNavBar() {
             </motion.div>
           )}
         </AnimatePresence>
-      </nav>
       <div className="h-16" aria-hidden />
     </>
   );

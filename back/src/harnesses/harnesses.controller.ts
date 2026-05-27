@@ -72,4 +72,17 @@ export class HarnessesController {
   create(@Body() dto: CreateHarnessDto) {
     return this.harnessesService.create(dto);
   }
+
+  // One-shot admin endpoint that mirrors prisma/update-descriptions.ts so
+  // operators can refresh curator-authored copy on Railway without shelling
+  // into the container. Intentionally unauthenticated for the initial sync;
+  // delete this route once the values are stable in production.
+  @Post('admin/sync-descriptions')
+  @ApiOperation({
+    summary:
+      '[Admin / temporary] Sync description + readmeExcerpt from prisma/seed.ts data',
+  })
+  syncDescriptions() {
+    return this.harnessesService.syncDescriptions();
+  }
 }
