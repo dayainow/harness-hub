@@ -121,13 +121,13 @@ function GalaxyStars() {
         const dy = mouseY - targetY;
         const dist = Math.sqrt(dx * dx + dy * dy);
         
-        const attractRadius = 4.0;
+        const attractRadius = 6.0;
         if (dist < attractRadius) {
           // Exponential pull towards the mouse
-          const pull = Math.pow(1 - dist / attractRadius, 2.0) * 1.2; 
+          const pull = Math.pow(1 - dist / attractRadius, 2.0) * 1.8; 
           targetX += dx * pull;
           targetY += dy * pull;
-          targetZ += pull * 2.0; // pop out towards the camera slightly
+          targetZ += pull * 3.5; // pop out towards the camera significantly
         }
       }
 
@@ -178,6 +178,8 @@ export default function ThreeBackground() {
         camera={{ position: [0, 0, 8], fov: 60 }}
         style={{ width: '100%', height: '100%' }}
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+        eventSource={typeof document !== 'undefined' ? document.body : undefined}
+        eventPrefix="client"
       >
         <fog attach="fog" args={['#0A0E14', 5, 15]} />
         <GalaxyStars />
