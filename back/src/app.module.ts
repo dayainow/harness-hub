@@ -1,7 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { CacheModule } from '@nestjs/cache-manager';
+import { LoggerModule } from 'nestjs-pino';
+import { TransformInterceptor } from './common/transform.interceptor';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { BenchmarksModule } from './benchmarks/benchmarks.module';
@@ -19,6 +22,18 @@ import { CrawlerModule } from './crawler/crawler.module';
     ConfigModule.forRoot({ isGlobal: true }),
     ScheduleModule.forRoot(),
     CrawlerModule,
+    CacheModule.register({
+      isGlobal: true,
+      ttl: 300000, // 5 minutes default
+    }),
+    LoggerModule.forRoot({
+      pinoHttp: {
+        transport:
+          process.env.NODE_ENV !== 'production'
+            ? { target: 'pino-pretty', options: { colorize: true } }
+            : undefined,
+      },
+    }),
     ThrottlerModule.forRoot([
       {
         name: 'default',
@@ -40,6 +55,10 @@ import { CrawlerModule } from './crawler/crawler.module';
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TransformInterceptor,
     },
   ],
 })

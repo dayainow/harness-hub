@@ -11,6 +11,9 @@ const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const core_1 = require("@nestjs/core");
 const throttler_1 = require("@nestjs/throttler");
+const cache_manager_1 = require("@nestjs/cache-manager");
+const nestjs_pino_1 = require("nestjs-pino");
+const transform_interceptor_1 = require("./common/transform.interceptor");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const benchmarks_module_1 = require("./benchmarks/benchmarks.module");
@@ -31,6 +34,17 @@ exports.AppModule = AppModule = __decorate([
             config_1.ConfigModule.forRoot({ isGlobal: true }),
             schedule_1.ScheduleModule.forRoot(),
             crawler_module_1.CrawlerModule,
+            cache_manager_1.CacheModule.register({
+                isGlobal: true,
+                ttl: 300000,
+            }),
+            nestjs_pino_1.LoggerModule.forRoot({
+                pinoHttp: {
+                    transport: process.env.NODE_ENV !== 'production'
+                        ? { target: 'pino-pretty', options: { colorize: true } }
+                        : undefined,
+                },
+            }),
             throttler_1.ThrottlerModule.forRoot([
                 {
                     name: 'default',
@@ -52,6 +66,10 @@ exports.AppModule = AppModule = __decorate([
             {
                 provide: core_1.APP_GUARD,
                 useClass: throttler_1.ThrottlerGuard,
+            },
+            {
+                provide: core_1.APP_INTERCEPTOR,
+                useClass: transform_interceptor_1.TransformInterceptor,
             },
         ],
     })

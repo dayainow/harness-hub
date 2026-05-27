@@ -4,7 +4,14 @@ import { QueryHarnessesDto } from './dto/query-harnesses.dto';
 import { SubmitHarnessDto } from './dto/submit-harness.dto';
 export declare class HarnessesService {
     private readonly prisma;
+    private readonly logger;
     constructor(prisma: PrismaService);
+    syncDescriptions(): Promise<{
+        total: number;
+        updated: number;
+        missing: number;
+        skipped: string[];
+    }>;
     findAll(query: QueryHarnessesDto): Promise<{
         items: ({
             benchmarks: {

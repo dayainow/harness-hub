@@ -4,11 +4,12 @@ const core_1 = require("@nestjs/core");
 const app_module_1 = require("./app.module");
 const swagger_1 = require("@nestjs/swagger");
 const common_1 = require("@nestjs/common");
+const nestjs_pino_1 = require("nestjs-pino");
 const prisma_exception_filter_1 = require("./common/prisma-exception.filter");
 const all_exceptions_filter_1 = require("./common/all-exceptions.filter");
 async function bootstrap() {
-    const logger = new common_1.Logger('Bootstrap');
-    const app = await core_1.NestFactory.create(app_module_1.AppModule);
+    const app = await core_1.NestFactory.create(app_module_1.AppModule, { bufferLogs: true });
+    app.useLogger(app.get(nestjs_pino_1.Logger));
     app.enableShutdownHooks();
     app.enableCors({
         origin: [
@@ -44,7 +45,7 @@ async function bootstrap() {
     swagger_1.SwaggerModule.setup('api/docs', app, document);
     const port = process.env.PORT || 3002;
     await app.listen(port);
-    logger.log(`🚀 Server is running on: http://localhost:${port}`);
+    app.get(nestjs_pino_1.Logger).log(`🚀 Server is running on: http://localhost:${port}`);
 }
 bootstrap();
 //# sourceMappingURL=main.js.map

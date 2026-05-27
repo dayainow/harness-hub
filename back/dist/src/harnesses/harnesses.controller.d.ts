@@ -192,4 +192,10 @@ export declare class HarnessesController {
         downloadsCount: number;
         updatedAt: Date;
     }>;
+    syncDescriptions(): Promise<{
+        total: number;
+        updated: number;
+        missing: number;
+        skipped: string[];
+    }>;
 }

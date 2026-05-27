@@ -129,7 +129,12 @@ async function safeFetch<T>(
       signal: AbortSignal.timeout(DEFAULT_TIMEOUT_MS),
     });
     if (!res.ok) return fallback;
-    return (await res.json()) as T;
+    const body = await res.json();
+    // Handle standard response envelope from TransformInterceptor
+    if (body && typeof body === 'object' && 'statusCode' in body && 'data' in body) {
+      return body.data as T;
+    }
+    return body as T;
   } catch {
     return fallback;
   }

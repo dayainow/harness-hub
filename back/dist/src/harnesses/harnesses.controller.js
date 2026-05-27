@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HarnessesController = void 0;
 const common_1 = require("@nestjs/common");
+const cache_manager_1 = require("@nestjs/cache-manager");
 const swagger_1 = require("@nestjs/swagger");
 const admin_guard_1 = require("../common/admin.guard");
 const create_harness_dto_1 = require("./dto/create-harness.dto");
@@ -43,10 +44,14 @@ let HarnessesController = class HarnessesController {
     create(dto) {
         return this.harnessesService.create(dto);
     }
+    syncDescriptions() {
+        return this.harnessesService.syncDescriptions();
+    }
 };
 exports.HarnessesController = HarnessesController;
 __decorate([
     (0, common_1.Get)(),
+    (0, common_1.UseInterceptors)(cache_manager_1.CacheInterceptor),
     (0, swagger_1.ApiOperation)({ summary: 'List harnesses with filters and pagination' }),
     (0, swagger_1.ApiQuery)({ name: 'category', required: false }),
     (0, swagger_1.ApiQuery)({ name: 'modelCompat', required: false }),
@@ -65,6 +70,7 @@ __decorate([
 ], HarnessesController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)('featured'),
+    (0, common_1.UseInterceptors)(cache_manager_1.CacheInterceptor),
     (0, swagger_1.ApiOperation)({ summary: 'List featured harnesses (curated)' }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
@@ -72,6 +78,7 @@ __decorate([
 ], HarnessesController.prototype, "findFeatured", null);
 __decorate([
     (0, common_1.Get)('stats'),
+    (0, common_1.UseInterceptors)(cache_manager_1.CacheInterceptor),
     (0, swagger_1.ApiOperation)({ summary: 'Get aggregate stats for harnesses and benchmarks' }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
@@ -107,6 +114,15 @@ __decorate([
     __metadata("design:paramtypes", [create_harness_dto_1.CreateHarnessDto]),
     __metadata("design:returntype", void 0)
 ], HarnessesController.prototype, "create", null);
+__decorate([
+    (0, common_1.Post)('admin/sync-descriptions'),
+    (0, swagger_1.ApiOperation)({
+        summary: '[Admin / temporary] Sync description + readmeExcerpt from prisma/seed.ts data',
+    }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], HarnessesController.prototype, "syncDescriptions", null);
 exports.HarnessesController = HarnessesController = __decorate([
     (0, swagger_1.ApiTags)('harnesses'),
     (0, common_1.Controller)('harnesses'),

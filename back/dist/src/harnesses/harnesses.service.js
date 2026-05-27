@@ -8,17 +8,47 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var HarnessesService_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HarnessesService = void 0;
 const common_1 = require("@nestjs/common");
+const harness_descriptions_generated_1 = require("../../prisma/harness-descriptions.generated");
 const prisma_service_1 = require("../prisma/prisma.service");
 const query_harnesses_dto_1 = require("./dto/query-harnesses.dto");
 const DEFAULT_PAGE = 1;
 const DEFAULT_LIMIT = 20;
-let HarnessesService = class HarnessesService {
+let HarnessesService = HarnessesService_1 = class HarnessesService {
     prisma;
+    logger = new common_1.Logger(HarnessesService_1.name);
     constructor(prisma) {
         this.prisma = prisma;
+    }
+    async syncDescriptions() {
+        const total = harness_descriptions_generated_1.HARNESS_DESCRIPTIONS.length;
+        let updated = 0;
+        const skipped = [];
+        for (const item of harness_descriptions_generated_1.HARNESS_DESCRIPTIONS) {
+            const result = await this.prisma.harness.updateMany({
+                where: { slug: item.slug },
+                data: {
+                    description: item.description,
+                    readmeExcerpt: item.readmeExcerpt,
+                },
+            });
+            if (result.count > 0) {
+                updated += 1;
+            }
+            else {
+                skipped.push(item.slug);
+            }
+        }
+        this.logger.log(`syncDescriptions: updated ${updated}/${total} (${skipped.length} skipped)`);
+        return {
+            total,
+            updated,
+            missing: skipped.length,
+            skipped,
+        };
     }
     async findAll(query) {
         const page = query.page ?? DEFAULT_PAGE;
@@ -277,7 +307,7 @@ let HarnessesService = class HarnessesService {
     }
 };
 exports.HarnessesService = HarnessesService;
-exports.HarnessesService = HarnessesService = __decorate([
+exports.HarnessesService = HarnessesService = HarnessesService_1 = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService])
 ], HarnessesService);

@@ -1,13 +1,14 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
+import { Logger } from 'nestjs-pino';
 import { PrismaExceptionFilter } from './common/prisma-exception.filter';
 import { AllExceptionsFilter } from './common/all-exceptions.filter';
 
 async function bootstrap() {
-  const logger = new Logger('Bootstrap');
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { bufferLogs: true });
+  app.useLogger(app.get(Logger));
 
   // Graceful shutdown hooks (SIGTERM, SIGINT)
   app.enableShutdownHooks();
@@ -67,7 +68,7 @@ async function bootstrap() {
 
   const port = process.env.PORT || 3002;
   await app.listen(port);
-  logger.log(`🚀 Server is running on: http://localhost:${port}`);
+  app.get(Logger).log(`🚀 Server is running on: http://localhost:${port}`);
 }
 
 bootstrap();

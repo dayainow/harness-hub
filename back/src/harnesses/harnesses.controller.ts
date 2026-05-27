@@ -6,7 +6,9 @@ import {
   Post,
   Query,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 import { ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { AdminGuard } from '../common/admin.guard';
 import { CreateHarnessDto } from './dto/create-harness.dto';
@@ -20,6 +22,7 @@ export class HarnessesController {
   constructor(private readonly harnessesService: HarnessesService) {}
 
   @Get()
+  @UseInterceptors(CacheInterceptor)
   @ApiOperation({ summary: 'List harnesses with filters and pagination' })
   @ApiQuery({ name: 'category', required: false })
   @ApiQuery({ name: 'modelCompat', required: false })
@@ -36,12 +39,14 @@ export class HarnessesController {
   }
 
   @Get('featured')
+  @UseInterceptors(CacheInterceptor)
   @ApiOperation({ summary: 'List featured harnesses (curated)' })
   findFeatured() {
     return this.harnessesService.findFeatured();
   }
 
   @Get('stats')
+  @UseInterceptors(CacheInterceptor)
   @ApiOperation({ summary: 'Get aggregate stats for harnesses and benchmarks' })
   getStats() {
     return this.harnessesService.getStats();
