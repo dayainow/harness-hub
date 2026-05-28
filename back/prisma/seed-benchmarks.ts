@@ -13,10 +13,6 @@
  */
 
 import { PrismaClient } from '@prisma/client';
-import * as dotenv from 'dotenv';
-dotenv.config();
-
-const prisma = new PrismaClient();
 
 export interface SeedBenchmark {
   harnessSlug: string;
@@ -304,6 +300,10 @@ export const BENCHMARKS: SeedBenchmark[] = [
 ];
 
 async function main() {
+  const dotenv = await import('dotenv');
+  dotenv.config();
+  const prisma = new PrismaClient();
+
   let created = 0;
   let skippedExisting = 0;
   let skippedMissing = 0;
@@ -345,11 +345,12 @@ async function main() {
   console.log(
     `\nDone. created=${created} skippedExisting=${skippedExisting} skippedMissing=${skippedMissing} total=${BENCHMARKS.length}`,
   );
+  await prisma.$disconnect();
 }
 
-main()
-  .catch((err) => {
+if (require.main === module) {
+  main().catch((err) => {
     console.error(err);
     process.exitCode = 1;
-  })
-  .finally(() => prisma.$disconnect());
+  });
+}
