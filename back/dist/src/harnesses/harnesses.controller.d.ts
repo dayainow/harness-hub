@@ -205,4 +205,12 @@ export declare class HarnessesController {
         skippedMissing: number;
         missingSlugs: string[];
     }>;
+    seedCollections(): Promise<{
+        total: number;
+        created: number;
+        skippedExisting: number;
+        createdSlugs: string[];
+        skippedSlugs: string[];
+        missingHarnesses: Record<string, string[]>;
+    }>;
 }

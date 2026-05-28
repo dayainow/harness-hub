@@ -21,6 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "seed": "prisma db seed",
     "seed-benchmarks": "ts-node -r tsconfig-paths/register prisma/seed-benchmarks.ts",
+    "seed-collections": "ts-node -r tsconfig-paths/register prisma/seed-collections.ts",
     "update-descriptions": "ts-node -r tsconfig-paths/register prisma/update-descriptions.ts",
     "extract-descriptions": "ts-node -r tsconfig-paths/register prisma/extract-descriptions.ts"
   },

@@ -102,4 +102,17 @@ export class HarnessesController {
   async seedBenchmarks() {
     return this.harnessesService.seedBenchmarks();
   }
+
+  // One-shot admin endpoint that mirrors prisma/seed-collections.ts so we can
+  // publish English curated collections on Railway without shelling in.
+  // Idempotent: existing slugs are skipped; missing harness slugs are silently
+  // filtered. Remove once collections are stable in production.
+  @Post('admin/seed-collections')
+  @ApiOperation({
+    summary:
+      '[Admin / temporary] Seed curated English collections (idempotent) from prisma/seed-collections.ts',
+  })
+  seedCollections() {
+    return this.harnessesService.seedCollections();
+  }
 }

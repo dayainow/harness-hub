@@ -8,6 +8,7 @@ import {
 import { Prisma } from '@prisma/client';
 import { HARNESS_DESCRIPTIONS } from '../../prisma/harness-descriptions.generated';
 import { BENCHMARKS as SEED_BENCHMARKS } from '../../prisma/seed-benchmarks';
+import { COLLECTIONS as SEED_COLLECTIONS } from '../../prisma/seed-collections';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateHarnessDto } from './dto/create-harness.dto';
 import {
@@ -126,6 +127,88 @@ export class HarnessesService {
       skippedExisting,
       skippedMissing: missingSlugs.length,
       missingSlugs,
+    };
+  }
+
+  /**
+   * Seed curated English collections from `prisma/seed-collections.ts`.
+   * Idempotent: collections with an existing slug are skipped. Missing harness
+   * slugs are silently filtered out so the call is safe to retry across
+   * environments that ship a different subset of harnesses.
+   */
+  async seedCollections(): Promise<{
+    total: number;
+    created: number;
+    skippedExisting: number;
+    createdSlugs: string[];
+    skippedSlugs: string[];
+    missingHarnesses: Record<string, string[]>;
+  }> {
+    const total = SEED_COLLECTIONS.length;
+    let created = 0;
+    const createdSlugs: string[] = [];
+    const skippedSlugs: string[] = [];
+    const missingHarnesses: Record<string, string[]> = {};
+
+    const curator = await this.prisma.user.findFirst({
+      where: { username: 'harnesshub-curator' },
+      select: { id: true },
+    });
+    if (!curator) {
+      throw new NotFoundException(
+        'Curator user "harnesshub-curator" not found. Run the base seed first.',
+      );
+    }
+
+    for (const col of SEED_COLLECTIONS) {
+      const existing = await this.prisma.collection.findUnique({
+        where: { slug: col.slug },
+      });
+      if (existing) {
+        skippedSlugs.push(col.slug);
+        continue;
+      }
+
+      const harnesses = await this.prisma.harness.findMany({
+        where: { slug: { in: col.harnessSlugs } },
+        select: { id: true, slug: true },
+      });
+      const slugToId = new Map(harnesses.map((h) => [h.slug, h.id]));
+      const missing = col.harnessSlugs.filter((s) => !slugToId.has(s));
+      if (missing.length) {
+        missingHarnesses[col.slug] = missing;
+      }
+      const orderedHarnessIds = col.harnessSlugs
+        .map((slug) => slugToId.get(slug))
+        .filter((id): id is string => Boolean(id));
+
+      await this.prisma.collection.create({
+        data: {
+          slug: col.slug,
+          title: col.title,
+          description: col.description,
+          curatorId: curator.id,
+          isPublic: true,
+          items: {
+            create: orderedHarnessIds.map((harnessId) => ({ harnessId })),
+          },
+        },
+      });
+      created += 1;
+      createdSlugs.push(col.slug);
+    }
+
+    this.logger.log(
+      `seedCollections: created=${created} skippedExisting=${skippedSlugs.length} total=${total}`,
+    );
+
+    return {
+      total,
+      created,
+      skippedExisting: skippedSlugs.length,
+      createdSlugs,
+      skippedSlugs,
+      missingHarnesses,
     };
   }
 

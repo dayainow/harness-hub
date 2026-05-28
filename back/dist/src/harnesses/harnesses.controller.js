@@ -50,6 +50,9 @@ let HarnessesController = class HarnessesController {
     async seedBenchmarks() {
         return this.harnessesService.seedBenchmarks();
     }
+    seedCollections() {
+        return this.harnessesService.seedCollections();
+    }
 };
 exports.HarnessesController = HarnessesController;
 __decorate([
@@ -135,6 +138,15 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], HarnessesController.prototype, "seedBenchmarks", null);
+__decorate([
+    (0, common_1.Post)('admin/seed-collections'),
+    (0, swagger_1.ApiOperation)({
+        summary: '[Admin / temporary] Seed curated English collections (idempotent) from prisma/seed-collections.ts',
+    }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], HarnessesController.prototype, "seedCollections", null);
 exports.HarnessesController = HarnessesController = __decorate([
     (0, swagger_1.ApiTags)('harnesses'),
     (0, common_1.Controller)('harnesses'),
