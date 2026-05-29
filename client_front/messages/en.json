@@ -6,10 +6,19 @@
     "ranking": "Top Ranking",
     "prompts": "Prompts",
     "community": "Community",
-    "submit": "+ Submit Product",
+    "explore": "Explore",
+    "collections": "Collections",
+    "benchmarks": "Benchmarks",
+    "docs": "Docs",
+    "submit": "+ Submit",
     "search": "Search...",
-    "login": "Login with Google",
-    "logout": "Logout"
+    "login": "Sign In",
+    "logout": "Logout",
+    "signIn": "Sign In",
+    "signOut": "Sign Out",
+    "profile": "Profile",
+    "signInWithGoogle": "Continue with Google",
+    "signInWithGitHub": "Continue with GitHub"
   },
   "Home": {
     "heroTag": "An AI Community to Make Life More Creative",

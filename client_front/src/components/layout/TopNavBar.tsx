@@ -226,7 +226,7 @@ export function TopNavBar() {
                     className="text-sm font-bold px-3.5 py-1.5 rounded-lg transition-all inline-flex items-center gap-2"
                     style={{ background: 'linear-gradient(135deg, #00E5FF 0%, #A78BFA 100%)', color: '#0A0E14' }}
                   >
-                    로그인
+                    {t('signIn')}
                   </button>
                   {loginDropdownOpen && (
                     <div
@@ -239,7 +239,7 @@ export function TopNavBar() {
                         style={{ color: 'var(--text)' }}
                       >
                         <GoogleIcon size={16} />
-                        Google로 계속하기
+                        {t('signInWithGoogle')}
                       </button>
                       <button
                         onClick={() => { setLoginDropdownOpen(false); signInWithGitHub(); }}
@@ -247,7 +247,7 @@ export function TopNavBar() {
                         style={{ color: 'var(--text)' }}
                       >
                         <GitHubIcon size={16} />
-                        GitHub로 계속하기
+                        {t('signInWithGitHub')}
                       </button>
                     </div>
                   )}
@@ -344,7 +344,7 @@ export function TopNavBar() {
                         style={{ background: 'linear-gradient(135deg, #00E5FF 0%, #A78BFA 100%)', color: '#0A0E14' }}
                       >
                         <GoogleIcon size={18} />
-                        Google로 계속하기
+                        {t('signInWithGoogle')}
                       </button>
                       <button
                         onClick={() => { setMobileOpen(false); signInWithGitHub(); }}
@@ -352,7 +352,7 @@ export function TopNavBar() {
                         style={{ backgroundColor: 'var(--bg-raised)', color: 'var(--text)', borderColor: 'var(--border)' }}
                       >
                         <GitHubIcon size={18} />
-                        GitHub로 계속하기
+                        {t('signInWithGitHub')}
                       </button>
                     </div>
                   ))}
