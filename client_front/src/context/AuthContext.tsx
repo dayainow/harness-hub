@@ -75,7 +75,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signIn = async () => {
     await supabase.auth.signInWithOAuth({
-      provider: 'github',
+      provider: 'google',
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,
       },

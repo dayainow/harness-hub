@@ -6,31 +6,34 @@ class UgcService {
   /**
    * 1. 프롬프트 목록 조회
    */
-  async getPrompts(params?: GetUgcParams): Promise<{ success: boolean; data?: { data: Prompt[], total?: number }; response?: any; error?: string }> {
-    return await apiService.callWithErrorHandling(
+  async getPrompts(params?: GetUgcParams): Promise<{ success: boolean; data?: { data: Prompt[], total?: number }; error?: string }> {
+    const res = await apiService.callWithErrorHandling<{ data: Prompt[], total?: number }>(
       () => apiService.get(PROMPTS_API.PREFIX, { ...params, admin: true }),
       '프롬프트 목록을 가져오는데 실패했습니다.'
-    ) as any;
+    );
+    return { success: res.success, data: res.response?.data, error: res.finalMessage };
   }
 
   /**
    * 2. 게시글 목록 조회
    */
-  async getPosts(params?: GetUgcParams): Promise<{ success: boolean; data?: { data: Post[], total?: number }; response?: any; error?: string }> {
-    return await apiService.callWithErrorHandling(
+  async getPosts(params?: GetUgcParams): Promise<{ success: boolean; data?: { data: Post[], total?: number }; error?: string }> {
+    const res = await apiService.callWithErrorHandling<{ data: Post[], total?: number }>(
       () => apiService.get(POSTS_API.PREFIX, { ...params, admin: true }),
       '게시글 목록을 가져오는데 실패했습니다.'
-    ) as any;
+    );
+    return { success: res.success, data: res.response?.data, error: res.finalMessage };
   }
 
   /**
    * 3. 실험실 목록 조회
    */
-  async getLabs(params?: { category?: string }): Promise<{ success: boolean; data?: { data: Lab[] }; response?: any; error?: string }> {
-    return await apiService.callWithErrorHandling(
+  async getLabs(params?: { category?: string }): Promise<{ success: boolean; data?: { data: Lab[] }; error?: string }> {
+    const res = await apiService.callWithErrorHandling<{ data: Lab[] }>(
       () => apiService.get(LABS_API.PREFIX, params),
       '실험실 목록을 가져오는데 실패했습니다.'
-    ) as any;
+    );
+    return { success: res.success, data: res.response?.data, error: res.finalMessage };
   }
 
   async deletePrompt(id: string) {

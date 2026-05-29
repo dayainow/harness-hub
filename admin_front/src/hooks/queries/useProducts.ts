@@ -17,8 +17,7 @@ export function useToolsList(params: GetToolsParams = {}) {
     queryFn: async () => {
       const res = await toolService.getTools(params);
       if (!res.success) throw new Error(res.error || 'Failed to fetch products');
-      // NestJS res => { success: true, response: { data: { success: true, data: [...] } } }
-      const responseData = (res as any).response?.data || (res as any).data;
+      const responseData = res.data;
       return Array.isArray(responseData) ? responseData : (responseData?.data || []);
     },
   });
@@ -31,7 +30,7 @@ export function usePendingTools() {
     queryFn: async () => {
       const res = await toolService.getPendingTools();
       if (!res.success) throw new Error(res.error || 'Failed to fetch pending products');
-      const responseData = (res as any).response?.data || (res as any).data;
+      const responseData = res.data;
       return Array.isArray(responseData) ? responseData : (responseData?.data || []);
     },
   });

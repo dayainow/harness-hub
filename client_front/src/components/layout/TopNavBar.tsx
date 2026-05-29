@@ -7,7 +7,7 @@ import { CommandPalette } from '@/components/CommandPalette';
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-function GitHubIcon({ size = 16 }: { size?: number }) {
+function GoogleIcon({ size = 16 }: { size?: number }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -17,7 +17,7 @@ function GitHubIcon({ size = 16 }: { size?: number }) {
       fill="currentColor"
       aria-hidden
     >
-      <path d="M12 .5C5.73.5.75 5.48.75 11.75c0 4.97 3.22 9.18 7.69 10.67.56.1.77-.24.77-.54v-2.05c-3.13.68-3.79-1.32-3.79-1.32-.51-1.3-1.25-1.65-1.25-1.65-1.02-.7.08-.68.08-.68 1.13.08 1.73 1.16 1.73 1.16 1.01 1.72 2.64 1.22 3.28.93.1-.73.39-1.22.71-1.5-2.5-.28-5.13-1.25-5.13-5.58 0-1.23.44-2.24 1.16-3.03-.12-.28-.5-1.43.11-2.98 0 0 .95-.3 3.11 1.16.9-.25 1.86-.37 2.83-.38.96 0 1.93.13 2.83.38 2.16-1.46 3.11-1.16 3.11-1.16.61 1.55.23 2.7.11 2.98.72.79 1.16 1.8 1.16 3.03 0 4.34-2.64 5.29-5.15 5.57.4.34.76 1.02.76 2.05v3.04c0 .3.2.65.78.54 4.47-1.5 7.68-5.7 7.68-10.67C23.25 5.48 18.27.5 12 .5z" />
+      <path d="M12.24 10.285V14.4h6.806c-.275 1.765-2.056 5.174-6.806 5.174-4.095 0-7.439-3.389-7.439-7.574s3.345-7.574 7.439-7.574c2.33 0 3.891.989 4.785 1.849l3.254-3.138C18.189 1.186 15.479 0 12.24 0c-6.635 0-12 5.365-12 12s5.365 12 12 12c6.926 0 11.52-4.869 11.52-11.726 0-.788-.085-1.39-.189-1.989H12.24z" />
     </svg>
   );
 }
@@ -208,7 +208,7 @@ export function TopNavBar() {
                     color: '#0A0E14',
                   }}
                 >
-                  <GitHubIcon size={15} />
+                  <GoogleIcon size={15} />
                   {t('signIn')}
                 </button>
               ))}
@@ -307,7 +307,7 @@ export function TopNavBar() {
                         color: '#0A0E14',
                       }}
                     >
-                      <GitHubIcon size={18} />
+                      <GoogleIcon size={18} />
                       {t('signIn')}
                     </button>
                   ))}
