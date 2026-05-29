@@ -5,9 +5,11 @@
     "benchmarks": "Benchmarks",
     "docs": "Docs",
     "submit": "+ Submit",
-    "signIn": "GitHub로 로그인",
+    "signIn": "로그인",
     "signOut": "로그아웃",
-    "profile": "프로필"
+    "profile": "프로필",
+    "signInWithGoogle": "Google로 계속하기",
+    "signInWithGitHub": "GitHub로 계속하기"
   },
   "Hero": {
     "tagline": "— DISCOVERY ENGINE —",

@@ -5,9 +5,11 @@
     "benchmarks": "Benchmarks",
     "docs": "Docs",
     "submit": "+ Submit",
-    "signIn": "Sign in with GitHub",
+    "signIn": "Sign In",
     "signOut": "Sign out",
-    "profile": "Profile"
+    "profile": "Profile",
+    "signInWithGoogle": "Continue with Google",
+    "signInWithGitHub": "Continue with GitHub"
   },
   "Hero": {
     "tagline": "— DISCOVERY ENGINE —",
