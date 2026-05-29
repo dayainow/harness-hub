@@ -22,12 +22,22 @@ function GoogleIcon({ size = 16 }: { size?: number }) {
   );
 }
 
+function GitHubIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+    </svg>
+  );
+}
+
 export function TopNavBar() {
   const t = useTranslations('Nav');
-  const { user, loading, signIn, signOut } = useAuth();
+  const { user, loading, signIn, signInWithGitHub, signOut } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [loginDropdownOpen, setLoginDropdownOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
+  const loginDropdownRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
   const pathname = usePathname();
   const locale = useLocale();
@@ -45,6 +55,16 @@ export function TopNavBar() {
     document.addEventListener('mousedown', onClick);
     return () => document.removeEventListener('mousedown', onClick);
   }, [menuOpen]);
+
+  // Close login dropdown on outside click
+  useEffect(() => {
+    if (!loginDropdownOpen) return;
+    const onClick = (e: MouseEvent) => {
+      if (!loginDropdownRef.current?.contains(e.target as Node)) setLoginDropdownOpen(false);
+    };
+    document.addEventListener('mousedown', onClick);
+    return () => document.removeEventListener('mousedown', onClick);
+  }, [loginDropdownOpen]);
 
   const avatarUrl =
     (user?.user_metadata?.avatar_url as string | undefined) ||
@@ -200,17 +220,38 @@ export function TopNavBar() {
                   )}
                 </div>
               ) : (
-                <button
-                  onClick={signIn}
-                  className="text-sm font-bold px-3.5 py-1.5 rounded-lg transition-all inline-flex items-center gap-2"
-                  style={{
-                    background: 'linear-gradient(135deg, #00E5FF 0%, #A78BFA 100%)',
-                    color: '#0A0E14',
-                  }}
-                >
-                  <GoogleIcon size={15} />
-                  {t('signIn')}
-                </button>
+                <div className="relative" ref={loginDropdownRef}>
+                  <button
+                    onClick={() => setLoginDropdownOpen((v) => !v)}
+                    className="text-sm font-bold px-3.5 py-1.5 rounded-lg transition-all inline-flex items-center gap-2"
+                    style={{ background: 'linear-gradient(135deg, #00E5FF 0%, #A78BFA 100%)', color: '#0A0E14' }}
+                  >
+                    로그인
+                  </button>
+                  {loginDropdownOpen && (
+                    <div
+                      className="absolute right-0 mt-2 w-52 rounded-xl border shadow-xl overflow-hidden z-50"
+                      style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
+                    >
+                      <button
+                        onClick={() => { setLoginDropdownOpen(false); signIn(); }}
+                        className="flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors hover:bg-[var(--bg-raised)] text-left"
+                        style={{ color: 'var(--text)' }}
+                      >
+                        <GoogleIcon size={16} />
+                        Google로 계속하기
+                      </button>
+                      <button
+                        onClick={() => { setLoginDropdownOpen(false); signInWithGitHub(); }}
+                        className="flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors hover:bg-[var(--bg-raised)] text-left"
+                        style={{ color: 'var(--text)' }}
+                      >
+                        <GitHubIcon size={16} />
+                        GitHub로 계속하기
+                      </button>
+                    </div>
+                  )}
+                </div>
               ))}
             <button
               onClick={() => setMobileOpen((v) => !v)}
@@ -296,20 +337,24 @@ export function TopNavBar() {
                       </button>
                     </>
                   ) : (
-                    <button
-                      onClick={() => {
-                        setMobileOpen(false);
-                        signIn();
-                      }}
-                      className="inline-flex items-center justify-center gap-2 px-4 py-3 mt-4 rounded-xl font-bold w-full"
-                      style={{
-                        background: 'linear-gradient(135deg, #00E5FF 0%, #A78BFA 100%)',
-                        color: '#0A0E14',
-                      }}
-                    >
-                      <GoogleIcon size={18} />
-                      {t('signIn')}
-                    </button>
+                    <div className="flex flex-col gap-3 mt-4">
+                      <button
+                        onClick={() => { setMobileOpen(false); signIn(); }}
+                        className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold w-full"
+                        style={{ background: 'linear-gradient(135deg, #00E5FF 0%, #A78BFA 100%)', color: '#0A0E14' }}
+                      >
+                        <GoogleIcon size={18} />
+                        Google로 계속하기
+                      </button>
+                      <button
+                        onClick={() => { setMobileOpen(false); signInWithGitHub(); }}
+                        className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold w-full border"
+                        style={{ backgroundColor: 'var(--bg-raised)', color: 'var(--text)', borderColor: 'var(--border)' }}
+                      >
+                        <GitHubIcon size={18} />
+                        GitHub로 계속하기
+                      </button>
+                    </div>
                   ))}
               </div>
             </motion.div>
