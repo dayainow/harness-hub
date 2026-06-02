@@ -8,6 +8,7 @@ import { TransformInterceptor } from './common/transform.interceptor';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { BenchmarksModule } from './benchmarks/benchmarks.module';
+import { BookmarksModule } from './bookmarks/bookmarks.module';
 import { CollectionsModule } from './collections/collections.module';
 import { HarnessesModule } from './harnesses/harnesses.module';
 import { PrismaModule } from './prisma/prisma.module';
@@ -48,6 +49,7 @@ import { CrawlerModule } from './crawler/crawler.module';
     CollectionsModule,
     SearchModule,
     UsersModule,
+    BookmarksModule,
   ],
   controllers: [AppController],
   providers: [

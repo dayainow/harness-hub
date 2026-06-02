@@ -12,6 +12,7 @@
     "@ai-sdk/anthropic": "^3.0.71",
     "@ai-sdk/google": "^3.0.64",
     "@ai-sdk/react": "^3.0.170",
+    "@next/third-parties": "^16.2.7",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.1",
     "@supabase/ssr": "^0.10.2",

@@ -1,34 +1,60 @@
-import type { Metadata } from 'next';
-import { Inter, JetBrains_Mono } from 'next/font/google';
-import './globals.css';
-import { Toaster } from 'sonner';
+import type { Metadata } from "next";
+import { Inter, JetBrains_Mono } from "next/font/google";
+import "./globals.css";
+import { Toaster } from "sonner";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-inter',
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
 });
 
 const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-jetbrains-mono',
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-jetbrains-mono",
 });
 
 export const revalidate = 300;
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://harnesshub.kr",
+  ),
   title: {
-    template: '%s | HarnessHub',
-    default: 'HarnessHub - The npm of AI Agent Harnesses',
+    template: "%s | HarnessHub",
+    default: "HarnessHub - The npm of AI Agent Harnesses",
   },
   description:
-    'Discover, install, and share AI agent harnesses. The npm of AI agent harnesses — curated from GitHub.',
+    "Discover, install, and share AI agent harnesses. The npm of AI agent harnesses — curated from GitHub.",
+  openGraph: {
+    title: "HarnessHub - The npm of AI Agent Harnesses",
+    description:
+      "Discover, install, and share AI agent harnesses. Curated from GitHub.",
+    url: "/",
+    siteName: "HarnessHub",
+    locale: "ko_KR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "HarnessHub",
+    description: "The npm of AI Agent Harnesses",
+  },
+  verification: {
+    // other: { 'naver-site-verification': ['your-naver-verification-code'] }, // 네이버 웹마스터도구 소유권 확인 코드
+  },
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ko" className={`dark sm:scroll-smooth ${inter.variable} ${jetbrainsMono.variable}`}>
+    <html
+      lang="ko"
+      className={`dark sm:scroll-smooth ${inter.variable} ${jetbrainsMono.variable}`}
+    >
       <head>
         <link
           rel="preload"
@@ -46,10 +72,13 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       </head>
       <body
         className="min-h-screen antialiased flex flex-col font-sans"
-        style={{ background: 'var(--bg)', color: 'var(--text)' }}
+        style={{ background: "var(--bg)", color: "var(--text)" }}
       >
         {children}
         <Toaster theme="dark" position="bottom-right" richColors />
+        {process.env.NEXT_PUBLIC_GA_ID && (
+          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+        )}
       </body>
     </html>
   );

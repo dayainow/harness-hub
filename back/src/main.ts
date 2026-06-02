@@ -28,6 +28,8 @@ async function bootstrap() {
       /^https:\/\/harness-.*\.vercel\.app$/,
       /^https:\/\/clientfront.*\.vercel\.app$/,
       /^https:\/\/.*\.onrender\.com$/,
+      'https://harnesshub.kr',
+      'https://www.harnesshub.kr',
     ],
     credentials: true,
   });
