@@ -7,14 +7,14 @@ datasource db {
 }
 
 model User {
-  id          String       @id @default(uuid())
-  email       String       @unique
-  username    String       @unique
+  id          String            @id @default(uuid())
+  email       String            @unique
+  username    String            @unique
   name        String?
   avatarUrl   String?
-  role        UserRole     @default(USER)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  role        UserRole          @default(USER)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
   reviews     Review[]
   collections Collection[]
   bookmarks   HarnessBookmark[]
@@ -27,36 +27,41 @@ enum UserRole {
 }
 
 model Harness {
-  id             String        @id @default(uuid())
-  slug           String        @unique  // e.g. "princeton-nlp/SWE-agent"
+  id             String          @id @default(uuid())
+  slug           String          @unique // e.g. "princeton-nlp/SWE-agent"
   name           String
   orgName        String
-  repoUrl        String        @unique
+  repoUrl        String          @unique
   description    String
-  readmeExcerpt  String?       @db.Text
-  stars          Int           @default(0)
-  forks          Int           @default(0)
-  issuesOpen     Int           @default(0)
+  readmeExcerpt  String?         @db.Text
+  stars          Int             @default(0)
+  forks          Int             @default(0)
+  issuesOpen     Int             @default(0)
   latestVersion  String?
   lastUpdated    DateTime?
-  license        String?       // SPDX ID e.g. "MIT"
-  licenseTier    LicenseTier   @default(GREEN)
+  license        String? // SPDX ID e.g. "MIT"
+  licenseTier    LicenseTier     @default(GREEN)
   languages      String[]
   category       HarnessCategory @default(OTHER)
-  modelCompat    String[]      // e.g. ["claude-sonnet-4-6", "gpt-4o"]
+  modelCompat    String[] // e.g. ["claude-sonnet-4-6", "gpt-4o"]
   tags           String[]
-  verified       Boolean       @default(false)
-  featured       Boolean       @default(false)
-  status         HarnessStatus @default(ACTIVE)
+  verified       Boolean         @default(false)
+  featured       Boolean         @default(false)
+  status         HarnessStatus   @default(ACTIVE)
   installCmd     String?
-  downloadsCount Int           @default(0)
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  downloadsCount Int             @default(0)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
 
-  benchmarks     Benchmark[]
-  reviews        Review[]
-  bookmarks      HarnessBookmark[]
+  benchmarks      Benchmark[]
+  reviews         Review[]
+  bookmarks       HarnessBookmark[]
   collectionItems CollectionItem[]
+
+  @@index([createdAt])
+  @@index([stars])
+  @@index([downloadsCount])
+  @@index([category])
 }
 
 enum LicenseTier {
@@ -86,9 +91,9 @@ enum HarnessCategory {
 model Benchmark {
   id        String   @id @default(uuid())
   harnessId String
-  name      String   // "SWE-bench Verified", "SWE-bench Lite", "MLE-bench"
+  name      String // "SWE-bench Verified", "SWE-bench Lite", "MLE-bench"
   score     Float
-  model     String   // e.g. "claude-sonnet-4-6"
+  model     String // e.g. "claude-sonnet-4-6"
   date      DateTime
   createdAt DateTime @default(now())
 
@@ -99,9 +104,9 @@ model Review {
   id           String   @id @default(uuid())
   harnessId    String
   userId       String
-  rating       Int      // 1-5
+  rating       Int // 1-5
   body         String
-  usageContext String?  // e.g. "Used for automated PR review"
+  usageContext String? // e.g. "Used for automated PR review"
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -121,7 +126,7 @@ model Collection {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  curator User            @relation(fields: [curatorId], references: [id], onDelete: Cascade)
+  curator User             @relation(fields: [curatorId], references: [id], onDelete: Cascade)
   items   CollectionItem[]
 }
 

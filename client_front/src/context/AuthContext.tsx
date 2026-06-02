@@ -25,7 +25,7 @@ const AuthContext = createContext<AuthContextType>({
 // 모듈 스코프에서 한 번만 생성하여 렌더링 시 재생성 방지
 const supabase = createClient();
 
-async function syncUserToDB(session: Session): Promise<void> {
+async function syncUserToDB(session: Session, retries = 2): Promise<void> {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   if (!apiUrl) {
     if (typeof window !== 'undefined') {
@@ -34,15 +34,21 @@ async function syncUserToDB(session: Session): Promise<void> {
     return;
   }
   try {
-    await fetch(`${apiUrl}/users/sync`, {
+    const res = await fetch(`${apiUrl}/users/sync`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${session.access_token}`,
         'Content-Type': 'application/json',
       },
     });
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+    }
   } catch (err) {
-    console.warn('[AuthContext] Failed to sync user to backend:', err);
+    console.warn(`[AuthContext] Failed to sync user to backend (${retries} retries left):`, err);
+    if (retries > 0) {
+      setTimeout(() => syncUserToDB(session, retries - 1), 2000);
+    }
   }
 }
 

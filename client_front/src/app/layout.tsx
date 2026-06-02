@@ -31,6 +31,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="ko" className={`dark sm:scroll-smooth ${inter.variable} ${jetbrainsMono.variable}`}>
       <head>
         <link
+          rel="preload"
+          as="style"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+        />
+        <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
         />
