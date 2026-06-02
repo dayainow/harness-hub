@@ -186,6 +186,20 @@ export function TopNavBar() {
                         </p>
                       </div>
                       <Link
+                        href="/my-toolbox"
+                        onClick={() => setMenuOpen(false)}
+                        className="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors hover:bg-[var(--bg-raised)]"
+                        style={{ color: 'var(--text-2)' }}
+                      >
+                        <span
+                          className="material-symbols-outlined"
+                          style={{ fontSize: 18, color: 'var(--text-3)' }}
+                        >
+                          bookmark
+                        </span>
+                        {t('myToolbox')}
+                      </Link>
+                      <Link
                         href="/profile"
                         onClick={() => setMenuOpen(false)}
                         className="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors hover:bg-[var(--bg-raised)]"
@@ -315,6 +329,15 @@ export function TopNavBar() {
                 {!loading &&
                   (user ? (
                     <>
+                      <Link
+                        href="/my-toolbox"
+                        onClick={() => setMobileOpen(false)}
+                        className="flex items-center gap-3"
+                        style={{ color: 'var(--text-2)' }}
+                      >
+                        <span className="material-symbols-outlined">bookmark</span>
+                        {t('myToolbox')}
+                      </Link>
                       <Link
                         href="/profile"
                         onClick={() => setMobileOpen(false)}

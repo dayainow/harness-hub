@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { useAuth } from '@/context/AuthContext';
-import { getBookmarkStatus, toggleBookmark, type Harness } from '@/lib/api';
+import { useBookmark } from '@/hooks/useBookmark';
+import { type Harness } from '@/lib/api';
 import { toast } from 'sonner';
 
 interface Props {
@@ -14,20 +14,12 @@ interface Props {
 export function InstallBox({ harness, initialBookmarked = false }: Props) {
   const t = useTranslations('Detail');
   const tCommon = useTranslations('Common');
-  const { session } = useAuth();
 
   const [copied, setCopied] = useState(false);
-  const [bookmarked, setBookmarked] = useState<boolean>(initialBookmarked);
-  const [bookmarking, setBookmarking] = useState(false);
-
-  // 마운트 후 실제 북마크 상태 동기화
-  useEffect(() => {
-    const token = session?.access_token;
-    if (!token) return;
-    getBookmarkStatus(harness.slug, token)
-      .then((status) => setBookmarked(status))
-      .catch(() => { /* 실패 시 initialBookmarked 유지 */ });
-  }, [harness.slug, session?.access_token]);
+  const { bookmarked, toggle, loading: bookmarking } = useBookmark(harness.id, {
+    initialBookmarked,
+    onLoginRequired: () => window.alert(t('bookmarkLoginRequired')),
+  });
 
   const installCmd = harness.installCmd ?? `pip install ${harness.name.toLowerCase()}`;
 
@@ -39,30 +31,6 @@ export function InstallBox({ harness, initialBookmarked = false }: Props) {
       setTimeout(() => setCopied(false), 1500);
     } catch {
       toast.error('Failed to copy');
-    }
-  };
-
-  const onBookmark = async () => {
-    const token = session?.access_token;
-    if (!token) {
-      window.alert(t('bookmarkLoginRequired'));
-      return;
-    }
-    if (bookmarking) return;
-
-    // Optimistic update
-    const prev = bookmarked;
-    setBookmarked(!prev);
-    setBookmarking(true);
-    try {
-      const result = await toggleBookmark(harness.slug, token);
-      setBookmarked(result.bookmarked);
-    } catch (err) {
-      // Roll back on failure
-      console.warn('[InstallBox] Failed to toggle bookmark:', err);
-      setBookmarked(prev);
-    } finally {
-      setBookmarking(false);
     }
   };
 
@@ -108,7 +76,7 @@ export function InstallBox({ harness, initialBookmarked = false }: Props) {
       <div className="flex gap-2">
         <button
           type="button"
-          onClick={onBookmark}
+          onClick={toggle}
           disabled={bookmarking}
           aria-pressed={bookmarked}
           aria-label={bookmarked ? t('bookmarked') : t('bookmark')}

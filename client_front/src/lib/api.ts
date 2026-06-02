@@ -2,6 +2,14 @@
  * HarnessHub API client.
  * Base URL is configured via NEXT_PUBLIC_API_URL (already includes the /api suffix).
  */
+import type {
+  ApiResponse,
+  BookmarkAddResult,
+  BookmarkRemoveResult,
+  BookmarkStatus,
+  BookmarkMyList,
+} from '@/types/bookmark';
+
 export const API_BASE =
   process.env.NEXT_PUBLIC_API_URL ?? (process.env.NODE_ENV === 'production' ? 'https://harness-hub-api-production.up.railway.app/api' : 'http://localhost:3002/api');
 
@@ -230,13 +238,7 @@ export interface MeUser {
   createdAt?: string;
 }
 
-export interface BookmarkItem {
-  id: string;
-  createdAt: string;
-  harness: Harness;
-}
-
-function authHeaders(token: string): HeadersInit {
+export function authHeaders(token: string): HeadersInit {
   return {
     Authorization: `Bearer ${token}`,
     'Content-Type': 'application/json',
@@ -258,55 +260,91 @@ export async function getMe(token: string): Promise<MeUser | null> {
   }
 }
 
-export async function getMyBookmarks(token: string): Promise<BookmarkItem[]> {
-  try {
-    const res = await fetch(`${API_BASE}/users/me/bookmarks`, {
-      method: 'GET',
-      headers: authHeaders(token),
-      signal: AbortSignal.timeout(DEFAULT_TIMEOUT_MS),
-      cache: 'no-store',
-    });
-    if (!res.ok) return [];
-    const data = (await res.json()) as BookmarkItem[] | { items: BookmarkItem[] };
-    return Array.isArray(data) ? data : (data.items ?? []);
-  } catch {
-    return [];
-  }
+// ── Bookmarks module (`/api/bookmarks/*`) ─────────────────────────────────────
+// All endpoints require `Authorization: Bearer <supabase access_token>` and
+// return the global `{ statusCode, message, data }` envelope. The helpers below
+// unwrap `.data`. `harnessId` is the Harness UUID (Harness.id), NOT the slug.
+
+/** Unwrap the `{ statusCode, message, data }` envelope. */
+function unwrap<T>(body: ApiResponse<T>): T {
+  return body.data;
 }
 
 /**
- * Toggle bookmark for a harness (requires authenticated Supabase token).
- * `slug` must be the harness "org/name" slug.
+ * POST /api/bookmarks/:harnessId — add a bookmark.
+ * The backend responds 409 if it is already bookmarked; we normalize that to a
+ * successful `{ bookmarked: true }` so the UI stays idempotent.
  */
-export async function toggleBookmark(
-  slug: string,
+export async function addBookmark(
+  harnessId: string,
   token: string,
-): Promise<{ bookmarked: boolean }> {
-  const res = await fetch(`${API_BASE}/harnesses/${slug}/bookmark`, {
+): Promise<BookmarkAddResult> {
+  const res = await fetch(`${API_BASE}/bookmarks/${harnessId}`, {
     method: 'POST',
     headers: authHeaders(token),
     signal: AbortSignal.timeout(DEFAULT_TIMEOUT_MS),
   });
-  if (!res.ok) {
-    throw new Error(`Failed to toggle bookmark (${res.status})`);
+  if (res.status === 409) {
+    return { bookmarked: true, id: '' };
   }
-  return (await res.json()) as { bookmarked: boolean };
+  if (!res.ok) {
+    throw new Error(`Failed to add bookmark (${res.status})`);
+  }
+  return unwrap((await res.json()) as ApiResponse<BookmarkAddResult>);
 }
 
 /**
- * Returns whether the current user has bookmarked the given harness slug.
- * Resolves to `false` on any error (including unauthenticated state).
+ * DELETE /api/bookmarks/:harnessId — remove a bookmark.
+ * The backend responds 404 if it was not bookmarked; we normalize that to a
+ * successful `{ bookmarked: false }`.
  */
-export async function getBookmarkStatus(
-  slug: string,
+export async function removeBookmark(
+  harnessId: string,
   token: string,
-): Promise<boolean> {
-  try {
-    const items = await getMyBookmarks(token);
-    return items.some((b) => b.harness?.slug === slug);
-  } catch {
-    return false;
+): Promise<BookmarkRemoveResult> {
+  const res = await fetch(`${API_BASE}/bookmarks/${harnessId}`, {
+    method: 'DELETE',
+    headers: authHeaders(token),
+    signal: AbortSignal.timeout(DEFAULT_TIMEOUT_MS),
+  });
+  if (res.status === 404) {
+    return { bookmarked: false };
   }
+  if (!res.ok) {
+    throw new Error(`Failed to remove bookmark (${res.status})`);
+  }
+  return unwrap((await res.json()) as ApiResponse<BookmarkRemoveResult>);
+}
+
+/** GET /api/bookmarks/check/:harnessId — is this harness bookmarked by me? */
+export async function checkBookmark(
+  harnessId: string,
+  token: string,
+): Promise<BookmarkStatus> {
+  const res = await fetch(`${API_BASE}/bookmarks/check/${harnessId}`, {
+    method: 'GET',
+    headers: authHeaders(token),
+    signal: AbortSignal.timeout(DEFAULT_TIMEOUT_MS),
+    cache: 'no-store',
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to check bookmark (${res.status})`);
+  }
+  return unwrap((await res.json()) as ApiResponse<BookmarkStatus>);
+}
+
+/** GET /api/bookmarks/my — list of the current user's bookmarks (harness included). */
+export async function getMyBookmarks(token: string): Promise<BookmarkMyList> {
+  const res = await fetch(`${API_BASE}/bookmarks/my`, {
+    method: 'GET',
+    headers: authHeaders(token),
+    signal: AbortSignal.timeout(DEFAULT_TIMEOUT_MS),
+    cache: 'no-store',
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to load bookmarks (${res.status})`);
+  }
+  return unwrap((await res.json()) as ApiResponse<BookmarkMyList>);
 }
 
 export interface SubmitHarnessPayload {

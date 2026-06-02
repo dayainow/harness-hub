@@ -4,12 +4,8 @@ import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
 import { useAuth } from '@/context/AuthContext';
-import {
-  getMe,
-  getMyBookmarks,
-  type MeUser,
-  type BookmarkItem,
-} from '@/lib/api';
+import { getMe, getMyBookmarks, type MeUser } from '@/lib/api';
+import type { BookmarkMyItem } from '@/types/bookmark';
 import { HarnessCard } from '@/components/HarnessCard';
 
 export default function ProfilePage() {
@@ -18,7 +14,7 @@ export default function ProfilePage() {
   const router = useRouter();
 
   const [me, setMe] = useState<MeUser | null>(null);
-  const [bookmarks, setBookmarks] = useState<BookmarkItem[]>([]);
+  const [bookmarks, setBookmarks] = useState<BookmarkMyItem[]>([]);
   const [fetched, setFetched] = useState(false);
 
   // Redirect if not authenticated
@@ -31,7 +27,10 @@ export default function ProfilePage() {
     const token = session?.access_token;
     if (!token) return;
     let cancelled = false;
-    Promise.all([getMe(token), getMyBookmarks(token)])
+    Promise.all([
+      getMe(token).catch(() => null),
+      getMyBookmarks(token).catch(() => []),
+    ])
       .then(([profile, items]) => {
         if (cancelled) return;
         setMe(profile);

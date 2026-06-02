@@ -8,6 +8,7 @@
     "signIn": "Sign In",
     "signOut": "Sign out",
     "profile": "Profile",
+    "myToolbox": "My Toolbox",
     "signInWithGoogle": "Continue with Google",
     "signInWithGitHub": "Continue with GitHub"
   },
@@ -99,6 +100,13 @@
     "noBookmarks": "No bookmarked harnesses yet.",
     "myProfile": "My Profile",
     "signOut": "Sign Out"
+  },
+  "MyToolbox": {
+    "title": "My Toolbox",
+    "subtitle": "Harnesses you've bookmarked, all in one place.",
+    "count": "{count} saved",
+    "empty": "No bookmarked tools yet.",
+    "emptyHint": "Tap the bookmark icon on any harness to save it here."
   },
   "Common": {
     "verified": "Verified",

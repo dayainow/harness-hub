@@ -8,6 +8,7 @@
     "signIn": "로그인",
     "signOut": "로그아웃",
     "profile": "프로필",
+    "myToolbox": "내 도구함",
     "signInWithGoogle": "Google로 계속하기",
     "signInWithGitHub": "GitHub로 계속하기"
   },
@@ -99,6 +100,13 @@
     "noBookmarks": "북마크한 하네스가 없습니다.",
     "myProfile": "내 프로필",
     "signOut": "로그아웃"
+  },
+  "MyToolbox": {
+    "title": "내 도구함",
+    "subtitle": "북마크한 하네스를 한 곳에서 모아보세요.",
+    "count": "{count}개 저장됨",
+    "empty": "아직 북마크한 도구가 없어요.",
+    "emptyHint": "하네스의 북마크 아이콘을 눌러 여기에 저장하세요."
   },
   "Common": {
     "verified": "검증됨",
