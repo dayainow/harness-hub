@@ -93,7 +93,14 @@
     "stats": "Stats",
     "install": "Install",
     "installCmd": "Install Command",
-    "bookmarkLoginRequired": "Sign in to bookmark harnesses."
+    "bookmarkLoginRequired": "Sign in to bookmark harnesses.",
+    "aiGuide": "AI Guide",
+    "aiGuideSummary": "Summary",
+    "aiGuidePurpose": "Purpose",
+    "aiGuideHowTo": "How to Use",
+    "aiGuidePros": "Pros",
+    "aiGuideCons": "Limitations",
+    "aiGuideUseCases": "When to Use"
   },
   "Profile": {
     "bookmarks": "Bookmarks",

@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import { getHarness, CATEGORY_META, formatNumber, relativeTime } from '@/lib/api';
 import { LicenseBadge } from '@/components/LicenseBadge';
+import { AiGuideSection } from '@/components/AiGuideSection';
 import { InstallBox } from './InstallBox';
 import ReactMarkdown from 'react-markdown';
 
@@ -231,6 +232,9 @@ export default async function HarnessDetailPage({ params }: PageProps) {
               </div>
             </section>
           )}
+
+          {/* AI Guide */}
+          <AiGuideSection aiGuide={harness.aiGuide} />
 
           {/* README */}
           <section>

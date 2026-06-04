@@ -47,6 +47,13 @@ export interface Harness {
   featured: boolean;
   installCmd: string | null;
   downloadsCount: number;
+  /**
+   * AI-generated Korean usage guide, stored as a JSON string (`@db.Text`).
+   * Parse with `parseAiGuide()` from `@/types/aiGuide`. Null until generated.
+   */
+  aiGuide?: string | null;
+  /** ISO timestamp of when `aiGuide` was last generated. Null until generated. */
+  aiGuideGeneratedAt?: string | null;
   createdAt: string;
   updatedAt: string;
   benchmarks?: Benchmark[];
