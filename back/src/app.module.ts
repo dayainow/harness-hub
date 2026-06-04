@@ -17,12 +17,14 @@ import { SearchModule } from './search/search.module';
 import { UsersModule } from './users/users.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CrawlerModule } from './crawler/crawler.module';
+import { AiGuideModule } from './ai-guide/ai-guide.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     ScheduleModule.forRoot(),
     CrawlerModule,
+    AiGuideModule,
     CacheModule.register({
       isGlobal: true,
       ttl: 300000, // 5 minutes default

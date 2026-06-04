@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../prisma/prisma.service';
+import { AiGuideService } from '../ai-guide/ai-guide.service';
 import { LicenseTier, HarnessStatus } from '@prisma/client';
 
 @Injectable()
@@ -11,6 +12,7 @@ export class CrawlerService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly configService: ConfigService,
+    private readonly aiGuideService: AiGuideService,
   ) {}
 
   private classifyLicense(spdxId: string | null): LicenseTier {
@@ -122,6 +124,22 @@ export class CrawlerService {
         // Simple plain text extraction for excerpt (removing markdown)
         const plainText = decodedReadme.replace(/[#*`_\[\]()]/g, '').trim();
         readmeExcerpt = plainText.substring(0, 200) + (plainText.length > 200 ? '...' : '');
+
+        // README full text 확보 후 aiGuide 생성 (없을 때만)
+        if (!harness.aiGuide) {
+          const fullReadme = decodedReadme; // 이미 디코딩된 텍스트
+          try {
+            const guide = await this.aiGuideService.generateGuide(harness, fullReadme);
+            if (guide) {
+              await this.prisma.harness.update({
+                where: { id: harness.id },
+                data: { aiGuide: guide, aiGuideGeneratedAt: new Date() },
+              });
+            }
+          } catch (e) {
+            this.logger.warn(`AI guide generation failed for ${harness.slug}`);
+          }
+        }
       }
     }
 
