@@ -79,6 +79,7 @@ export default function ExploreClient({ initialData, initialQuery }: Props) {
   const [search, setSearch] = useState(initialQuery.search ?? '');
   const [sort, setSort] = useState<QueryParams['sort']>(initialQuery.sort ?? 'stars');
   const [page, setPage] = useState(initialQuery.page ?? 1);
+  const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
 
   // Active filter pills
   const activeFilters = useMemo(() => {
@@ -179,7 +180,7 @@ export default function ExploreClient({ initialData, initialQuery }: Props) {
       <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8">
         {/* Sidebar */}
         <aside
-          className="rounded-2xl border p-5 self-start sticky top-20"
+          className={`rounded-2xl border p-5 self-start sticky top-20 ${mobileFilterOpen ? 'block' : 'hidden'} lg:block`}
           style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
         >
           <div className="flex items-center justify-between mb-5">
@@ -258,6 +259,15 @@ export default function ExploreClient({ initialData, initialQuery }: Props) {
               label={t('featured')}
             />
           </FilterGroup>
+
+          {/* 모바일: 결과 보기 버튼 */}
+          <button
+            className="lg:hidden w-full mt-4 py-3 rounded-xl text-sm font-bold"
+            style={{ background: 'linear-gradient(135deg, #00E5FF 0%, #A78BFA 100%)', color: '#0A0E14' }}
+            onClick={() => setMobileFilterOpen(false)}
+          >
+            {t('results', { count: data.pagination.total })} 보기
+          </button>
         </aside>
 
         {/* Main */}
@@ -275,6 +285,22 @@ export default function ExploreClient({ initialData, initialQuery }: Props) {
               </p>
             </div>
 
+            <div className="flex items-center gap-2">
+            {/* 모바일: 필터 토글 버튼 */}
+            <button
+              className="lg:hidden inline-flex items-center gap-1.5 text-sm font-medium px-3 py-1.5 rounded-lg border"
+              style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)', color: 'var(--text-2)' }}
+              onClick={() => setMobileFilterOpen(true)}
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: 16 }}>tune</span>
+              {t('filters')}
+              {activeFilters.length > 0 && (
+                <span className="w-4 h-4 rounded-full text-[10px] font-bold flex items-center justify-center"
+                  style={{ background: 'var(--accent)', color: '#0A0E14' }}>
+                  {activeFilters.length}
+                </span>
+              )}
+            </button>
             <div
               className="flex items-center gap-2 rounded-lg border px-2 py-1"
               style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
@@ -300,6 +326,7 @@ export default function ExploreClient({ initialData, initialQuery }: Props) {
                   </option>
                 ))}
               </select>
+            </div>
             </div>
           </div>
 
