@@ -11,15 +11,17 @@
 GitHub (dayainow/harness-hub)
   └─ push to main
         ├─ Vercel  → 프론트엔드  (client_front/)
-        └─ Railway → 백엔드 API  (back/)
+        └─ Render  → 백엔드 API  (back/)
                           │
                     Supabase PostgreSQL (DB + Auth)
+
+cron-job.org → POST /api/crawler/sync/all (12시간마다, Render 슬립 방지 겸용)
 ```
 
 | 서비스 | 플랫폼 | URL | 루트 디렉토리 |
 |--------|--------|-----|--------------|
 | 프론트엔드 | Vercel (dayainow 계정) | `clientfront-ebon.vercel.app` | `client_front/` |
-| 백엔드 API | Railway | `harness-hub-api-production.up.railway.app` | `back/` |
+| 백엔드 API | Render (Free) | `ola-backend-9f03.onrender.com` | `back/` |
 | 데이터베이스 | Supabase PostgreSQL | `jluzkhyhfqkfuxqmpsqe.supabase.co` | — |
 
 ---
@@ -50,24 +52,24 @@ Vercel 대시보드 → Project Settings → Environment Variables에서 설정.
 
 ---
 
-## 백엔드 API — Railway
+## 백엔드 API — Render
 
 ### 배포 트리거
-`main` 브랜치에 push하면 Railway가 자동 재배포.
+`main` 브랜치에 push하면 Render가 자동 재배포.
 
-### Railway 대시보드 설정 (중요)
-Railway 서비스 설정 → **Root Directory = `back`** 로 반드시 설정되어 있어야 한다.
-이 설정이 없으면 빌드가 루트에서 실행되어 실패한다.
+### Render 대시보드 설정 (중요)
+Render 서비스 설정 → **Root Directory = `back`** 로 반드시 설정.
 
-### Railway 환경변수
-Railway 대시보드 → Service → Variables에서 설정.
+### Render 환경변수
+Render 대시보드 → Service → Environment에서 설정.
 
 | 변수 | 설명 |
 |------|------|
 | `DATABASE_URL` | Supabase connection pooler URL (포트 6543) |
 | `DIRECT_URL` | Supabase direct connection URL (포트 5432, 마이그레이션용) |
 | `GITHUB_TOKEN` | GitHub PAT — 크롤링 엔진용 (rate limit 해제) |
-| `PORT` | Railway가 자동 주입 (기본 3002) |
+| `GROQ_API_KEY` | Groq API 키 — AI 가이드 생성용 (무료: console.groq.com) |
+| `PORT` | Render가 자동 주입 (기본 3002) |
 
 ### 빌드 파이프라인
 ```
@@ -82,7 +84,15 @@ node dist/src/main.js
 ```
 
 ### 헬스체크
-`GET /api/health` — Railway가 30초 타임아웃으로 확인.
+`GET /api/health`
+
+### ⚠️ Render Free 플랜 주의사항
+Render Free는 15분 비활성 시 슬립 → NestJS `@Cron` 잡이 실행되지 않음.
+**해결책: cron-job.org에서 외부 크론으로 직접 API 호출**
+- URL: `https://ola-backend-9f03.onrender.com/api/crawler/sync/all`
+- Method: POST
+- Schedule: `0 */12 * * *` (12시간마다)
+- 이 호출이 서비스를 깨우는 동시에 크롤링도 실행함
 
 ### 핵심 주의사항: Prisma 7 pglite 버그
 Prisma 7.7.0은 존재하지 않는 npm 패키지 `@electric-sql/pglite-products@0.3.1`에 의존한다.
@@ -94,7 +104,7 @@ Prisma 7.7.0은 존재하지 않는 npm 패키지 `@electric-sql/pglite-products
 }
 ```
 
-이 overrides가 없으면 Railway 빌드가 404 에러로 실패한다.
+이 overrides가 없으면 Render 빌드가 404 에러로 실패한다.
 
 ---
 
