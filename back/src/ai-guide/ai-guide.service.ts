@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import Anthropic from '@anthropic-ai/sdk';
+import Groq from 'groq-sdk';
 import { PrismaService } from '../prisma/prisma.service';
 import { Harness } from '@prisma/client';
 
-const AI_GUIDE_MODEL = 'claude-haiku-4-5-20251001';
+const AI_GUIDE_MODEL = 'llama-3.3-70b-versatile';
 const README_MAX_CHARS = 3000;
 const INTER_HARNESS_DELAY_MS = 1000;
 
@@ -30,25 +30,25 @@ const SYSTEM_PROMPT = `당신은 AI 하네스(에이전트 도구)를 분석하�
 @Injectable()
 export class AiGuideService {
   private readonly logger = new Logger(AiGuideService.name);
-  private client: Anthropic | null = null;
+  private client: Groq | null = null;
 
   constructor(
     private readonly prisma: PrismaService,
     private readonly configService: ConfigService,
   ) {}
 
-  private getClient(): Anthropic | null {
+  private getClient(): Groq | null {
     if (this.client) {
       return this.client;
     }
-    const apiKey = this.configService.get<string>('ANTHROPIC_API_KEY');
+    const apiKey = this.configService.get<string>('GROQ_API_KEY');
     if (!apiKey) {
       this.logger.warn(
-        'ANTHROPIC_API_KEY is missing. AI guide generation is disabled.',
+        'GROQ_API_KEY is missing. AI guide generation is disabled.',
       );
       return null;
     }
-    this.client = new Anthropic({ apiKey });
+    this.client = new Groq({ apiKey });
     return this.client;
   }
 
@@ -72,17 +72,11 @@ export class AiGuideService {
     }
 
     try {
-      const response = await client.messages.create({
+      const response = await client.chat.completions.create({
         model: AI_GUIDE_MODEL,
         max_tokens: 2048,
-        system: [
-          {
-            type: 'text',
-            text: SYSTEM_PROMPT,
-            cache_control: { type: 'ephemeral' },
-          },
-        ],
         messages: [
+          { role: 'system', content: SYSTEM_PROMPT },
           {
             role: 'user',
             content: `하네스 이름: ${harness.name}\n조직: ${harness.orgName}\n설명: ${harness.description}\n\n--- README ---\n${readme}`,
@@ -90,11 +84,7 @@ export class AiGuideService {
         ],
       });
 
-      const text = response.content
-        .filter((block) => block.type === 'text')
-        .map((block) => (block as { text: string }).text)
-        .join('')
-        .trim();
+      const text = (response.choices[0]?.message?.content ?? '').trim();
 
       const guide = this.parseGuideJson(text);
       if (!guide) {
