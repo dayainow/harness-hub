@@ -20,7 +20,7 @@ export async function AiGuideSection({ aiGuide }: Props) {
   return (
     <section className="mb-10">
       <h2 className="text-lg font-bold mb-4 flex items-center gap-2" style={{ color: 'var(--text)' }}>
-        <span aria-hidden>🤖</span>
+        <span aria-hidden>📖</span>
         {t('aiGuide')}
       </h2>
 
