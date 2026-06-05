@@ -178,20 +178,43 @@ export default function ExploreClient({ initialData, initialQuery }: Props) {
   return (
     <div className="max-w-[1440px] mx-auto px-6 py-10">
       <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8">
+        {/* 모바일 오버레이 배경 */}
+        {mobileFilterOpen && (
+          <div
+            className="lg:hidden fixed inset-0 z-40 bg-black/60"
+            onClick={() => setMobileFilterOpen(false)}
+          />
+        )}
+
         {/* Sidebar */}
         <aside
-          className={`rounded-2xl border p-5 self-start sticky top-20 ${mobileFilterOpen ? 'block' : 'hidden'} lg:block`}
+          className={`
+            lg:rounded-2xl lg:border lg:p-5 lg:self-start lg:sticky lg:top-20 lg:block
+            ${mobileFilterOpen
+              ? 'fixed inset-x-0 bottom-0 z-50 rounded-t-2xl border-t overflow-y-auto max-h-[85vh] p-5'
+              : 'hidden lg:block'}
+          `}
           style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
         >
           <div className="flex items-center justify-between mb-5">
             <p className="font-mono-code text-xs uppercase tracking-widest" style={{ color: 'var(--text-3)' }}>
               {t('filters')}
             </p>
-            {activeFilters.length > 0 && (
-              <button onClick={clearAll} className="text-xs font-medium" style={{ color: 'var(--accent)' }}>
-                {t('clear')}
+            <div className="flex items-center gap-3">
+              {activeFilters.length > 0 && (
+                <button onClick={clearAll} className="text-xs font-medium" style={{ color: 'var(--accent)' }}>
+                  {t('clear')}
+                </button>
+              )}
+              {/* 모바일 닫기 버튼 */}
+              <button
+                className="lg:hidden inline-flex items-center gap-1.5 text-sm font-bold px-3 py-1 rounded-lg"
+                style={{ background: 'linear-gradient(135deg, #00E5FF 0%, #A78BFA 100%)', color: '#0A0E14' }}
+                onClick={() => setMobileFilterOpen(false)}
+              >
+                {t('results', { count: data.pagination.total })} 보기
               </button>
-            )}
+            </div>
           </div>
 
           <FilterGroup label={t('category')}>
@@ -260,14 +283,6 @@ export default function ExploreClient({ initialData, initialQuery }: Props) {
             />
           </FilterGroup>
 
-          {/* 모바일: 결과 보기 버튼 */}
-          <button
-            className="lg:hidden w-full mt-4 py-3 rounded-xl text-sm font-bold"
-            style={{ background: 'linear-gradient(135deg, #00E5FF 0%, #A78BFA 100%)', color: '#0A0E14' }}
-            onClick={() => setMobileFilterOpen(false)}
-          >
-            {t('results', { count: data.pagination.total })} 보기
-          </button>
         </aside>
 
         {/* Main */}
