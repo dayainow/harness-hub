@@ -111,7 +111,7 @@ harnesshub install princeton-nlp/SWE-agent
 ---
 
 ## 🚀 Production Deployment
-- **Frontend URL:** [https://client-front-one.vercel.app](https://vercel.com/dayainows-projects/client_front)
+- **Frontend URL:** [https://harnesshub.kr/](https://harnesshub.kr/)
 - **Backend API:** [https://harness-hub-api-production.up.railway.app](https://harness-hub-api-production.up.railway.app)
 - Both environments are securely connected, allowing the CLI and Frontend to consume live metadata seamlessly.
 
